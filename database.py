@@ -9,8 +9,13 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL", "")
 
+# Railway provides postgres:// — normalise to postgresql://
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+# Switch driver to pg8000 (pure Python, no libpq needed)
+if "postgresql://" in DATABASE_URL and "pg8000" not in DATABASE_URL:
+    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+pg8000://", 1)
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -61,7 +66,7 @@ class RosterOverride(Base):
     id = Column(Integer, primary_key=True, index=True)
     staff_emp = Column(String, index=True)
     date = Column(Date, nullable=False)
-    status = Column(String, nullable=False)  # AL, LWOP
+    status = Column(String, nullable=False)
     notes = Column(Text, nullable=True)
     created_by = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -76,7 +81,7 @@ class ChangeRequest(Base):
     effective_date = Column(Date, nullable=False)
     new_date = Column(Date, nullable=True)
     reason = Column(Text, nullable=False)
-    status = Column(String, default="requested")  # requested, booked, confirmed, notified, complete
+    status = Column(String, default="requested")
     workflow_ref = Column(String, nullable=True)
     notes = Column(Text, nullable=True)
     submitted_by = Column(String, nullable=True)
