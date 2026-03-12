@@ -7,420 +7,379 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --red: #b21c24;
-    --orange: #f7951e;
-    --dark: #1a1a2e;
-    --mid: #2d2d4e;
-    --card: #ffffff;
-    --bg: #f4f5f7;
-    --border: #e2e4e9;
-    --text: #1a1a2e;
-    --muted: #6b7280;
-    --jv: #f7951e;
-    --kv: #b21c24;
-    --cb: #6b3fa0;
+    --red:#b21c24;--red-light:#f9e8e9;--orange:#f7951e;--dark:#1a1a2e;
+    --bg:#f7f8fa;--card:#fff;--border:#e4e6ea;--text:#1a1a2e;--muted:#6b7280;
+    --green-light:#dcfce7;--blue-light:#dbeafe;--purple-light:#ede9fe;
+    --yellow-light:#fef9c3;--jv:#f7951e;--kv:#b21c24;--cb:#7c3aed;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
 
   /* LOGIN */
-  #login-screen {
-    display: flex; align-items: center; justify-content: center;
-    min-height: 100vh; background: linear-gradient(135deg, var(--dark) 0%, var(--mid) 100%);
-  }
-  .login-card {
-    background: white; border-radius: 16px; padding: 48px 40px; width: 100%; max-width: 400px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-  }
-  .login-logo { text-align: center; margin-bottom: 32px; }
-  .login-logo .logo-badge {
-    width: 64px; height: 64px; background: var(--red); border-radius: 16px;
-    display: inline-flex; align-items: center; justify-content: center;
-    font-size: 28px; font-weight: 700; color: white; margin-bottom: 12px;
-  }
-  .login-logo h1 { font-size: 20px; font-weight: 700; color: var(--dark); }
-  .login-logo p { font-size: 13px; color: var(--muted); margin-top: 4px; }
-  .login-card label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
-  .login-card input {
-    width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px;
-    font-size: 14px; font-family: inherit; margin-bottom: 16px; outline: none; transition: border-color .2s;
-  }
-  .login-card input:focus { border-color: var(--red); }
-  .login-btn {
-    width: 100%; padding: 12px; background: var(--red); color: white; border: none;
-    border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: opacity .2s;
-  }
-  .login-btn:hover { opacity: .9; }
-  .login-error { color: var(--red); font-size: 13px; margin-top: 8px; text-align: center; display: none; }
+  #login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--dark);}
+  .login-card{background:#fff;border-radius:20px;padding:48px 40px;width:100%;max-width:380px;box-shadow:0 24px 64px rgba(0,0,0,.3);}
+  .login-logo{text-align:center;margin-bottom:32px;}
+  .login-badge{width:60px;height:60px;background:var(--red);border-radius:14px;display:inline-flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#fff;margin-bottom:14px;}
+  .login-logo h1{font-size:20px;font-weight:700;}
+  .login-logo p{font-size:13px;color:var(--muted);margin-top:3px;}
+  .fl{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px;margin-top:14px;text-transform:uppercase;letter-spacing:.4px;}
+  .fi{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:inherit;outline:none;transition:border-color .15s;background:var(--bg);}
+  .fi:focus{border-color:var(--red);background:#fff;}
+  .login-btn{width:100%;margin-top:22px;padding:13px;background:var(--red);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;}
+  .login-btn:hover{opacity:.9;}
+  .login-error{color:var(--red);font-size:13px;margin-top:10px;text-align:center;display:none;}
 
-  /* APP */
-  #app { display: none; }
-  .topbar {
-    background: var(--dark); color: white; padding: 0 24px;
-    display: flex; align-items: center; justify-content: space-between; height: 56px;
-    position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,.2);
-  }
-  .topbar-left { display: flex; align-items: center; gap: 12px; }
-  .topbar-badge {
-    background: var(--red); border-radius: 8px; padding: 4px 10px;
-    font-size: 13px; font-weight: 700; letter-spacing: .5px;
-  }
-  .topbar-title { font-size: 15px; font-weight: 600; }
-  .topbar-right { display: flex; align-items: center; gap: 12px; }
-  .user-chip { font-size: 13px; color: rgba(255,255,255,.7); }
-  .logout-btn {
-    background: rgba(255,255,255,.12); border: none; color: white;
-    padding: 6px 14px; border-radius: 6px; font-size: 13px; cursor: pointer;
-  }
-  .logout-btn:hover { background: rgba(255,255,255,.2); }
+  /* SHELL */
+  #app{display:none;}
+  .topbar{background:var(--dark);color:#fff;height:54px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+  .tb-left{display:flex;align-items:center;gap:10px;}
+  .tb-badge{background:var(--red);border-radius:7px;padding:3px 9px;font-size:12px;font-weight:800;letter-spacing:.5px;}
+  .tb-title{font-size:14px;font-weight:600;opacity:.9;}
+  .tb-right{display:flex;align-items:center;gap:10px;}
+  .tb-user{font-size:12px;color:rgba(255,255,255,.5);}
+  .tb-logout{background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.7);padding:5px 12px;border-radius:6px;font-size:12px;cursor:pointer;}
+  .tb-logout:hover{background:rgba(255,255,255,.14);}
 
-  .tabs { background: white; border-bottom: 1px solid var(--border); display: flex; padding: 0 24px; }
-  .tab {
-    padding: 14px 18px; font-size: 13px; font-weight: 500; color: var(--muted);
-    cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; white-space: nowrap;
-  }
-  .tab.active { color: var(--red); border-bottom-color: var(--red); font-weight: 600; }
-  .tab:hover:not(.active) { color: var(--text); }
+  .nav{background:#fff;border-bottom:1px solid var(--border);display:flex;padding:0 20px;gap:2px;}
+  .nav-tab{padding:13px 16px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+  .nav-tab.active{color:var(--red);border-bottom-color:var(--red);font-weight:600;}
+  .nav-tab:hover:not(.active){color:var(--text);}
+  .nbadge{background:var(--red);color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:700;}
 
-  .content { padding: 24px; max-width: 1200px; margin: 0 auto; }
+  .page{padding:20px;max-width:1400px;margin:0 auto;}
 
-  /* CARDS */
-  .card { background: white; border-radius: 12px; border: 1px solid var(--border); padding: 20px; margin-bottom: 16px; }
-  .card-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); margin-bottom: 12px; }
+  /* STAFF STRIP */
+  .staff-strip{display:flex;gap:12px;margin-bottom:20px;}
+  .sc{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:12px;flex:1;min-width:0;}
+  .sc-av{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0;}
+  .sc-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .sc-status{display:flex;align-items:center;gap:6px;margin-top:3px;}
 
-  /* STAFF CARDS */
-  .staff-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 16px; margin-bottom: 20px; }
-  .staff-card {
-    background: white; border-radius: 12px; border: 1px solid var(--border);
-    padding: 18px; display: flex; align-items: flex-start; gap: 14px;
-  }
-  .staff-avatar {
-    width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center;
-    justify-content: center; font-size: 18px; font-weight: 700; color: white; flex-shrink: 0;
-  }
-  .staff-name { font-size: 15px; font-weight: 600; }
-  .staff-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .status-pill {
-    display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
-    letter-spacing: .4px; margin-top: 6px;
-  }
-  .village-pill {
-    display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;
-    color: white; margin-left: 6px;
-  }
-  .vJV { background: var(--jv); }
-  .vKV { background: var(--kv); }
-  .vCB { background: var(--cb); }
-  .sCC { background: #dcfce7; color: #166534; }
-  .sRR { background: #e0f2fe; color: #0369a1; }
-  .sAL { background: #fef3c7; color: #92400e; }
-  .sFIAM,.sFIPM { background: #f0fdf4; color: #15803d; }
-  .sFOAM,.sFOPM { background: #fdf4ff; color: #7e22ce; }
-  .sLWOP { background: #fee2e2; color: #991b1b; }
+  /* PILLS */
+  .pill{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.2px;white-space:nowrap;}
+  .pill-CC{background:var(--green-light);color:#166534;}
+  .pill-FIAM,.pill-FIPM{background:#dcfce7;color:#15803d;}
+  .pill-FOAM,.pill-FOPM{background:var(--purple-light);color:#6d28d9;}
+  .pill-RR{background:var(--blue-light);color:#1e40af;}
+  .pill-AL{background:var(--yellow-light);color:#854d0e;}
+  .pill-LWOP{background:#fee2e2;color:#991b1b;}
+  .pill-dash{background:var(--bg);color:var(--muted);}
+  .vpill{display:inline-flex;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:700;color:#fff;}
+  .vpill-JV{background:var(--jv);}
+  .vpill-KV{background:var(--kv);}
+  .vpill-CB{background:var(--cb);}
 
   /* CALENDAR */
-  .cal-nav { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-  .cal-nav button {
-    background: white; border: 1px solid var(--border); border-radius: 8px;
-    padding: 6px 14px; font-size: 13px; cursor: pointer;
-  }
-  .cal-nav button:hover { background: var(--bg); }
-  .cal-title { font-size: 16px; font-weight: 600; flex: 1; }
-  .cal-table { width: 100%; border-collapse: collapse; }
-  .cal-table th {
-    background: var(--dark); color: white; padding: 10px 8px; font-size: 12px;
-    font-weight: 600; text-align: left; border-radius: 0;
-  }
-  .cal-table th:first-child { border-radius: 8px 0 0 0; }
-  .cal-table th:last-child { border-radius: 0 8px 0 0; }
-  .cal-table td { padding: 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-  .cal-table tr:last-child td { border-bottom: none; }
-  .cal-table tr:hover td { background: #fafafa; }
-  .cal-cell {
-    display: inline-flex; align-items: center; gap: 4px;
-    padding: 4px 8px; border-radius: 6px; font-size: 12px; font-weight: 600;
-    cursor: pointer; transition: opacity .15s;
-  }
-  .cal-cell:hover { opacity: .8; }
-  .date-col { font-size: 12px; color: var(--muted); white-space: nowrap; }
-  .today-row td { background: #fff7ed !important; }
+  .cal-controls{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .cal-title{font-size:15px;font-weight:700;flex:1;}
+  .cbtn{background:#fff;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:inherit;}
+  .cbtn:hover{background:var(--bg);}
+  .cbtn-today{background:var(--red);color:#fff;border-color:var(--red);}
+  .cbtn-today:hover{opacity:.9;}
+  .cal-wrap{background:#fff;border:1px solid var(--border);border-radius:14px;overflow-x:auto;}
+  .cal-table{width:100%;border-collapse:collapse;table-layout:auto;}
+  .cal-table thead tr{background:var(--dark);}
+  .cal-table thead th{padding:10px 8px;font-size:11px;font-weight:600;color:rgba(255,255,255,.6);text-align:center;border-right:1px solid rgba(255,255,255,.06);white-space:nowrap;}
+  .cal-table thead th:first-child{text-align:left;padding-left:14px;width:120px;font-size:10px;color:rgba(255,255,255,.35);}
+  .cal-table thead th.tcol{background:rgba(178,28,36,.55);color:#fff;}
+  .th-day{display:block;font-size:13px;font-weight:700;color:#fff;}
+  .th-dt{display:block;font-size:10px;color:rgba(255,255,255,.5);margin-top:1px;}
+  .tcol .th-day,.tcol .th-dt{color:#fff;}
+  .cal-table tbody tr{border-top:1px solid var(--border);}
+  .cal-table tbody tr:hover{background:#fafbfc;}
+  .cal-table tbody td{padding:9px 6px;text-align:center;vertical-align:middle;border-right:1px solid var(--border);}
+  .cal-table tbody td:first-child{text-align:left;padding-left:14px;}
+  .cal-table tbody td.tcol{background:#fffbf5;}
+  .csl{display:flex;align-items:center;gap:8px;}
+  .csd{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .csn{font-size:12px;font-weight:600;white-space:nowrap;}
+  .ccell{display:inline-flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap;}
+
+  /* POPOVER */
+  .popover{position:fixed;z-index:500;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.14);padding:14px 16px;min-width:220px;pointer-events:none;opacity:0;transition:opacity .1s;}
+  .popover.vis{opacity:1;}
+  .pop-fl{font-size:20px;font-weight:800;color:var(--red);margin-bottom:4px;}
+  .pop-rt{font-size:12px;color:var(--muted);margin-bottom:8px;}
+  .pop-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+  .pop-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+  .pop-val{font-size:13px;font-weight:600;}
+  .pop-div{border:none;border-top:1px solid var(--border);margin:8px 0;}
+  .pop-ci{font-size:11px;color:var(--muted);}
 
   /* SWINGS */
-  .swing-card {
-    background: white; border: 1px solid var(--border); border-radius: 10px;
-    padding: 16px 20px; margin-bottom: 12px;
-  }
-  .swing-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .swing-staff { font-size: 14px; font-weight: 600; }
-  .swing-dates { font-size: 13px; color: var(--muted); }
-  .swing-flights { display: flex; gap: 16px; margin-top: 8px; }
-  .flight-chip {
-    background: var(--bg); border-radius: 8px; padding: 8px 12px; font-size: 12px;
-    border: 1px solid var(--border); flex: 1;
-  }
-  .flight-chip .fc-label { color: var(--muted); font-size: 11px; margin-bottom: 2px; }
-  .flight-chip .fc-num { font-weight: 700; font-size: 14px; }
-  .swing-actions { display: flex; gap: 8px; margin-top: 12px; }
-  .btn {
-    padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 500;
-    border: 1px solid var(--border); background: white; cursor: pointer; transition: all .15s;
-  }
-  .btn:hover { background: var(--bg); }
-  .btn-red { background: var(--red); color: white; border-color: var(--red); }
-  .btn-red:hover { opacity: .9; }
-  .btn-orange { background: var(--orange); color: white; border-color: var(--orange); }
-  .btn-orange:hover { opacity: .9; }
+  .section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+  .section-ttl{font-size:17px;font-weight:700;}
+  .sw-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:flex-start;gap:16px;margin-bottom:10px;}
+  .sw-left{flex:1;min-width:0;}
+  .sw-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+  .sw-name{font-size:14px;font-weight:700;}
+  .sw-dates{font-size:13px;color:var(--muted);}
+  .sw-flights{display:flex;gap:10px;}
+  .fb{background:var(--bg);border-radius:8px;padding:8px 12px;border:1px solid var(--border);flex:1;min-width:0;}
+  .fb-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;}
+  .fb-num{font-size:16px;font-weight:800;color:var(--red);}
+  .sw-acts{display:flex;flex-direction:column;gap:6px;flex-shrink:0;}
+
+  /* CHANGES */
+  .cr-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:10px;}
+  .cr-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
+  .cr-title{font-size:14px;font-weight:700;}
+  .cr-meta{font-size:12px;color:var(--muted);margin-top:2px;}
+  .sbadge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
+  .sb-requested{background:#f3f4f6;color:#374151;}
+  .sb-booked{background:var(--yellow-light);color:#854d0e;}
+  .sb-confirmed{background:var(--green-light);color:#166534;}
+  .sb-notified{background:var(--blue-light);color:#1e40af;}
+  .sb-complete{background:var(--red-light);color:var(--red);}
+  .cr-detail{font-size:13px;color:var(--text);margin-bottom:12px;line-height:1.5;}
+  .cr-acts{display:flex;gap:8px;flex-wrap:wrap;}
+
+  /* DRAFT */
+  .draft-box{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;font-size:12px;font-family:monospace;white-space:pre-wrap;line-height:1.6;max-height:280px;overflow-y:auto;margin-top:10px;}
+
+  /* BUTTONS */
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:500;border:1px solid var(--border);background:#fff;cursor:pointer;font-family:inherit;transition:all .12s;white-space:nowrap;}
+  .btn:hover{background:var(--bg);}
+  .btn-red{background:var(--red);color:#fff;border-color:var(--red);}
+  .btn-red:hover{opacity:.9;background:var(--red);}
+  .btn-orange{background:var(--orange);color:#fff;border-color:var(--orange);}
+  .btn-orange:hover{opacity:.9;}
+  .btn-sm{padding:5px 11px;font-size:12px;}
+  .btn-ghost{background:transparent;border-color:transparent;color:var(--muted);}
+  .btn-ghost:hover{background:var(--bg);color:var(--text);}
 
   /* MODAL */
-  .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 200;
-    display: flex; align-items: center; justify-content: center; padding: 20px;
-  }
-  .modal {
-    background: white; border-radius: 16px; padding: 28px; width: 100%; max-width: 480px;
-    box-shadow: 0 20px 60px rgba(0,0,0,.2);
-  }
-  .modal h3 { font-size: 17px; font-weight: 700; margin-bottom: 20px; }
-  .modal label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 4px; margin-top: 12px; }
-  .modal input, .modal select, .modal textarea {
-    width: 100%; padding: 9px 12px; border: 1.5px solid var(--border); border-radius: 8px;
-    font-size: 14px; font-family: inherit; outline: none;
-  }
-  .modal input:focus, .modal select:focus, .modal textarea:focus { border-color: var(--red); }
-  .modal-actions { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
+  .overlay{position:fixed;inset:0;background:rgba(15,15,35,.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;}
+  .modal{background:#fff;border-radius:16px;padding:28px;width:100%;max-width:500px;box-shadow:0 24px 64px rgba(0,0,0,.18);max-height:90vh;overflow-y:auto;}
+  .modal-ttl{font-size:17px;font-weight:700;margin-bottom:20px;}
+  .modal-acts{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;}
+  .fg{margin-bottom:14px;}
+  .flbl{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px;}
+  .finp,.fsel,.ftxt{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-family:inherit;outline:none;transition:border-color .15s;background:#fff;}
+  .finp:focus,.fsel:focus,.ftxt:focus{border-color:var(--red);}
+  .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .flight-opts{display:flex;flex-direction:column;gap:6px;margin-top:6px;}
+  .fo{border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:all .12s;}
+  .fo:hover,.fo.sel{border-color:var(--red);background:var(--red-light);}
+  .fo-num{font-weight:800;font-size:14px;color:var(--red);min-width:64px;}
+  .fo-rt{font-size:11px;color:var(--muted);}
+  .fo-tm{font-size:12px;font-weight:600;margin-left:auto;}
 
   /* AGENT */
-  .agent-panel {
-    background: white; border-radius: 12px; border: 1px solid var(--border);
-    display: flex; flex-direction: column; height: 520px;
-  }
-  .agent-header {
-    padding: 14px 18px; border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap: 10px; flex-shrink: 0;
-  }
-  .agent-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; }
-  .agent-title { font-size: 14px; font-weight: 600; }
-  .agent-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
-  .msg { max-width: 85%; padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; }
-  .msg-user { background: var(--red); color: white; align-self: flex-end; border-radius: 12px 12px 2px 12px; }
-  .msg-agent { background: var(--bg); color: var(--text); align-self: flex-start; border-radius: 12px 12px 12px 2px; }
-  .msg-system { background: #f0fdf4; color: #15803d; align-self: center; font-size: 11px; padding: 4px 10px; border-radius: 20px; }
-  .agent-input-row {
-    padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px; flex-shrink: 0;
-  }
-  .agent-input {
-    flex: 1; padding: 9px 14px; border: 1.5px solid var(--border); border-radius: 8px;
-    font-size: 13px; font-family: inherit; outline: none;
-  }
-  .agent-input:focus { border-color: var(--red); }
-  .agent-send {
-    background: var(--red); color: white; border: none; border-radius: 8px;
-    padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
-  }
-  .quick-btns { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px 10px; flex-shrink: 0; }
-  .qbtn {
-    background: var(--bg); border: 1px solid var(--border); border-radius: 20px;
-    padding: 4px 12px; font-size: 11px; cursor: pointer; color: var(--text);
-  }
-  .qbtn:hover { border-color: var(--red); color: var(--red); }
+  .agent-wrap{background:#fff;border:1px solid var(--border);border-radius:14px;display:flex;flex-direction:column;height:540px;}
+  .agent-hdr{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0;}
+  .agent-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;}
+  .agent-ttl{font-size:14px;font-weight:600;}
+  .agent-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;}
+  .msg{max-width:82%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.5;}
+  .msg-user{background:var(--red);color:#fff;align-self:flex-end;border-radius:12px 12px 3px 12px;}
+  .msg-agent{background:var(--bg);color:var(--text);align-self:flex-start;border-radius:12px 12px 12px 3px;}
+  .msg-sys{background:var(--green-light);color:#166534;font-size:11px;align-self:center;padding:3px 10px;border-radius:20px;}
+  .agent-quick{display:flex;flex-wrap:wrap;gap:5px;padding:0 16px 10px;flex-shrink:0;}
+  .qbtn{background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:4px 11px;font-size:11px;cursor:pointer;font-family:inherit;}
+  .qbtn:hover{border-color:var(--red);color:var(--red);}
+  .agent-foot{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;}
+  .agent-inp{flex:1;padding:9px 13px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;}
+  .agent-inp:focus{border-color:var(--red);}
+  .agent-send{background:var(--red);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;}
 
-  /* FORM GROUP */
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-  /* DRAFT EMAIL */
-  .draft-box {
-    background: #f8fafc; border: 1px solid var(--border); border-radius: 8px;
-    padding: 14px; font-size: 12px; font-family: monospace; white-space: pre-wrap;
-    margin-top: 12px; max-height: 300px; overflow-y: auto;
-  }
-
-  /* LOADING */
-  .spinner {
-    display: inline-block; width: 16px; height: 16px;
-    border: 2px solid rgba(255,255,255,.3); border-top-color: white;
-    border-radius: 50%; animation: spin .6s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .hidden { display: none !important; }
-  .text-muted { color: var(--muted); font-size: 13px; }
-  .mt-4 { margin-top: 16px; }
-
-  /* FLIGHT PICKER */
-  .flight-options { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
-  .flight-option {
-    border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 14px;
-    cursor: pointer; transition: all .15s; display: flex; align-items: center; gap: 12px;
-  }
-  .flight-option:hover, .flight-option.selected { border-color: var(--red); background: #fff5f5; }
-  .flight-option .fo-num { font-weight: 700; font-size: 14px; color: var(--red); min-width: 70px; }
-  .flight-option .fo-route { font-size: 12px; color: var(--muted); }
-  .flight-option .fo-time { font-size: 13px; font-weight: 500; margin-left: auto; }
+  .hidden{display:none!important;}
+  .mt12{margin-top:12px;}
+  .tmuted{color:var(--muted);font-size:13px;}
+  .red-light{background:var(--red-light);}
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-card">
     <div class="login-logo">
-      <div class="logo-badge">IS</div>
+      <div class="login-badge">IS</div>
       <h1>ISSG Roster</h1>
-      <p>Eastern Hub — Christmas Creek</p>
+      <p>Eastern Hub · Christmas Creek</p>
     </div>
-    <label>Username</label>
-    <input type="text" id="login-user" placeholder="e.g. britt" autocomplete="username">
-    <label>Password</label>
-    <input type="password" id="login-pass" placeholder="Password" autocomplete="current-password">
+    <label class="fl">Username</label>
+    <input type="text" class="fi" id="lu" placeholder="e.g. britt" autocomplete="username">
+    <label class="fl">Password</label>
+    <input type="password" class="fi" id="lp" placeholder="Password" autocomplete="current-password">
     <button class="login-btn" onclick="doLogin()">Sign In</button>
-    <div class="login-error" id="login-error">Incorrect username or password.</div>
+    <div class="login-error" id="lerr">Incorrect username or password.</div>
   </div>
 </div>
 
 <!-- APP -->
 <div id="app">
   <div class="topbar">
-    <div class="topbar-left">
-      <span class="topbar-badge">ISSG</span>
-      <span class="topbar-title">Eastern Hub Roster</span>
+    <div class="tb-left">
+      <span class="tb-badge">ISSG</span>
+      <span class="tb-title">Eastern Hub Roster</span>
     </div>
-    <div class="topbar-right">
-      <span class="user-chip" id="user-chip"></span>
-      <button class="logout-btn" onclick="doLogout()">Sign out</button>
+    <div class="tb-right">
+      <span class="tb-user" id="user-chip"></span>
+      <button class="tb-logout" onclick="doLogout()">Sign out</button>
     </div>
   </div>
-
-  <div class="tabs">
-    <div class="tab active" onclick="showTab('roster')">Roster</div>
-    <div class="tab" onclick="showTab('swings')">Swings</div>
-    <div class="tab" onclick="showTab('staff')">Staff</div>
-    <div class="tab" onclick="showTab('agent')">AI Agent</div>
+  <div class="nav">
+    <div class="nav-tab active" onclick="showTab('roster')" id="tabn-roster">Roster</div>
+    <div class="nav-tab" onclick="showTab('swings')" id="tabn-swings">Swings</div>
+    <div class="nav-tab" onclick="showTab('changes')" id="tabn-changes">Changes <span class="nbadge hidden" id="changes-badge">0</span></div>
+    <div class="nav-tab" onclick="showTab('agent')" id="tabn-agent">AI Agent</div>
   </div>
 
-  <div class="content">
+  <!-- ROSTER -->
+  <div class="page" id="tab-roster">
+    <div class="staff-strip" id="staff-strip"></div>
+    <div class="cal-controls">
+      <button class="cbtn" onclick="calShift(-14)">&#8592; Prev</button>
+      <button class="cbtn" onclick="calShift(14)">Next &#8594;</button>
+      <span class="cal-title" id="cal-title"></span>
+      <button class="cbtn cbtn-today" onclick="calToday()">Today</button>
+    </div>
+    <div class="cal-wrap">
+      <table class="cal-table">
+        <thead id="cal-head"></thead>
+        <tbody id="cal-body"></tbody>
+      </table>
+    </div>
+    <p class="tmuted mt12" style="font-size:12px">Hover fly-in / fly-out cells to see flight details &nbsp;·&nbsp; Edit via Swings tab</p>
+  </div>
 
-    <!-- ROSTER TAB -->
-    <div id="tab-roster">
-      <div class="staff-grid" id="staff-cards"></div>
-      <div class="card">
-        <div class="cal-nav">
-          <button onclick="calPrev()">← Prev</button>
-          <span class="cal-title" id="cal-title"></span>
-          <button onclick="calNext()">Next →</button>
-          <button onclick="calToday()" style="margin-left:auto">Today</button>
-        </div>
-        <table class="cal-table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Amanda</th>
-              <th>Clive</th>
-              <th>Pete</th>
-            </tr>
-          </thead>
-          <tbody id="cal-body"></tbody>
-        </table>
+  <!-- SWINGS -->
+  <div class="page hidden" id="tab-swings">
+    <div class="section-hdr">
+      <span class="section-ttl">Swing Records</span>
+      <button class="btn btn-red" onclick="openSwingModal()">+ Add Swing</button>
+    </div>
+    <div id="swings-list"></div>
+  </div>
+
+  <!-- CHANGES -->
+  <div class="page hidden" id="tab-changes">
+    <div class="section-hdr">
+      <span class="section-ttl">Change Requests</span>
+      <button class="btn btn-red" onclick="openChangeModal()">+ New Request</button>
+    </div>
+    <div id="changes-list"></div>
+  </div>
+
+  <!-- AGENT -->
+  <div class="page hidden" id="tab-agent">
+    <div class="agent-wrap">
+      <div class="agent-hdr">
+        <div class="agent-dot"></div>
+        <span class="agent-ttl">ISSG Operations Assistant</span>
+      </div>
+      <div class="agent-msgs" id="agent-msgs">
+        <div class="msg msg-sys">Connected &middot; Eastern Hub context loaded</div>
+        <div class="msg msg-agent">Hi! I can help with roster queries, swing planning, and mobilisation drafts. What do you need?</div>
+      </div>
+      <div class="agent-quick">
+        <button class="qbtn" onclick="aq('Who is on site at Christmas Creek today?')">Who's on site?</button>
+        <button class="qbtn" onclick="aq('When is the next fly-in for Eastern Hub?')">Next fly-in</button>
+        <button class="qbtn" onclick="aq('Draft a mobilisation email for Pete Scully to cover an emergency swing')">Mobilise Pete</button>
+        <button class="qbtn" onclick="aq('What flights run Perth to Christmas Creek on Wednesdays?')">Wed flights</button>
+      </div>
+      <div class="agent-foot">
+        <input type="text" class="agent-inp" id="agent-input" placeholder="Ask anything about the roster..." onkeydown="if(event.key==='Enter')sendAgent()">
+        <button class="agent-send" onclick="sendAgent()">Send</button>
       </div>
     </div>
-
-    <!-- SWINGS TAB -->
-    <div id="tab-swings" class="hidden">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-        <h2 style="font-size:18px;font-weight:700">Swing Records</h2>
-        <button class="btn btn-red" onclick="openSwingModal()">+ Add Swing</button>
-      </div>
-      <div id="swings-list"></div>
-    </div>
-
-    <!-- STAFF TAB -->
-    <div id="tab-staff" class="hidden">
-      <h2 style="font-size:18px;font-weight:700;margin-bottom:16px">Eastern Hub — Staff</h2>
-      <div id="staff-full-cards"></div>
-    </div>
-
-    <!-- AGENT TAB -->
-    <div id="tab-agent" class="hidden">
-      <div class="agent-panel">
-        <div class="agent-header">
-          <div class="agent-dot"></div>
-          <span class="agent-title">ISSG Operations Assistant</span>
-        </div>
-        <div class="agent-messages" id="agent-msgs">
-          <div class="msg msg-system">Connected — Eastern Hub context loaded</div>
-          <div class="msg msg-agent">Hi! I'm your ISSG ops assistant. I can help with roster queries, swing planning, mobilisation drafts, and flight bookings. What do you need?</div>
-        </div>
-        <div class="quick-btns">
-          <button class="qbtn" onclick="agentQuick('Who is on site at Christmas Creek today?')">Who's on site?</button>
-          <button class="qbtn" onclick="agentQuick('When is the next fly-in?')">Next fly-in</button>
-          <button class="qbtn" onclick="agentQuick('Draft a mobilisation email for Pete Scully')">Mobilise Pete</button>
-          <button class="qbtn" onclick="agentQuick('What flights run Perth to Christmas Creek on Wednesdays?')">Wed flights</button>
-        </div>
-        <div class="agent-input-row">
-          <input type="text" class="agent-input" id="agent-input" placeholder="Ask anything about the roster..." onkeydown="if(event.key==='Enter')sendAgent()">
-          <button class="agent-send" onclick="sendAgent()">Send</button>
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>
 
+<!-- POPOVER -->
+<div class="popover" id="popover">
+  <div class="pop-fl" id="pop-fl"></div>
+  <div class="pop-rt" id="pop-rt"></div>
+  <hr class="pop-div">
+  <div class="pop-row"><span class="pop-lbl">Departs</span><span class="pop-val" id="pop-dep"></span></div>
+  <div class="pop-row"><span class="pop-lbl">Arrives</span><span class="pop-val" id="pop-arr"></span></div>
+  <div class="pop-ci" id="pop-ci"></div>
+</div>
+
 <!-- SWING MODAL -->
-<div class="modal-overlay hidden" id="swing-modal">
+<div class="overlay hidden" id="swing-modal">
   <div class="modal">
-    <h3 id="swing-modal-title">Add Swing</h3>
-    <input type="hidden" id="swing-id">
-    <label>Staff</label>
-    <select id="swing-staff">
-      <option value="764148">Amanda Inglis-Baillie</option>
-      <option value="807406">Clive Ettia</option>
-      <option value="PETE-CASUAL">Pete Scully</option>
-    </select>
-    <div class="form-row">
-      <div>
-        <label>Fly-In Date</label>
-        <input type="date" id="swing-fiin" oninput="loadFlightOptions('in')">
-      </div>
-      <div>
-        <label>Fly-Out Date</label>
-        <input type="date" id="swing-fiout" oninput="loadFlightOptions('out')">
-      </div>
+    <div class="modal-ttl" id="sw-modal-ttl">Add Swing</div>
+    <input type="hidden" id="sw-id">
+    <div class="fg"><label class="flbl">Staff Member</label>
+      <select class="fsel" id="sw-staff">
+        <option value="764148">Amanda Inglis-Baillie</option>
+        <option value="807406">Clive Ettia</option>
+        <option value="PETE-CASUAL">Pete Scully</option>
+      </select>
     </div>
-    <label>Fly-In Flight</label>
-    <input type="text" id="swing-fiin-flight" placeholder="e.g. QF2924">
-    <div id="flight-in-options" class="flight-options"></div>
-    <label>Fly-Out Flight</label>
-    <input type="text" id="swing-fiout-flight" placeholder="e.g. QF2925">
-    <div id="flight-out-options" class="flight-options"></div>
-    <div class="form-row">
-      <div>
-        <label>Village</label>
-        <select id="swing-village">
+    <div class="frow">
+      <div class="fg"><label class="flbl">Fly-In Date</label><input type="date" class="finp" id="sw-fiin" oninput="loadFlyOpts('in')"></div>
+      <div class="fg"><label class="flbl">Fly-Out Date</label><input type="date" class="finp" id="sw-fiout" oninput="loadFlyOpts('out')"></div>
+    </div>
+    <div class="fg"><label class="flbl">Fly-In Flight</label>
+      <input type="text" class="finp" id="sw-fiin-fl" placeholder="e.g. QF2924">
+      <div class="flight-opts" id="fi-opts"></div>
+    </div>
+    <div class="fg"><label class="flbl">Fly-Out Flight</label>
+      <input type="text" class="finp" id="sw-fiout-fl" placeholder="e.g. QF2925">
+      <div class="flight-opts" id="fo-opts"></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="flbl">Village</label>
+        <select class="fsel" id="sw-village">
           <option value="JV">JV — Java Village</option>
           <option value="KV">KV — Kariyarra Village</option>
           <option value="CB">CB — Cloudbreak Village</option>
         </select>
       </div>
-      <div>
-        <label>Room Ref</label>
-        <input type="text" id="swing-room" placeholder="Optional">
-      </div>
+      <div class="fg"><label class="flbl">Room Ref</label><input type="text" class="finp" id="sw-room" placeholder="Optional"></div>
     </div>
-    <label>Notes</label>
-    <textarea id="swing-notes" rows="2" placeholder="Optional"></textarea>
-    <div class="modal-actions">
+    <div class="fg"><label class="flbl">Notes</label><textarea class="ftxt" id="sw-notes" rows="2" placeholder="Optional"></textarea></div>
+    <div class="modal-acts">
       <button class="btn" onclick="closeModal('swing-modal')">Cancel</button>
       <button class="btn btn-red" onclick="saveSwing()">Save Swing</button>
     </div>
   </div>
 </div>
 
+<!-- CHANGE MODAL -->
+<div class="overlay hidden" id="change-modal">
+  <div class="modal">
+    <div class="modal-ttl">New Change Request</div>
+    <div class="fg"><label class="flbl">Staff Member</label>
+      <select class="fsel" id="cr-staff">
+        <option value="764148">Amanda Inglis-Baillie</option>
+        <option value="807406">Clive Ettia</option>
+        <option value="PETE-CASUAL">Pete Scully</option>
+      </select>
+    </div>
+    <div class="fg"><label class="flbl">Change Type</label>
+      <select class="fsel" id="cr-type">
+        <option value="sick_leave">Sick Leave</option>
+        <option value="annual_leave">Annual Leave</option>
+        <option value="flight_change">Flight Change Only</option>
+        <option value="swing_extension">Swing Extension</option>
+        <option value="swing_cut_short">Swing Cut Short</option>
+        <option value="relief_mobilisation">Relief Mobilisation</option>
+      </select>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="flbl">Effective Date</label><input type="date" class="finp" id="cr-date"></div>
+      <div class="fg"><label class="flbl">New Fly-Out Date</label><input type="date" class="finp" id="cr-newdate"></div>
+    </div>
+    <div class="fg"><label class="flbl">Reason / Notes</label><textarea class="ftxt" id="cr-reason" rows="3" placeholder="Briefly describe the reason..."></textarea></div>
+    <div class="modal-acts">
+      <button class="btn" onclick="closeModal('change-modal')">Cancel</button>
+      <button class="btn btn-red" onclick="saveChange()">Submit Request</button>
+    </div>
+  </div>
+</div>
+
 <!-- DRAFT MODAL -->
-<div class="modal-overlay hidden" id="draft-modal">
+<div class="overlay hidden" id="draft-modal">
   <div class="modal" style="max-width:560px">
-    <h3>Mobilisation Email Draft</h3>
+    <div class="modal-ttl">Mobilisation Email Draft</div>
+    <p class="tmuted" style="margin-bottom:6px">Review, then copy and send to mobilisation@issg.net.au</p>
     <div class="draft-box" id="draft-content"></div>
-    <div class="modal-actions">
+    <div class="modal-acts">
       <button class="btn" onclick="closeModal('draft-modal')">Close</button>
       <button class="btn btn-orange" onclick="copyDraft()">Copy to Clipboard</button>
     </div>
@@ -428,458 +387,348 @@
 </div>
 
 <script>
-// ─── STATE ───────────────────────────────────────────────────────
-let token = localStorage.getItem('issg_token') || '';
-let currentUser = localStorage.getItem('issg_user') || '';
-let calWeekStart = getMonday(new Date());
-let allSwings = [];
-let allStaff = [];
-let agentHistory = [];
-let editingSwingId = null;
+let token=localStorage.getItem('issg_token')||'';
+let currentUser=localStorage.getItem('issg_user')||'';
+let calStart=getMonday(new Date());
+let allSwings=[],allStaff=[],allChanges=[],agentHistory=[],editSwingId=null,flightCache={};
 
-// ─── API HELPERS ─────────────────────────────────────────────────
-async function api(path, opts = {}) {
-  const res = await fetch(path, {
-    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json', ...(opts.headers || {}) },
-    ...opts
-  });
-  if (res.status === 401) { doLogout(); return null; }
-  if (!res.ok) { const t = await res.text(); console.error(path, t); return null; }
+const AMANDA_BASE=new Date('2025-03-05');
+const CLIVE_BASE=new Date('2025-03-12');
+const SWING_ON=8,SWING_OFF=6;
+
+const STAFF_DEF=[
+  {emp:'764148',name:'Amanda Inglis-Baillie',short:'Amanda',base:AMANDA_BASE,village:'JV',color:'#e67e22'},
+  {emp:'807406',name:'Clive Ettia',short:'Clive',base:CLIVE_BASE,village:'KV',color:'#b21c24'},
+  {emp:'PETE-CASUAL',name:'Pete Scully',short:'Pete',base:null,village:'JV',color:'#6b7280'},
+];
+
+const SL={'FIAM':'Fly In','FIPM':'Fly In','FOAM':'Fly Out','FOPM':'Fly Out','CC':'On Site','RR':'R&R','AL':'Annual Leave','LWOP':'LWOP','—':'—'};
+const CTL={sick_leave:'Sick Leave',annual_leave:'Annual Leave',flight_change:'Flight Change',swing_extension:'Swing Extension',swing_cut_short:'Swing Cut Short',relief_mobilisation:'Relief Mobilisation'};
+const NM={'764148':'Amanda Inglis-Baillie','807406':'Clive Ettia','PETE-CASUAL':'Pete Scully'};
+
+async function api(path,opts={}){
+  const res=await fetch(path,{headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json',...(opts.headers||{})},...opts});
+  if(res.status===401){doLogout();return null;}
+  if(!res.ok)return null;
   return res.json();
 }
 
-// ─── AUTH ─────────────────────────────────────────────────────────
-async function doLogin() {
-  const u = document.getElementById('login-user').value.trim();
-  const p = document.getElementById('login-pass').value;
-  const err = document.getElementById('login-error');
-  err.style.display = 'none';
-
-  const form = new FormData();
-  form.append('username', u);
-  form.append('password', p);
-
-  const res = await fetch('/api/auth/token', { method: 'POST', body: form });
-  if (!res.ok) { err.style.display = 'block'; return; }
-  const data = await res.json();
-  token = data.access_token;
-  currentUser = data.full_name;
-  localStorage.setItem('issg_token', token);
-  localStorage.setItem('issg_user', currentUser);
+async function doLogin(){
+  const u=document.getElementById('lu').value.trim();
+  const p=document.getElementById('lp').value;
+  const err=document.getElementById('lerr');
+  err.style.display='none';
+  const form=new FormData();form.append('username',u);form.append('password',p);
+  const res=await fetch('/api/auth/token',{method:'POST',body:form});
+  if(!res.ok){err.style.display='block';return;}
+  const data=await res.json();
+  token=data.access_token;currentUser=data.full_name;
+  localStorage.setItem('issg_token',token);localStorage.setItem('issg_user',currentUser);
   showApp();
 }
 
-function doLogout() {
-  token = ''; currentUser = '';
-  localStorage.removeItem('issg_token');
-  localStorage.removeItem('issg_user');
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
+function doLogout(){
+  token='';currentUser='';
+  localStorage.removeItem('issg_token');localStorage.removeItem('issg_user');
+  document.getElementById('app').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
 }
 
-document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('lp').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 
-// ─── APP INIT ─────────────────────────────────────────────────────
-async function showApp() {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  document.getElementById('user-chip').textContent = currentUser;
+async function showApp(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('user-chip').textContent=currentUser;
   await loadData();
-  renderStaffCards();
+  renderStaffStrip();
   renderCalendar();
 }
 
-async function loadData() {
-  allStaff = await api('/api/staff/') || [];
-  allSwings = await api('/api/swings/') || [];
+async function loadData(){
+  allStaff=await api('/api/staff/')||[];
+  allSwings=await api('/api/swings/')||[];
 }
 
-// ─── TABS ─────────────────────────────────────────────────────────
-function showTab(name) {
-  ['roster','swings','staff','agent'].forEach(t => {
-    document.getElementById(`tab-${t}`).classList.toggle('hidden', t !== name);
+function showTab(name){
+  ['roster','swings','changes','agent'].forEach(t=>{
+    document.getElementById(`tab-${t}`).classList.toggle('hidden',t!==name);
+    document.getElementById(`tabn-${t}`).classList.toggle('active',t===name);
   });
-  document.querySelectorAll('.tab').forEach((el,i) => {
-    el.classList.toggle('active', ['roster','swings','staff','agent'][i] === name);
+  if(name==='swings')renderSwings();
+  if(name==='changes')renderChanges();
+}
+
+function getSwingStatus(base,date){
+  if(!base)return'—';
+  const cycle=SWING_ON+SWING_OFF;
+  const diff=Math.floor((date-base)/86400000);
+  const pos=((diff%cycle)+cycle)%cycle;
+  if(pos===0)return'FIAM';
+  if(pos<SWING_ON)return'CC';
+  if(pos===SWING_ON)return'FOAM';
+  return'RR';
+}
+
+function isTravelDay(s){return['FIAM','FIPM','FOAM','FOPM'].includes(s);}
+function isOnSite(s){return['FIAM','FIPM','CC','FOAM','FOPM'].includes(s);}
+
+function getMonday(d){
+  const day=d.getDay();
+  const r=new Date(d);r.setDate(d.getDate()-day+(day===0?-6:1));r.setHours(0,0,0,0);return r;
+}
+
+function getFlightForCell(emp,d,status){
+  const ds=d.toISOString().slice(0,10);
+  const sw=allSwings.find(s=>{
+    if(s.staff_emp!==emp)return false;
+    if((status==='FIAM'||status==='FIPM')&&s.fly_in_date?.slice(0,10)===ds)return true;
+    if((status==='FOAM'||status==='FOPM')&&s.fly_out_date?.slice(0,10)===ds)return true;
+    return false;
   });
-  if (name === 'swings') renderSwings();
-  if (name === 'staff') renderStaffFull();
+  if(!sw)return null;
+  return(status==='FIAM'||status==='FIPM')?{num:sw.fly_in_flight,sw}:{num:sw.fly_out_flight,sw};
 }
 
-// ─── ROSTER LOGIC ─────────────────────────────────────────────────
-const AMANDA_BASE = new Date('2025-03-05'); // fly-in Wednesday
-const CLIVE_BASE  = new Date('2025-03-12');
-const SWING_ON = 8, SWING_OFF = 6;
+function calShift(days){calStart=new Date(calStart);calStart.setDate(calStart.getDate()+days);renderCalendar();}
+function calToday(){calStart=getMonday(new Date());renderCalendar();}
 
-function getSwingStatus(base, date) {
-  const msPerDay = 86400000;
-  const cycleDays = SWING_ON + SWING_OFF;
-  const diff = Math.floor((date - base) / msPerDay);
-  const pos = ((diff % cycleDays) + cycleDays) % cycleDays;
-  if (pos === 0) return 'FIAM';
-  if (pos < SWING_ON) return 'CC';
-  if (pos === SWING_ON) return 'FOAM';
-  return 'RR';
+function renderCalendar(){
+  const today=new Date();today.setHours(0,0,0,0);
+  const days=[];
+  for(let i=0;i<14;i++){const d=new Date(calStart);d.setDate(d.getDate()+i);d.setHours(0,0,0,0);days.push(d);}
+  const end=days[13];
+  document.getElementById('cal-title').textContent=
+    `${calStart.toLocaleDateString('en-AU',{day:'numeric',month:'short'})} – ${end.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})}`;
+
+  // HEAD
+  let hh='<tr><th></th>';
+  days.forEach(d=>{
+    const isT=d.getTime()===today.getTime();
+    hh+=`<th class="${isT?'tcol':''}"><span class="th-day">${d.toLocaleDateString('en-AU',{weekday:'short'})}</span><span class="th-dt">${d.toLocaleDateString('en-AU',{day:'numeric',month:'short'})}</span></th>`;
+  });
+  document.getElementById('cal-head').innerHTML=hh+'</tr>';
+
+  // BODY
+  const tbody=document.getElementById('cal-body');
+  tbody.innerHTML='';
+  STAFF_DEF.forEach(s=>{
+    const tr=document.createElement('tr');
+    let html=`<td><div class="csl"><div class="csd" style="background:${s.color}"></div><span class="csn">${s.short}</span></div></td>`;
+    days.forEach(d=>{
+      const isT=d.getTime()===today.getTime();
+      const status=getSwingStatus(s.base,d);
+      const fi=isTravelDay(status)?getFlightForCell(s.emp,d,status):null;
+      const village=isOnSite(status)?s.village:null;
+      const hasP=fi&&fi.num;
+      let cell=`<span class="pill pill-${status||'dash'}">${fi?.num||SL[status]||status}</span>`;
+      if(village)cell+=` <span class="vpill vpill-${village}">${village}</span>`;
+      const da=hasP?`data-fl="${fi.num}" data-st="${status}" data-emp="${s.emp}"`:'';
+      html+=`<td class="${isT?'tcol':''}" ${da} ${hasP?'onmouseenter="showPop(event,this)" onmouseleave="hidePop()"':''}><div class="ccell">${cell}</div></td>`;
+    });
+    tr.innerHTML=html;tbody.appendChild(tr);
+  });
+  renderStaffStrip();
 }
 
-function statusLabel(s) {
-  const map = { FIAM:'FI (AM)', FIPM:'FI (PM)', FOAM:'FO (AM)', FOPM:'FO (PM)', CC:'On Site', RR:'R&R', AL:'Annual Leave', LWOP:'LWOP' };
-  return map[s] || s;
-}
-
-function statusClass(s) {
-  return `s${s}`;
-}
-
-function getMonday(d) {
-  const day = d.getDay();
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-  return new Date(d.setDate(diff));
-}
-
-function fmtDate(d) {
-  return d.toLocaleDateString('en-AU', { weekday:'short', day:'numeric', month:'short' });
-}
-
-// ─── CALENDAR ─────────────────────────────────────────────────────
-function calPrev() { calWeekStart = new Date(calWeekStart); calWeekStart.setDate(calWeekStart.getDate() - 7); renderCalendar(); }
-function calNext() { calWeekStart = new Date(calWeekStart); calWeekStart.setDate(calWeekStart.getDate() + 7); renderCalendar(); }
-function calToday() { calWeekStart = getMonday(new Date()); renderCalendar(); }
-
-function renderCalendar() {
-  const end = new Date(calWeekStart);
-  end.setDate(end.getDate() + 6);
-  document.getElementById('cal-title').textContent =
-    `${calWeekStart.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})} — ${end.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})}`;
-
-  const today = new Date(); today.setHours(0,0,0,0);
-  const tbody = document.getElementById('cal-body');
-  tbody.innerHTML = '';
-
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(calWeekStart);
-    d.setDate(d.getDate() + i);
-    d.setHours(0,0,0,0);
-    const isToday = d.getTime() === today.getTime();
-
-    const aStatus = getSwingStatus(AMANDA_BASE, d);
-    const cStatus = getSwingStatus(CLIVE_BASE, d);
-    const pStatus = getPeteStatus(d);
-    const aVillage = ['FIAM','FIPM','CC','FOAM','FOPM'].includes(aStatus) ? 'JV' : '';
-    const cVillage = ['FIAM','FIPM','CC','FOAM','FOPM'].includes(cStatus) ? 'KV' : '';
-
-    const aFlight = (aStatus === 'FIAM' || aStatus === 'FOAM') ? getFlightForDay(d, aStatus) : '';
-    const cFlight = (cStatus === 'FIAM' || cStatus === 'FOAM') ? getFlightForDay(d, cStatus) : '';
-
-    const tr = document.createElement('tr');
-    if (isToday) tr.className = 'today-row';
-    tr.innerHTML = `
-      <td class="date-col">${fmtDate(d)}</td>
-      <td><div class="cal-cell ${statusClass(aStatus)}" onclick="openOverride('764148','${d.toISOString().slice(0,10)}','${aStatus}')">
-        ${statusLabel(aStatus)}${aFlight ? ` <small>${aFlight}</small>` : ''}
-        ${aVillage ? `<span class="village-pill v${aVillage}">${aVillage}</span>` : ''}
-      </div></td>
-      <td><div class="cal-cell ${statusClass(cStatus)}" onclick="openOverride('807406','${d.toISOString().slice(0,10)}','${cStatus}')">
-        ${statusLabel(cStatus)}${cFlight ? ` <small>${cFlight}</small>` : ''}
-        ${cVillage ? `<span class="village-pill v${cVillage}">${cVillage}</span>` : ''}
-      </div></td>
-      <td><div class="cal-cell ${statusClass(pStatus)}">${statusLabel(pStatus)}</div></td>
-    `;
-    tbody.appendChild(tr);
+async function showPop(e,el){
+  const flNum=el.dataset.fl,status=el.dataset.st;
+  if(!flNum)return;
+  const pop=document.getElementById('popover');
+  if(!flightCache[flNum]){
+    const dir=(status==='FIAM'||status==='FIPM')?'inbound':'outbound';
+    const res=await api(`/api/flights/?site=CC&direction=${dir}`);
+    if(res)res.forEach(f=>{flightCache[f.flight_number]=f;});
   }
+  const fd=flightCache[flNum];
+  document.getElementById('pop-fl').textContent=flNum;
+  document.getElementById('pop-rt').textContent=fd?`${fd.depart_location} → ${fd.arrive_location}`:(status==='FIAM'?'Perth → Christmas Creek':'Christmas Creek → Perth');
+  document.getElementById('pop-dep').textContent=fd?.depart_time||'—';
+  document.getElementById('pop-arr').textContent=fd?.arrive_time||'—';
+  document.getElementById('pop-ci').textContent=fd?.checkin_open?`Check-in opens ${fd.checkin_open} · closes ${fd.checkin_close}`:'';
+  const rect=el.getBoundingClientRect();
+  pop.style.left=Math.min(rect.left,window.innerWidth-240)+'px';
+  pop.style.top=(rect.bottom+8)+'px';
+  pop.classList.add('vis');
 }
 
-function getPeteStatus(d) {
-  // Pete shows as available on RR days for primary staff
-  const aStatus = getSwingStatus(AMANDA_BASE, d);
-  const cStatus = getSwingStatus(CLIVE_BASE, d);
-  if (aStatus === 'RR' || cStatus === 'RR') return 'RR'; // both cycling
-  return '—';
-}
+function hidePop(){document.getElementById('popover').classList.remove('vis');}
 
-function getFlightForDay(d, status) {
-  // Look up from swings data
-  const dateStr = d.toISOString().slice(0, 10);
-  const swing = allSwings.find(s => {
-    const fi = s.fly_in_date?.slice(0,10);
-    const fo = s.fly_out_date?.slice(0,10);
-    return fi === dateStr || fo === dateStr;
-  });
-  if (!swing) return '';
-  if (status === 'FIAM' || status === 'FIPM') return swing.fly_in_flight || '';
-  if (status === 'FOAM' || status === 'FOPM') return swing.fly_out_flight || '';
-  return '';
-}
-
-// ─── STAFF CARDS ──────────────────────────────────────────────────
-function renderStaffCards() {
-  const today = new Date(); today.setHours(0,0,0,0);
-  const container = document.getElementById('staff-cards');
-  const staffDef = [
-    { emp: '764148', name: 'Amanda Inglis-Baillie', role: 'Technician', base: AMANDA_BASE, village: 'JV', color: '#e67e22' },
-    { emp: '807406', name: 'Clive Ettia', role: 'Technician', base: CLIVE_BASE, village: 'KV', color: '#b21c24' },
-    { emp: 'PETE-CASUAL', name: 'Pete Scully', role: 'Relief', base: null, village: 'JV', color: '#6b7280' },
-  ];
-  container.innerHTML = staffDef.map(s => {
-    const status = s.base ? getSwingStatus(s.base, today) : '—';
-    const onSite = ['FIAM','FIPM','CC','FOAM','FOPM'].includes(status);
-    const initials = s.name.split(' ').map(w=>w[0]).join('').slice(0,2);
-    return `<div class="staff-card">
-      <div class="staff-avatar" style="background:${s.color}">${initials}</div>
-      <div>
-        <div class="staff-name">${s.name}</div>
-        <div class="staff-meta">${s.role} · #${s.emp}</div>
-        <span class="status-pill ${statusClass(status)}">${statusLabel(status)}</span>
-        ${onSite ? `<span class="village-pill v${s.village}">${s.village}</span>` : ''}
-      </div>
-    </div>`;
+function renderStaffStrip(){
+  const today=new Date();today.setHours(0,0,0,0);
+  document.getElementById('staff-strip').innerHTML=STAFF_DEF.map(s=>{
+    const status=getSwingStatus(s.base,today);
+    const ini=s.name.split(' ').map(w=>w[0]).join('').slice(0,2);
+    const village=isOnSite(status)?s.village:null;
+    return`<div class="sc"><div class="sc-av" style="background:${s.color}">${ini}</div><div style="min-width:0"><div class="sc-name">${s.name}</div><div class="sc-status"><span class="pill pill-${status||'dash'}">${SL[status]||'—'}</span>${village?`<span class="vpill vpill-${village}">${village}</span>`:''}</div></div></div>`;
   }).join('');
 }
 
-// ─── STAFF FULL ───────────────────────────────────────────────────
-function renderStaffFull() {
-  const staffDef = [
-    { emp: '764148', name: 'Amanda Inglis-Baillie', role: 'Technician', roster: '8/6', expiry: '18 Aug 2026', village: 'JV', color: '#e67e22' },
-    { emp: '807406', name: 'Clive Ettia', role: 'Technician', roster: '8/6', expiry: '19 Aug 2026', village: 'KV', color: '#b21c24' },
-    { emp: 'PETE-CASUAL', name: 'Pete Scully', role: 'Relief', roster: 'Casual', expiry: '—', village: 'JV', color: '#6b7280' },
-  ];
-  document.getElementById('staff-full-cards').innerHTML = staffDef.map(s => `
-    <div class="card" style="display:flex;align-items:center;gap:18px">
-      <div class="staff-avatar" style="background:${s.color};width:56px;height:56px;font-size:22px">${s.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
-      <div style="flex:1">
-        <div style="font-size:16px;font-weight:700">${s.name}</div>
-        <div class="text-muted">${s.role} · Emp #${s.emp}</div>
-        <div class="text-muted" style="margin-top:4px">Roster: ${s.roster} &nbsp;·&nbsp; Expiry: ${s.expiry} &nbsp;·&nbsp; Village: <span class="village-pill v${s.village}">${s.village}</span></div>
-      </div>
-    </div>
-  `).join('');
-}
-
-// ─── SWINGS ───────────────────────────────────────────────────────
-function renderSwings() {
-  const nameMap = { '764148': 'Amanda Inglis-Baillie', '807406': 'Clive Ettia', 'PETE-CASUAL': 'Pete Scully' };
-  const colorMap = { '764148': '#e67e22', '807406': '#b21c24', 'PETE-CASUAL': '#6b7280' };
-  const container = document.getElementById('swings-list');
-  if (!allSwings.length) {
-    container.innerHTML = '<p class="text-muted">No swings recorded yet. Click + Add Swing to get started.</p>';
-    return;
-  }
-  container.innerHTML = allSwings.map(sw => {
-    const name = nameMap[sw.staff_emp] || sw.staff_emp;
-    const color = colorMap[sw.staff_emp] || '#6b7280';
-    return `<div class="swing-card">
-      <div class="swing-header">
-        <div>
-          <span class="swing-staff" style="color:${color}">${name}</span>
-          ${sw.village ? `<span class="village-pill v${sw.village}">${sw.village}</span>` : ''}
-          ${sw.room_ref ? `<span class="text-muted" style="font-size:12px;margin-left:8px">${sw.room_ref}</span>` : ''}
-        </div>
-        <div class="swing-dates">${sw.fly_in_date} → ${sw.fly_out_date}</div>
-      </div>
-      <div class="swing-flights">
-        <div class="flight-chip">
-          <div class="fc-label">Fly In</div>
-          <div class="fc-num">${sw.fly_in_flight || '—'}</div>
-        </div>
-        <div class="flight-chip">
-          <div class="fc-label">Fly Out</div>
-          <div class="fc-num">${sw.fly_out_flight || '—'}</div>
-        </div>
-      </div>
-      ${sw.notes ? `<div class="text-muted" style="margin-top:8px;font-size:12px">${sw.notes}</div>` : ''}
-      <div class="swing-actions">
-        <button class="btn" onclick="editSwing(${sw.id})">Edit</button>
-        <button class="btn btn-orange" onclick="openDraft(${sw.id})">Draft Email</button>
-        <button class="btn" style="color:var(--red)" onclick="deleteSwing(${sw.id})">Delete</button>
-      </div>
-    </div>`;
+function renderSwings(){
+  const c=document.getElementById('swings-list');
+  if(!allSwings.length){c.innerHTML='<p class="tmuted">No swings recorded yet.</p>';return;}
+  const sorted=[...allSwings].sort((a,b)=>a.fly_in_date>b.fly_in_date?-1:1);
+  c.innerHTML=sorted.map(sw=>{
+    const s=STAFF_DEF.find(x=>x.emp===sw.staff_emp)||{};
+    return`<div class="sw-card"><div class="sw-left"><div class="sw-top"><span class="sw-name" style="color:${s.color||'#333'}">${NM[sw.staff_emp]||sw.staff_emp}</span>${sw.village?`<span class="vpill vpill-${sw.village}">${sw.village}</span>`:''}<span class="sw-dates">${sw.fly_in_date} → ${sw.fly_out_date}</span></div><div class="sw-flights"><div class="fb"><div class="fb-lbl">Fly In</div><div class="fb-num">${sw.fly_in_flight||'—'}</div></div><div class="fb"><div class="fb-lbl">Fly Out</div><div class="fb-num">${sw.fly_out_flight||'—'}</div></div></div>${sw.notes?`<p class="tmuted" style="margin-top:8px">${sw.notes}</p>`:''}</div><div class="sw-acts"><button class="btn btn-sm" onclick="editSwing(${sw.id})">Edit</button><button class="btn btn-sm btn-orange" onclick="openChangeModal(${sw.id})">Request Change</button><button class="btn btn-sm btn-ghost" style="color:var(--red)" onclick="deleteSwing(${sw.id})">Delete</button></div></div>`;
   }).join('');
 }
 
-function openSwingModal(swing = null) {
-  editingSwingId = swing ? swing.id : null;
-  document.getElementById('swing-modal-title').textContent = swing ? 'Edit Swing' : 'Add Swing';
-  document.getElementById('swing-id').value = swing?.id || '';
-  document.getElementById('swing-staff').value = swing?.staff_emp || '764148';
-  document.getElementById('swing-fiin').value = swing?.fly_in_date || '';
-  document.getElementById('swing-fiout').value = swing?.fly_out_date || '';
-  document.getElementById('swing-fiin-flight').value = swing?.fly_in_flight || '';
-  document.getElementById('swing-fiout-flight').value = swing?.fly_out_flight || '';
-  document.getElementById('swing-village').value = swing?.village || 'JV';
-  document.getElementById('swing-room').value = swing?.room_ref || '';
-  document.getElementById('swing-notes').value = swing?.notes || '';
-  document.getElementById('flight-in-options').innerHTML = '';
-  document.getElementById('flight-out-options').innerHTML = '';
+function openSwingModal(swing=null){
+  editSwingId=swing?.id||null;
+  document.getElementById('sw-modal-ttl').textContent=swing?'Edit Swing':'Add Swing';
+  document.getElementById('sw-id').value=swing?.id||'';
+  document.getElementById('sw-staff').value=swing?.staff_emp||'764148';
+  document.getElementById('sw-fiin').value=swing?.fly_in_date||'';
+  document.getElementById('sw-fiout').value=swing?.fly_out_date||'';
+  document.getElementById('sw-fiin-fl').value=swing?.fly_in_flight||'';
+  document.getElementById('sw-fiout-fl').value=swing?.fly_out_flight||'';
+  document.getElementById('sw-village').value=swing?.village||'JV';
+  document.getElementById('sw-room').value=swing?.room_ref||'';
+  document.getElementById('sw-notes').value=swing?.notes||'';
+  document.getElementById('fi-opts').innerHTML='';
+  document.getElementById('fo-opts').innerHTML='';
   document.getElementById('swing-modal').classList.remove('hidden');
 }
 
-function editSwing(id) {
-  const sw = allSwings.find(s => s.id === id);
-  if (sw) openSwingModal(sw);
+function editSwing(id){openSwingModal(allSwings.find(s=>s.id===id));}
+
+async function deleteSwing(id){
+  if(!confirm('Delete this swing?'))return;
+  await api(`/api/swings/${id}`,{method:'DELETE'});
+  allSwings=allSwings.filter(s=>s.id!==id);
+  renderSwings();renderCalendar();
 }
 
-async function deleteSwing(id) {
-  if (!confirm('Delete this swing?')) return;
-  await api(`/api/swings/${id}`, { method: 'DELETE' });
-  allSwings = allSwings.filter(s => s.id !== id);
-  renderSwings();
-  renderCalendar();
-}
-
-async function saveSwing() {
-  const payload = {
-    staff_emp: document.getElementById('swing-staff').value,
-    fly_in_date: document.getElementById('swing-fiin').value,
-    fly_out_date: document.getElementById('swing-fiout').value,
-    fly_in_flight: document.getElementById('swing-fiin-flight').value || null,
-    fly_out_flight: document.getElementById('swing-fiout-flight').value || null,
-    village: document.getElementById('swing-village').value,
-    room_ref: document.getElementById('swing-room').value || null,
-    notes: document.getElementById('swing-notes').value || null,
+async function saveSwing(){
+  const payload={
+    staff_emp:document.getElementById('sw-staff').value,
+    fly_in_date:document.getElementById('sw-fiin').value,
+    fly_out_date:document.getElementById('sw-fiout').value,
+    fly_in_flight:document.getElementById('sw-fiin-fl').value||null,
+    fly_out_flight:document.getElementById('sw-fiout-fl').value||null,
+    village:document.getElementById('sw-village').value,
+    room_ref:document.getElementById('sw-room').value||null,
+    notes:document.getElementById('sw-notes').value||null,
   };
-  if (!payload.fly_in_date || !payload.fly_out_date) { alert('Fly-in and fly-out dates are required.'); return; }
-
+  if(!payload.fly_in_date||!payload.fly_out_date){alert('Fly-in and fly-out dates required.');return;}
   let result;
-  if (editingSwingId) {
-    result = await api(`/api/swings/${editingSwingId}`, { method: 'PUT', body: JSON.stringify(payload) });
-    if (result) allSwings = allSwings.map(s => s.id === editingSwingId ? result : s);
-  } else {
-    result = await api('/api/swings/', { method: 'POST', body: JSON.stringify(payload) });
-    if (result) allSwings.push(result);
-  }
-  closeModal('swing-modal');
-  renderSwings();
-  renderCalendar();
+  if(editSwingId){result=await api(`/api/swings/${editSwingId}`,{method:'PUT',body:JSON.stringify(payload)});if(result)allSwings=allSwings.map(s=>s.id===editSwingId?result:s);}
+  else{result=await api('/api/swings/',{method:'POST',body:JSON.stringify(payload)});if(result)allSwings.push(result);}
+  closeModal('swing-modal');renderSwings();renderCalendar();
 }
 
-// ─── FLIGHT PICKER ────────────────────────────────────────────────
-async function loadFlightOptions(dir) {
-  const dateInput = dir === 'in' ? 'swing-fiin' : 'swing-fiout';
-  const optionsDiv = dir === 'in' ? 'flight-in-options' : 'flight-out-options';
-  const flightInput = dir === 'in' ? 'swing-fiin-flight' : 'swing-fiout-flight';
-  const dateVal = document.getElementById(dateInput).value;
-  if (!dateVal) return;
-
-  const d = new Date(dateVal);
-  const dayName = d.toLocaleDateString('en-AU', { weekday: 'long' });
-  const direction = dir === 'in' ? 'inbound' : 'outbound';
-
-  const flights = await api(`/api/flights/?site=CC&day_of_week=${dayName}&direction=${direction}`);
-  const container = document.getElementById(optionsDiv);
-  if (!flights || !flights.length) {
-    container.innerHTML = '<div class="text-muted" style="font-size:12px">No flights found for this day.</div>';
-    return;
-  }
-  container.innerHTML = flights.map(f => `
-    <div class="flight-option" onclick="selectFlight('${flightInput}','${f.flight_number}',this)">
-      <span class="fo-num">${f.flight_number}</span>
-      <span class="fo-route">${f.depart_location} → ${f.arrive_location}</span>
-      <span class="fo-time">${f.depart_time} → ${f.arrive_time}</span>
-    </div>
-  `).join('');
+async function loadFlyOpts(dir){
+  const dv=document.getElementById(dir==='in'?'sw-fiin':'sw-fiout').value;
+  const od=document.getElementById(dir==='in'?'fi-opts':'fo-opts');
+  const inp=dir==='in'?'sw-fiin-fl':'sw-fiout-fl';
+  if(!dv)return;
+  const d=new Date(dv);
+  const dn=d.toLocaleDateString('en-AU',{weekday:'long'});
+  const direction=dir==='in'?'inbound':'outbound';
+  const fl=await api(`/api/flights/?site=CC&day_of_week=${dn}&direction=${direction}`);
+  if(!fl?.length){od.innerHTML='<p class="tmuted" style="font-size:12px;margin-top:4px">No flights on this day.</p>';return;}
+  od.innerHTML=fl.map(f=>`<div class="fo" onclick="selFlight('${inp}','${f.flight_number}',this)"><span class="fo-num">${f.flight_number}</span><span class="fo-rt">${f.depart_location} → ${f.arrive_location}</span><span class="fo-tm">${f.depart_time} → ${f.arrive_time}</span></div>`).join('');
 }
 
-function selectFlight(inputId, flightNum, el) {
-  document.getElementById(inputId).value = flightNum;
-  el.closest('.flight-options').querySelectorAll('.flight-option').forEach(e => e.classList.remove('selected'));
-  el.classList.add('selected');
+function selFlight(inp,num,el){
+  document.getElementById(inp).value=num;
+  el.closest('.flight-opts').querySelectorAll('.fo').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
 }
 
-// ─── DRAFT EMAIL ──────────────────────────────────────────────────
-function openDraft(swingId) {
-  const sw = allSwings.find(s => s.id === swingId);
-  if (!sw) return;
-  const nameMap = { '764148': 'Amanda Inglis-Baillie', '807406': 'Clive Ettia', 'PETE-CASUAL': 'Pete Scully' };
-  const name = nameMap[sw.staff_emp] || sw.staff_emp;
+function openChangeModal(swingId=null){
+  document.getElementById('cr-date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('cr-newdate').value='';
+  document.getElementById('cr-reason').value='';
+  if(swingId){const sw=allSwings.find(s=>s.id===swingId);if(sw)document.getElementById('cr-staff').value=sw.staff_emp;}
+  document.getElementById('change-modal').classList.remove('hidden');
+}
 
-  const draft = `To: Ryan Clifton / Riel Sibley
-CC: Kerri-Anne Bull
-Subject: Flight Booking Request — ${name} / Christmas Creek
+function saveChange(){
+  const emp=document.getElementById('cr-staff').value;
+  const type=document.getElementById('cr-type').value;
+  const date=document.getElementById('cr-date').value;
+  const newDate=document.getElementById('cr-newdate').value;
+  const reason=document.getElementById('cr-reason').value;
+  if(!reason.trim()){alert('Please enter a reason.');return;}
+  const change={id:Date.now(),staff_emp:emp,change_type:type,effective_date:date,new_date:newDate||null,reason,status:'requested',created_at:new Date().toISOString(),draft:buildDraft(emp,type,date,newDate,reason)};
+  allChanges.unshift(change);
+  updateChangesBadge();
+  closeModal('change-modal');
+  showTab('changes');
+}
 
-Hi Ryan,
+function buildDraft(emp,type,date,newDate,reason){
+  const name=NM[emp]||emp;
+  return`To: mobilisation@issg.net.au\nSubject: Roster Change Request — ${name} / Christmas Creek\n\nHi Team,\n\nPlease action the following roster change in FMG Workflow:\n\nTechnician: ${name}\nChange Type: ${CTL[type]||type}\nEffective Date: ${date}${newDate?'\nNew Fly-Out Date: '+newDate:''}\nSite: Christmas Creek (CCK)\n\nReason: ${reason}\n\nPlease confirm once actioned in Workflow and provide the booking reference.\n\nRegards,\n${currentUser}\nISSG — Eastern Hub`;
+}
 
-Could you please arrange the following booking for one of our technicians:
+const SC={requested:'sb-requested',booked:'sb-booked',confirmed:'sb-confirmed',notified:'sb-notified',complete:'sb-complete'};
+const SN={requested:'booked',booked:'confirmed',confirmed:'notified',notified:'complete'};
+const SNL={requested:'Mark Booked',booked:'Log Confirmation',confirmed:'Mark Notified',notified:'Mark Complete'};
 
-Technician: ${name}
-Employee #: ${sw.staff_emp}
+function renderChanges(){
+  const c=document.getElementById('changes-list');
+  if(!allChanges.length){c.innerHTML='<p class="tmuted" style="padding:40px 0;text-align:center">No change requests yet.<br><span style="font-size:12px">Submit from a swing record or click + New Request.</span></p>';return;}
+  c.innerHTML=allChanges.map(ch=>{
+    const name=NM[ch.staff_emp]||ch.staff_emp;
+    const slbl=ch.status.charAt(0).toUpperCase()+ch.status.slice(1).replace('_',' ');
+    const next=SN[ch.status];
+    return`<div class="cr-card"><div class="cr-hdr"><div><div class="cr-title">${name} — ${CTL[ch.change_type]||ch.change_type}</div><div class="cr-meta">Effective ${ch.effective_date}${ch.new_date?' · New: '+ch.new_date:''} · Logged ${new Date(ch.created_at).toLocaleDateString('en-AU')}</div></div><span class="sbadge ${SC[ch.status]}">${slbl}</span></div><div class="cr-detail">${ch.reason}</div><div class="cr-acts"><button class="btn btn-sm" onclick="showDraft(${ch.id})">View Draft Email</button>${next?`<button class="btn btn-sm btn-red" onclick="advStatus(${ch.id})">${SNL[ch.status]}</button>`:''}<button class="btn btn-sm btn-ghost" style="color:var(--red)" onclick="delChange(${ch.id})">Delete</button></div></div>`;
+  }).join('');
+}
 
-FLY IN
-Date: ${sw.fly_in_date}
-Flight: ${sw.fly_in_flight || '[TBC]'}
-Route: Perth (PER) → Christmas Creek (CCK)
-Village: ${sw.village || '[TBC]'}${sw.room_ref ? '\nRoom Ref: ' + sw.room_ref : ''}
+function advStatus(id){
+  const c=allChanges.find(x=>x.id===id);if(!c)return;
+  if(c.status==='booked'){const ref=prompt('Enter FMG Workflow confirmation reference:');if(!ref)return;c.workflow_ref=ref;}
+  c.status=SN[c.status];renderChanges();updateChangesBadge();
+}
 
-FLY OUT
-Date: ${sw.fly_out_date}
-Flight: ${sw.fly_out_flight || '[TBC]'}
-Route: Christmas Creek (CCK) → Perth (PER)
-
-Please confirm once booked.
-
-Cheers,
-Ryan Weston
-Operations Manager — ISSG`;
-
-  document.getElementById('draft-content').textContent = draft;
+function showDraft(id){
+  const c=allChanges.find(x=>x.id===id);if(!c)return;
+  document.getElementById('draft-content').textContent=c.draft;
   document.getElementById('draft-modal').classList.remove('hidden');
 }
 
-function copyDraft() {
-  const text = document.getElementById('draft-content').textContent;
-  navigator.clipboard.writeText(text).then(() => alert('Copied to clipboard.'));
+function delChange(id){
+  if(!confirm('Delete this change request?'))return;
+  allChanges=allChanges.filter(x=>x.id!==id);
+  renderChanges();updateChangesBadge();
 }
 
-// ─── AGENT ────────────────────────────────────────────────────────
-async function sendAgent() {
-  const input = document.getElementById('agent-input');
-  const text = input.value.trim();
-  if (!text) return;
-  input.value = '';
-  appendMsg('user', text);
-  agentHistory.push({ role: 'user', content: text });
-
-  const typingEl = appendMsg('agent', '...');
-  const data = await api('/api/agent/chat', {
-    method: 'POST',
-    body: JSON.stringify({ messages: agentHistory })
-  });
-  typingEl.remove();
-
-  const reply = data?.reply || 'Sorry, I could not get a response. Please try again.';
-  agentHistory.push({ role: 'assistant', content: reply });
-  appendMsg('agent', reply);
+function updateChangesBadge(){
+  const open=allChanges.filter(c=>c.status!=='complete').length;
+  const b=document.getElementById('changes-badge');
+  b.textContent=open;b.classList.toggle('hidden',open===0);
 }
 
-function agentQuick(text) {
-  document.getElementById('agent-input').value = text;
-  sendAgent();
+function copyDraft(){
+  navigator.clipboard.writeText(document.getElementById('draft-content').textContent).then(()=>alert('Copied.'));
 }
 
-function appendMsg(role, text) {
-  const msgs = document.getElementById('agent-msgs');
-  const el = document.createElement('div');
-  el.className = `msg msg-${role}`;
-  el.textContent = text;
-  msgs.appendChild(el);
-  msgs.scrollTop = msgs.scrollHeight;
-  return el;
+async function sendAgent(){
+  const inp=document.getElementById('agent-input');
+  const text=inp.value.trim();if(!text)return;
+  inp.value='';appendMsg('user',text);agentHistory.push({role:'user',content:text});
+  const t=appendMsg('agent','...');
+  const data=await api('/api/agent/chat',{method:'POST',body:JSON.stringify({messages:agentHistory})});
+  t.remove();
+  const reply=data?.reply||'No response. Please try again.';
+  agentHistory.push({role:'assistant',content:reply});appendMsg('agent',reply);
 }
 
-// ─── MODALS ───────────────────────────────────────────────────────
-function closeModal(id) {
-  document.getElementById(id).classList.add('hidden');
+function aq(text){document.getElementById('agent-input').value=text;sendAgent();}
+
+function appendMsg(role,text){
+  const msgs=document.getElementById('agent-msgs');
+  const el=document.createElement('div');el.className=`msg msg-${role}`;el.textContent=text;
+  msgs.appendChild(el);msgs.scrollTop=msgs.scrollHeight;return el;
 }
 
-// ─── OVERRIDE (placeholder) ───────────────────────────────────────
-function openOverride(emp, date, currentStatus) {
-  const status = prompt(`Override status for ${date}?\nCurrent: ${currentStatus}\nOptions: AL, LWOP, FIAM, FIPM, FOAM, FOPM, CC, RR`);
-  if (status) alert(`Override saved: ${emp} on ${date} → ${status}\n(Full override API integration in next release.)`);
-}
+function closeModal(id){document.getElementById(id).classList.add('hidden');}
 
-// ─── STARTUP ─────────────────────────────────────────────────────
-if (token) {
-  showApp();
-}
+if(token)showApp();
 </script>
 </body>
 </html>
