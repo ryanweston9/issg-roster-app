@@ -188,6 +188,26 @@
   .tmuted{color:var(--muted);font-size:13px;}
   .red-light{background:var(--red-light);}
 </style>
+  /* SWING DETAIL MODAL */
+  .sd-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+  .sd-name{font-size:16px;font-weight:800;}
+  .sd-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+  .sd-flights{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+  .sd-fb{border:1.5px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all .12s;}
+  .sd-fb:hover{border-color:var(--red);background:var(--red-light);}
+  .sd-fb.active{border-color:var(--red);background:var(--red-light);}
+  .sd-fb-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;}
+  .sd-fb-num{font-size:22px;font-weight:800;color:var(--red);}
+  .sd-fb-dt{font-size:12px;color:var(--muted);margin-top:2px;}
+  .sd-fb-times{font-size:12px;font-weight:600;margin-top:4px;}
+  .sd-info{background:var(--bg);border-radius:10px;padding:12px 14px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .sd-info-row{display:flex;flex-direction:column;gap:2px;}
+  .sd-info-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+  .sd-info-val{font-size:13px;font-weight:600;}
+  .sd-cr-section{border-top:1px solid var(--border);padding-top:16px;margin-top:4px;}
+  .sd-cr-ttl{font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text);}
+  .sd-cr-hint{font-size:12px;color:var(--muted);margin-bottom:10px;}
+</style>
 </head>
 <body>
 
@@ -209,7 +229,7 @@
 </div>
 
 <!-- APP -->
-<div id="app">
+<div id="app" style="display:none">
   <div class="topbar">
     <div class="tb-left">
       <span class="tb-badge">ISSG</span>
@@ -242,7 +262,7 @@
         <tbody id="cal-body"></tbody>
       </table>
     </div>
-    <p class="tmuted mt12" style="font-size:12px">Hover fly-in / fly-out cells to see flight details &nbsp;·&nbsp; Edit via Swings tab</p>
+    <p class="tmuted mt12" style="font-size:12px">Hover fly-in / fly-out cells for flight details &nbsp;·&nbsp; Click any on-site swing cell to view or request changes</p>
   </div>
 
   <!-- SWINGS -->
@@ -275,7 +295,7 @@
         <div class="msg msg-agent">Hi! I can help with roster queries, swing planning, and mobilisation drafts. What do you need?</div>
       </div>
       <div class="agent-quick">
-        <button class="qbtn" onclick="aq('Who is on site at Christmas Creek today?')">Who's on site?</button>
+        <button class="qbtn" onclick="aq('Who is on site at Christmas Creek today?')">Who is on site?</button>
         <button class="qbtn" onclick="aq('When is the next fly-in for Eastern Hub?')">Next fly-in</button>
         <button class="qbtn" onclick="aq('Draft a mobilisation email for Pete Scully to cover an emergency swing')">Mobilise Pete</button>
         <button class="qbtn" onclick="aq('What flights run Perth to Christmas Creek on Wednesdays?')">Wed flights</button>
@@ -288,7 +308,7 @@
   </div>
 </div>
 
-<!-- POPOVER -->
+<!-- FLIGHT POPOVER (tooltip, no interaction) -->
 <div class="popover" id="popover">
   <div class="pop-fl" id="pop-fl"></div>
   <div class="pop-rt" id="pop-rt"></div>
@@ -298,7 +318,31 @@
   <div class="pop-ci" id="pop-ci"></div>
 </div>
 
-<!-- SWING MODAL -->
+<!-- SWING DETAIL MODAL (click on calendar cell) -->
+<div class="overlay hidden" id="swing-detail-modal">
+  <div class="modal" style="max-width:520px">
+    <div class="sd-header">
+      <div>
+        <div class="sd-name" id="sd-name"></div>
+        <div class="sd-sub" id="sd-sub"></div>
+      </div>
+      <button class="btn btn-ghost" onclick="closeModal('swing-detail-modal')">Close</button>
+    </div>
+    <div class="sd-flights" id="sd-flights"></div>
+    <div class="sd-info" id="sd-info"></div>
+    <div class="sd-cr-section">
+      <div class="sd-cr-ttl">Request a Change</div>
+      <div class="sd-cr-hint">Select which part of this swing you need to change:</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-red" id="sd-cr-fiin-btn">Change Fly-In</button>
+        <button class="btn btn-red" id="sd-cr-fiout-btn">Change Fly-Out</button>
+        <button class="btn" id="sd-cr-other-btn">Other / General</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SWING ADD/EDIT MODAL -->
 <div class="overlay hidden" id="swing-modal">
   <div class="modal">
     <div class="modal-ttl" id="sw-modal-ttl">Add Swing</div>
@@ -325,9 +369,9 @@
     <div class="frow">
       <div class="fg"><label class="flbl">Village</label>
         <select class="fsel" id="sw-village">
-          <option value="JV">JV — Java Village</option>
-          <option value="KV">KV — Kariyarra Village</option>
-          <option value="CB">CB — Cloudbreak Village</option>
+          <option value="JV">JV - Java Village</option>
+          <option value="KV">KV - Kariyarra Village</option>
+          <option value="CB">CB - Cloudbreak Village</option>
         </select>
       </div>
       <div class="fg"><label class="flbl">Room Ref</label><input type="text" class="finp" id="sw-room" placeholder="Optional"></div>
@@ -340,10 +384,10 @@
   </div>
 </div>
 
-<!-- CHANGE MODAL -->
+<!-- CHANGE REQUEST MODAL -->
 <div class="overlay hidden" id="change-modal">
   <div class="modal">
-    <div class="modal-ttl">New Change Request</div>
+    <div class="modal-ttl" id="cr-modal-ttl">New Change Request</div>
     <div class="fg"><label class="flbl">Staff Member</label>
       <select class="fsel" id="cr-staff">
         <option value="764148">Amanda Inglis-Baillie</option>
@@ -353,17 +397,23 @@
     </div>
     <div class="fg"><label class="flbl">Change Type</label>
       <select class="fsel" id="cr-type">
-        <option value="sick_leave">Sick Leave</option>
-        <option value="annual_leave">Annual Leave</option>
-        <option value="flight_change">Flight Change Only</option>
+        <option value="flight_change_in">Fly-In Flight Change</option>
+        <option value="flight_change_out">Fly-Out Flight Change</option>
         <option value="swing_extension">Swing Extension</option>
         <option value="swing_cut_short">Swing Cut Short</option>
+        <option value="sick_leave">Sick Leave</option>
+        <option value="annual_leave">Annual Leave</option>
         <option value="relief_mobilisation">Relief Mobilisation</option>
       </select>
     </div>
     <div class="frow">
       <div class="fg"><label class="flbl">Effective Date</label><input type="date" class="finp" id="cr-date"></div>
-      <div class="fg"><label class="flbl">New Fly-Out Date</label><input type="date" class="finp" id="cr-newdate"></div>
+      <div class="fg"><label class="flbl">New Date (if applicable)</label><input type="date" class="finp" id="cr-newdate"></div>
+    </div>
+    <div class="fg" id="cr-flight-row" style="display:none">
+      <label class="flbl">New Flight Number</label>
+      <input type="text" class="finp" id="cr-flight" placeholder="e.g. QF2924">
+      <div class="flight-opts" id="cr-flight-opts"></div>
     </div>
     <div class="fg"><label class="flbl">Reason / Notes</label><textarea class="ftxt" id="cr-reason" rows="3" placeholder="Briefly describe the reason..."></textarea></div>
     <div class="modal-acts">
@@ -387,33 +437,36 @@
 </div>
 
 <script>
-// ── STATE ────────────────────────────────────────────────────────────────────
-let token = localStorage.getItem('issg_token') || '';
-let currentUser = localStorage.getItem('issg_user') || '';
-let calStart = getMonday(new Date());
-let allSwings = [], allStaff = [], allChanges = [], allOverrides = [];
-let agentHistory = [], editSwingId = null, flightCache = {};
+// ── STATE ─────────────────────────────────────────────────────────────────────
+var token = localStorage.getItem('issg_token') || '';
+var currentUser = localStorage.getItem('issg_user') || '';
+var calStart = getMonday(new Date());
+var allSwings = [], allStaff = [], allChanges = [], allOverrides = [];
+var agentHistory = [], editSwingId = null, flightCache = {};
+var popTimer = null;
 
-// ── CONSTANTS ────────────────────────────────────────────────────────────────
-const SWING_ON = 8, SWING_OFF = 6, CYCLE = 14;
-const AMANDA_BASE = new Date('2025-03-05T00:00:00');
-const CLIVE_BASE  = new Date('2025-03-12T00:00:00');
+// ── CONSTANTS ─────────────────────────────────────────────────────────────────
+var SWING_ON = 8, CYCLE = 14;
+var AMANDA_BASE = new Date('2025-03-05T00:00:00');
+var CLIVE_BASE  = new Date('2025-03-12T00:00:00');
 
-const STAFF_DEF = [
+var STAFF_DEF = [
   { emp: '764148',      name: 'Amanda Inglis-Baillie', short: 'Amanda', base: AMANDA_BASE, village: 'JV', color: '#e67e22' },
   { emp: '807406',      name: 'Clive Ettia',           short: 'Clive',  base: CLIVE_BASE,  village: 'KV', color: '#b21c24' },
   { emp: 'PETE-CASUAL', name: 'Pete Scully',           short: 'Pete',   base: null,        village: 'JV', color: '#6b7280' },
 ];
 
-const SL  = { FIAM:'Fly In', FIPM:'Fly In', FOAM:'Fly Out', FOPM:'Fly Out', CC:'On Site', RR:'R&R', AL:'Annual Leave', LWOP:'LWOP', '---':'---' };
-const CTL = { sick_leave:'Sick Leave', annual_leave:'Annual Leave', flight_change:'Flight Change', swing_extension:'Swing Extension', swing_cut_short:'Swing Cut Short', relief_mobilisation:'Relief Mobilisation' };
-const NM  = { '764148':'Amanda Inglis-Baillie', '807406':'Clive Ettia', 'PETE-CASUAL':'Pete Scully' };
+var SL  = { FIAM:'Fly In (AM)', FIPM:'Fly In (PM)', FOAM:'Fly Out (AM)', FOPM:'Fly Out (PM)', CC:'On Site', RR:'R&R', AL:'Annual Leave', LWOP:'LWOP' };
+var CTL = { flight_change_in:'Fly-In Change', flight_change_out:'Fly-Out Change', swing_extension:'Swing Extension', swing_cut_short:'Swing Cut Short', sick_leave:'Sick Leave', annual_leave:'Annual Leave', relief_mobilisation:'Relief Mobilisation' };
+var NM  = { '764148':'Amanda Inglis-Baillie', '807406':'Clive Ettia', 'PETE-CASUAL':'Pete Scully' };
 
 // ── API ───────────────────────────────────────────────────────────────────────
-async function api(path, opts = {}) {
-  const res = await fetch(path, {
-    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', ...(opts.headers || {}) },
-    ...opts
+async function api(path, opts) {
+  opts = opts || {};
+  var res = await fetch(path, {
+    headers: Object.assign({ 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, opts.headers || {}),
+    method: opts.method || 'GET',
+    body: opts.body || undefined
   });
   if (res.status === 401) { doLogout(); return null; }
   if (!res.ok) return null;
@@ -422,16 +475,16 @@ async function api(path, opts = {}) {
 
 // ── AUTH ──────────────────────────────────────────────────────────────────────
 async function doLogin() {
-  const u = document.getElementById('lu').value.trim();
-  const p = document.getElementById('lp').value;
-  const err = document.getElementById('lerr');
+  var u = document.getElementById('lu').value.trim();
+  var p = document.getElementById('lp').value;
+  var err = document.getElementById('lerr');
   err.style.display = 'none';
-  const form = new FormData();
+  var form = new FormData();
   form.append('username', u);
   form.append('password', p);
-  const res = await fetch('/api/auth/token', { method: 'POST', body: form });
+  var res = await fetch('/api/auth/token', { method: 'POST', body: form });
   if (!res.ok) { err.style.display = 'block'; return; }
-  const data = await res.json();
+  var data = await res.json();
   token = data.access_token;
   currentUser = data.full_name;
   localStorage.setItem('issg_token', token);
@@ -460,22 +513,22 @@ async function showApp() {
 }
 
 async function loadData() {
-  const [swings, staff, changes, overrides] = await Promise.all([
+  var results = await Promise.all([
     api('/api/swings/'),
     api('/api/staff/'),
     api('/api/changes/'),
-    api('/api/overrides/'),
+    api('/api/overrides/')
   ]);
-  allSwings    = swings    || [];
-  allStaff     = staff     || [];
-  allChanges   = changes   || [];
-  allOverrides = overrides || [];
+  allSwings    = results[0] || [];
+  allStaff     = results[1] || [];
+  allChanges   = results[2] || [];
+  allOverrides = results[3] || [];
   updateChangesBadge();
 }
 
-// ── TAB NAVIGATION ────────────────────────────────────────────────────────────
+// ── TABS ──────────────────────────────────────────────────────────────────────
 function showTab(name) {
-  ['roster', 'swings', 'changes', 'agent'].forEach(function(t) {
+  ['roster','swings','changes','agent'].forEach(function(t) {
     document.getElementById('tab-' + t).classList.toggle('hidden', t !== name);
     document.getElementById('tabn-' + t).classList.toggle('active', t === name);
   });
@@ -488,33 +541,40 @@ function toDateStr(d) { return d.toISOString().slice(0, 10); }
 
 function getStatusForDate(emp, d) {
   var ds = toDateStr(d);
-
-  // 1. Override (AL, LWOP)
-  var ov = allOverrides.find(function(o) { return o.staff_emp === emp && o.date === ds; });
+  // 1. Override
+  var ov = null;
+  for (var i = 0; i < allOverrides.length; i++) {
+    if (allOverrides[i].staff_emp === emp && allOverrides[i].date === ds) { ov = allOverrides[i]; break; }
+  }
   if (ov) return ov.status;
-
-  // 2. Swing record from DB
-  var sw = allSwings.find(function(s) {
-    if (s.staff_emp !== emp) return false;
-    var fi = s.fly_in_date ? s.fly_in_date.slice(0, 10) : null;
-    var fo = s.fly_out_date ? s.fly_out_date.slice(0, 10) : null;
-    return fi === ds || fo === ds || (fi && fo && ds > fi && ds < fo);
-  });
+  // 2. Swing record
+  var sw = getSwingForDate(emp, ds);
   if (sw) {
-    var fi = sw.fly_in_date ? sw.fly_in_date.slice(0, 10) : null;
-    var fo = sw.fly_out_date ? sw.fly_out_date.slice(0, 10) : null;
+    var fi = sw.fly_in_date ? sw.fly_in_date.slice(0,10) : null;
+    var fo = sw.fly_out_date ? sw.fly_out_date.slice(0,10) : null;
     if (fi === ds) return 'FIAM';
     if (fo === ds) return 'FOAM';
     return 'CC';
   }
-
-  // 3. Calculated pattern fallback
-  var def = STAFF_DEF.find(function(x) { return x.emp === emp; });
+  // 3. Calculated fallback
+  var def = null;
+  for (var j = 0; j < STAFF_DEF.length; j++) { if (STAFF_DEF[j].emp === emp) { def = STAFF_DEF[j]; break; } }
   if (!def || !def.base) return '---';
-  return calcSwingStatus(def.base, d);
+  return calcStatus(def.base, d);
 }
 
-function calcSwingStatus(base, d) {
+function getSwingForDate(emp, ds) {
+  for (var i = 0; i < allSwings.length; i++) {
+    var s = allSwings[i];
+    if (s.staff_emp !== emp) continue;
+    var fi = s.fly_in_date ? s.fly_in_date.slice(0,10) : null;
+    var fo = s.fly_out_date ? s.fly_out_date.slice(0,10) : null;
+    if (fi === ds || fo === ds || (fi && fo && ds > fi && ds < fo)) return s;
+  }
+  return null;
+}
+
+function calcStatus(base, d) {
   var diff = Math.floor((d - base) / 86400000);
   var pos = ((diff % CYCLE) + CYCLE) % CYCLE;
   if (pos === 0) return 'FIAM';
@@ -531,143 +591,268 @@ function getMonday(d) {
   var day = d.getDay();
   var r = new Date(d);
   r.setDate(d.getDate() - day + (day === 0 ? -6 : 1));
-  r.setHours(0, 0, 0, 0);
+  r.setHours(0,0,0,0);
   return r;
 }
-
-function calShift(days) { calStart = new Date(calStart); calStart.setDate(calStart.getDate() + days); renderCalendar(); }
-function calToday()     { calStart = getMonday(new Date()); renderCalendar(); }
+function calShift(n) { calStart = new Date(calStart); calStart.setDate(calStart.getDate() + n); renderCalendar(); }
+function calToday()  { calStart = getMonday(new Date()); renderCalendar(); }
 
 function renderCalendar() {
-  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var today = new Date(); today.setHours(0,0,0,0);
   var days = [];
   for (var i = 0; i < 14; i++) {
-    var d = new Date(calStart);
-    d.setDate(d.getDate() + i);
-    d.setHours(0, 0, 0, 0);
-    days.push(d);
+    var d = new Date(calStart); d.setDate(d.getDate() + i); d.setHours(0,0,0,0); days.push(d);
   }
-  var end = days[13];
   document.getElementById('cal-title').textContent =
-    calStart.toLocaleDateString('en-AU', { day: 'numeric', month: 'short' }) + ' - ' +
-    end.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+    days[0].toLocaleDateString('en-AU',{day:'numeric',month:'short'}) + ' - ' +
+    days[13].toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'});
 
+  // Header
   var hh = '<tr><th></th>';
-  days.forEach(function(d) {
-    var isT = d.getTime() === today.getTime();
-    hh += '<th class="' + (isT ? 'tcol' : '') + '"><span class="th-day">' +
-      d.toLocaleDateString('en-AU', { weekday: 'short' }) + '</span><span class="th-dt">' +
-      d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short' }) + '</span></th>';
-  });
+  for (var i = 0; i < days.length; i++) {
+    var isT = days[i].getTime() === today.getTime();
+    hh += '<th class="' + (isT?'tcol':'') + '"><span class="th-day">' +
+      days[i].toLocaleDateString('en-AU',{weekday:'short'}) + '</span><span class="th-dt">' +
+      days[i].toLocaleDateString('en-AU',{day:'numeric',month:'short'}) + '</span></th>';
+  }
   document.getElementById('cal-head').innerHTML = hh + '</tr>';
 
+  // Body
   var tbody = document.getElementById('cal-body');
   tbody.innerHTML = '';
-  STAFF_DEF.forEach(function(s) {
+  for (var si = 0; si < STAFF_DEF.length; si++) {
+    var s = STAFF_DEF[si];
     var tr = document.createElement('tr');
     var html = '<td><div class="csl"><div class="csd" style="background:' + s.color + '"></div><span class="csn">' + s.short + '</span></div></td>';
-    days.forEach(function(d) {
+    for (var di = 0; di < days.length; di++) {
+      var d = days[di];
       var isT = d.getTime() === today.getTime();
+      var ds = toDateStr(d);
       var status = getStatusForDate(s.emp, d);
-      var fi = isTravelDay(status) ? getFlightForCell(s.emp, d, status) : null;
-      var village = isOnSite(status) ? getVillageForDate(s.emp, d, s.village) : null;
-      var hasP = fi && fi.num;
-      var label = (fi && fi.num) ? fi.num : (SL[status] || status);
+      var sw = getSwingForDate(s.emp, ds);
+      var travel = isTravelDay(status);
+      var onsite = isOnSite(status);
+      var village = onsite ? getVillageForDate(s.emp, ds, s.village) : null;
+
+      // Only show popover on actual travel days with a swing record
+      var flNum = null;
+      var flData = null;
+      if (travel && sw) {
+        flNum = (status === 'FIAM' || status === 'FIPM') ? sw.fly_in_flight : sw.fly_out_flight;
+        if (flNum && flightCache[flNum]) flData = flightCache[flNum];
+      }
+
+      var label = flNum ? flNum : (SL[status] || status);
       var cellHtml = '<span class="pill pill-' + (status || 'dash') + '">' + label + '</span>';
       if (village) cellHtml += ' <span class="vpill vpill-' + village + '">' + village + '</span>';
-      var da = hasP ? 'data-fl="' + fi.num + '" data-st="' + status + '" data-emp="' + s.emp + '"' : '';
-      var ev = hasP ? 'onmouseenter="showPop(event,this)" onmouseleave="hidePop()"' : '';
-      html += '<td class="' + (isT ? 'tcol' : '') + '" ' + da + ' ' + ev + '><div class="ccell">' + cellHtml + '</div></td>';
-    });
+
+      var tdClass = isT ? 'tcol' : '';
+      var tdAttrs = '';
+      var tdStyle = '';
+
+      if (travel && flNum) {
+        // Hover popover only on travel days
+        tdAttrs = 'data-fl="' + flNum + '" data-st="' + status + '"';
+        tdStyle = 'cursor:default;';
+        html += '<td class="' + tdClass + '" ' + tdAttrs + ' style="' + tdStyle + '" ' +
+          'onmouseenter="schedPop(event,this)" onmouseleave="cancelPop()">' +
+          '<div class="ccell">' + cellHtml + '</div></td>';
+      } else if (sw && (status === 'CC')) {
+        // Clickable on-site days — opens swing detail
+        var swId = sw.id;
+        html += '<td class="' + tdClass + '" style="cursor:pointer;" onclick="openSwingDetail(' + swId + ',\'' + ds + '\')">' +
+          '<div class="ccell">' + cellHtml + '</div></td>';
+      } else {
+        html += '<td class="' + tdClass + '"><div class="ccell">' + cellHtml + '</div></td>';
+      }
+    }
     tr.innerHTML = html;
     tbody.appendChild(tr);
-  });
+  }
   renderStaffStrip();
 }
 
-function getVillageForDate(emp, d, defaultVillage) {
-  var ds = toDateStr(d);
-  var sw = allSwings.find(function(s) {
-    return s.staff_emp === emp &&
-      s.fly_in_date && s.fly_out_date &&
-      s.fly_in_date.slice(0,10) <= ds &&
-      s.fly_out_date.slice(0,10) >= ds;
-  });
-  return (sw && sw.village) ? sw.village : defaultVillage;
-}
-
-function getFlightForCell(emp, d, status) {
-  var ds = toDateStr(d);
-  var sw = allSwings.find(function(s) {
-    if (s.staff_emp !== emp) return false;
-    if ((status === 'FIAM' || status === 'FIPM') && s.fly_in_date && s.fly_in_date.slice(0,10) === ds) return true;
-    if ((status === 'FOAM' || status === 'FOPM') && s.fly_out_date && s.fly_out_date.slice(0,10) === ds) return true;
-    return false;
-  });
-  if (!sw) return null;
-  var num = (status === 'FIAM' || status === 'FIPM') ? sw.fly_in_flight : sw.fly_out_flight;
-  return num ? { num: num, sw: sw } : null;
+function getVillageForDate(emp, ds, def) {
+  var sw = getSwingForDate(emp, ds);
+  return (sw && sw.village) ? sw.village : def;
 }
 
 // ── STAFF STRIP ───────────────────────────────────────────────────────────────
 function renderStaffStrip() {
-  var today = new Date(); today.setHours(0, 0, 0, 0);
-  document.getElementById('staff-strip').innerHTML = STAFF_DEF.map(function(s) {
+  var today = new Date(); today.setHours(0,0,0,0);
+  var html = '';
+  for (var i = 0; i < STAFF_DEF.length; i++) {
+    var s = STAFF_DEF[i];
     var status = getStatusForDate(s.emp, today);
-    var ini = s.name.split(' ').map(function(w) { return w[0]; }).join('').slice(0, 2);
-    var village = isOnSite(status) ? getVillageForDate(s.emp, today, s.village) : null;
-    return '<div class="sc"><div class="sc-av" style="background:' + s.color + '">' + ini + '</div>' +
+    var ini = s.name.split(' ').map(function(w){return w[0];}).join('').slice(0,2);
+    var village = isOnSite(status) ? getVillageForDate(s.emp, toDateStr(today), s.village) : null;
+    html += '<div class="sc"><div class="sc-av" style="background:' + s.color + '">' + ini + '</div>' +
       '<div style="min-width:0"><div class="sc-name">' + s.name + '</div>' +
-      '<div class="sc-status"><span class="pill pill-' + (status || 'dash') + '">' + (SL[status] || '---') + '</span>' +
+      '<div class="sc-status"><span class="pill pill-' + (status||'dash') + '">' + (SL[status]||'---') + '</span>' +
       (village ? '<span class="vpill vpill-' + village + '">' + village + '</span>' : '') +
       '</div></div></div>';
-  }).join('');
+  }
+  document.getElementById('staff-strip').innerHTML = html;
 }
 
 // ── FLIGHT POPOVER ────────────────────────────────────────────────────────────
-async function showPop(e, el) {
-  var flNum = el.dataset.fl, status = el.dataset.st;
+// Uses delayed show to prevent flicker; hides immediately on mouseleave
+function schedPop(e, el) {
+  cancelPop();
+  popTimer = setTimeout(function() { doShowPop(e, el); }, 120);
+}
+
+function cancelPop() {
+  if (popTimer) { clearTimeout(popTimer); popTimer = null; }
+  hidePop();
+}
+
+async function doShowPop(e, el) {
+  var flNum = el.dataset.fl;
+  var status = el.dataset.st;
   if (!flNum) return;
-  var pop = document.getElementById('popover');
+
+  // Fetch flight data if not cached
   if (!flightCache[flNum]) {
     var dir = (status === 'FIAM' || status === 'FIPM') ? 'inbound' : 'outbound';
     var res = await api('/api/flights/?site=CC&direction=' + dir);
-    if (res) res.forEach(function(f) { flightCache[f.flight_number] = f; });
+    if (res) {
+      for (var i = 0; i < res.length; i++) {
+        flightCache[res[i].flight_number] = res[i];
+      }
+    }
   }
+
   var fd = flightCache[flNum];
+  var pop = document.getElementById('popover');
   document.getElementById('pop-fl').textContent = flNum;
-  document.getElementById('pop-rt').textContent = fd ? (fd.depart_location + ' to ' + fd.arrive_location) : (status === 'FIAM' ? 'Perth to Christmas Creek' : 'Christmas Creek to Perth');
-  document.getElementById('pop-dep').textContent = fd ? fd.depart_time : '---';
-  document.getElementById('pop-arr').textContent = fd ? fd.arrive_time : '---';
-  document.getElementById('pop-ci').textContent = fd && fd.checkin_open ? 'Check-in opens ' + fd.checkin_open + ' closes ' + fd.checkin_close : '';
+
+  if (fd) {
+    document.getElementById('pop-rt').textContent = fd.depart_location + ' to ' + fd.arrive_location;
+    document.getElementById('pop-dep').textContent = fd.depart_time || '---';
+    document.getElementById('pop-arr').textContent = fd.arrive_time || '---';
+    document.getElementById('pop-ci').textContent = fd.checkin_open
+      ? 'Check-in ' + fd.checkin_open + ' - ' + fd.checkin_close
+      : '';
+  } else {
+    document.getElementById('pop-rt').textContent = status === 'FIAM' ? 'Perth to Christmas Creek' : 'Christmas Creek to Perth';
+    document.getElementById('pop-dep').textContent = '---';
+    document.getElementById('pop-arr').textContent = '---';
+    document.getElementById('pop-ci').textContent = 'Flight times not loaded';
+  }
+
+  // Position below the cell
   var rect = el.getBoundingClientRect();
-  pop.style.left = Math.min(rect.left, window.innerWidth - 240) + 'px';
-  pop.style.top = (rect.bottom + 8) + 'px';
+  var left = Math.min(rect.left, window.innerWidth - 250);
+  pop.style.left = left + 'px';
+  pop.style.top = (rect.bottom + window.scrollY + 6) + 'px';
   pop.classList.add('vis');
 }
 
-function hidePop() { document.getElementById('popover').classList.remove('vis'); }
+function hidePop() {
+  document.getElementById('popover').classList.remove('vis');
+}
 
-// ── SWINGS ────────────────────────────────────────────────────────────────────
+// ── SWING DETAIL MODAL ────────────────────────────────────────────────────────
+async function openSwingDetail(swingId, ds) {
+  var sw = null;
+  for (var i = 0; i < allSwings.length; i++) { if (allSwings[i].id === swingId) { sw = allSwings[i]; break; } }
+  if (!sw) return;
+
+  var staffDef = null;
+  for (var i = 0; i < STAFF_DEF.length; i++) { if (STAFF_DEF[i].emp === sw.staff_emp) { staffDef = STAFF_DEF[i]; break; } }
+
+  document.getElementById('sd-name').textContent = NM[sw.staff_emp] || sw.staff_emp;
+  document.getElementById('sd-sub').textContent = sw.fly_in_date + '  to  ' + sw.fly_out_date + (sw.village ? '  |  ' + sw.village : '');
+
+  // Load flight details for both legs
+  var fiF = sw.fly_in_flight, foF = sw.fly_out_flight;
+  if (fiF && !flightCache[fiF]) {
+    var r = await api('/api/flights/?site=CC&direction=inbound'); 
+    if (r) r.forEach(function(f){ flightCache[f.flight_number] = f; });
+  }
+  if (foF && !flightCache[foF]) {
+    var r = await api('/api/flights/?site=CC&direction=outbound');
+    if (r) r.forEach(function(f){ flightCache[f.flight_number] = f; });
+  }
+
+  var fiData = fiF ? flightCache[fiF] : null;
+  var foData = foF ? flightCache[foF] : null;
+
+  document.getElementById('sd-flights').innerHTML =
+    '<div class="sd-fb" id="sd-fi-card">' +
+      '<div class="sd-fb-lbl">Fly In</div>' +
+      '<div class="sd-fb-num">' + (fiF || '---') + '</div>' +
+      '<div class="sd-fb-dt">' + (sw.fly_in_date || '') + '</div>' +
+      '<div class="sd-fb-times">' + (fiData ? fiData.depart_time + ' - ' + fiData.arrive_time : fiF ? 'Times not loaded' : 'No flight set') + '</div>' +
+    '</div>' +
+    '<div class="sd-fb" id="sd-fo-card">' +
+      '<div class="sd-fb-lbl">Fly Out</div>' +
+      '<div class="sd-fb-num">' + (foF || '---') + '</div>' +
+      '<div class="sd-fb-dt">' + (sw.fly_out_date || '') + '</div>' +
+      '<div class="sd-fb-times">' + (foData ? foData.depart_time + ' - ' + foData.arrive_time : foF ? 'Times not loaded' : 'No flight set') + '</div>' +
+    '</div>';
+
+  document.getElementById('sd-info').innerHTML =
+    '<div class="sd-info-row"><div class="sd-info-lbl">Village</div><div class="sd-info-val">' + (sw.village || '---') + '</div></div>' +
+    '<div class="sd-info-row"><div class="sd-info-lbl">Room</div><div class="sd-info-val">' + (sw.room_ref || '---') + '</div></div>' +
+    '<div class="sd-info-row"><div class="sd-info-lbl">Days on site</div><div class="sd-info-val">' + calcDaysOnSite(sw.fly_in_date, sw.fly_out_date) + '</div></div>' +
+    '<div class="sd-info-row"><div class="sd-info-lbl">Notes</div><div class="sd-info-val">' + (sw.notes || '---') + '</div></div>';
+
+  // Wire up the change buttons
+  document.getElementById('sd-cr-fiin-btn').onclick = function() {
+    closeModal('swing-detail-modal');
+    openChangeModal(sw.id, 'flight_change_in', sw.fly_in_date);
+  };
+  document.getElementById('sd-cr-fiout-btn').onclick = function() {
+    closeModal('swing-detail-modal');
+    openChangeModal(sw.id, 'flight_change_out', sw.fly_out_date);
+  };
+  document.getElementById('sd-cr-other-btn').onclick = function() {
+    closeModal('swing-detail-modal');
+    openChangeModal(sw.id, null, null);
+  };
+
+  document.getElementById('swing-detail-modal').classList.remove('hidden');
+}
+
+function calcDaysOnSite(fi, fo) {
+  if (!fi || !fo) return '---';
+  var a = new Date(fi), b = new Date(fo);
+  return Math.round((b - a) / 86400000) + ' days';
+}
+
+// ── SWINGS TAB ────────────────────────────────────────────────────────────────
 function renderSwings() {
   var c = document.getElementById('swings-list');
   if (!allSwings.length) { c.innerHTML = '<p class="tmuted">No swings recorded yet.</p>'; return; }
-  var sorted = allSwings.slice().sort(function(a, b) { return a.fly_in_date > b.fly_in_date ? -1 : 1; });
-  c.innerHTML = sorted.map(function(sw) {
-    var s = STAFF_DEF.find(function(x) { return x.emp === sw.staff_emp; }) || {};
-    return '<div class="sw-card"><div class="sw-left">' +
-      '<div class="sw-top"><span class="sw-name" style="color:' + (s.color || '#333') + '">' + (NM[sw.staff_emp] || sw.staff_emp) + '</span>' +
+  var sorted = allSwings.slice().sort(function(a,b){ return a.fly_in_date > b.fly_in_date ? -1 : 1; });
+  var html = '';
+  for (var i = 0; i < sorted.length; i++) {
+    var sw = sorted[i];
+    var s = null;
+    for (var j = 0; j < STAFF_DEF.length; j++) { if (STAFF_DEF[j].emp === sw.staff_emp) { s = STAFF_DEF[j]; break; } }
+    var fiData = sw.fly_in_flight ? flightCache[sw.fly_in_flight] : null;
+    var foData = sw.fly_out_flight ? flightCache[sw.fly_out_flight] : null;
+    html += '<div class="sw-card">' +
+      '<div class="sw-left">' +
+      '<div class="sw-top"><span class="sw-name" style="color:' + (s?s.color:'#333') + '">' + (NM[sw.staff_emp]||sw.staff_emp) + '</span>' +
       (sw.village ? '<span class="vpill vpill-' + sw.village + '">' + sw.village + '</span>' : '') +
       '<span class="sw-dates">' + sw.fly_in_date + ' to ' + sw.fly_out_date + '</span></div>' +
-      '<div class="sw-flights"><div class="fb"><div class="fb-lbl">Fly In</div><div class="fb-num">' + (sw.fly_in_flight || '---') + '</div></div>' +
-      '<div class="fb"><div class="fb-lbl">Fly Out</div><div class="fb-num">' + (sw.fly_out_flight || '---') + '</div></div></div>' +
-      (sw.notes ? '<p class="tmuted" style="margin-top:8px">' + sw.notes + '</p>' : '') +
-      '</div><div class="sw-acts">' +
+      '<div class="sw-flights">' +
+      '<div class="fb"><div class="fb-lbl">Fly In</div><div class="fb-num">' + (sw.fly_in_flight||'---') + '</div>' +
+      (fiData ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + fiData.depart_time + ' - ' + fiData.arrive_time + '</div>' : '') + '</div>' +
+      '<div class="fb"><div class="fb-lbl">Fly Out</div><div class="fb-num">' + (sw.fly_out_flight||'---') + '</div>' +
+      (foData ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + foData.depart_time + ' - ' + foData.arrive_time + '</div>' : '') + '</div>' +
+      '</div>' + (sw.notes ? '<p class="tmuted" style="margin-top:8px">' + sw.notes + '</p>' : '') +
+      '</div>' +
+      '<div class="sw-acts">' +
       '<button class="btn btn-sm" onclick="editSwing(' + sw.id + ')">Edit</button>' +
-      '<button class="btn btn-sm btn-orange" onclick="openChangeModal(' + sw.id + ')">Request Change</button>' +
+      '<button class="btn btn-sm btn-orange" onclick="openChangeModal(' + sw.id + ',null,null)">Request Change</button>' +
       '<button class="btn btn-sm btn-ghost" style="color:var(--red)" onclick="deleteSwing(' + sw.id + ')">Delete</button>' +
       '</div></div>';
-  }).join('');
+  }
+  c.innerHTML = html;
 }
 
 function openSwingModal(swing) {
@@ -676,27 +861,28 @@ function openSwingModal(swing) {
   document.getElementById('sw-modal-ttl').textContent = swing ? 'Edit Swing' : 'Add Swing';
   document.getElementById('sw-id').value = swing ? swing.id : '';
   document.getElementById('sw-staff').value = swing ? swing.staff_emp : '764148';
-  document.getElementById('sw-fiin').value = swing ? swing.fly_in_date : '';
-  document.getElementById('sw-fiout').value = swing ? swing.fly_out_date : '';
-  document.getElementById('sw-fiin-fl').value = swing ? (swing.fly_in_flight || '') : '';
-  document.getElementById('sw-fiout-fl').value = swing ? (swing.fly_out_flight || '') : '';
-  document.getElementById('sw-village').value = swing ? (swing.village || 'JV') : 'JV';
-  document.getElementById('sw-room').value = swing ? (swing.room_ref || '') : '';
-  document.getElementById('sw-notes').value = swing ? (swing.notes || '') : '';
+  document.getElementById('sw-fiin').value = swing ? (swing.fly_in_date||'') : '';
+  document.getElementById('sw-fiout').value = swing ? (swing.fly_out_date||'') : '';
+  document.getElementById('sw-fiin-fl').value = swing ? (swing.fly_in_flight||'') : '';
+  document.getElementById('sw-fiout-fl').value = swing ? (swing.fly_out_flight||'') : '';
+  document.getElementById('sw-village').value = swing ? (swing.village||'JV') : 'JV';
+  document.getElementById('sw-room').value = swing ? (swing.room_ref||'') : '';
+  document.getElementById('sw-notes').value = swing ? (swing.notes||'') : '';
   document.getElementById('fi-opts').innerHTML = '';
   document.getElementById('fo-opts').innerHTML = '';
   document.getElementById('swing-modal').classList.remove('hidden');
 }
 
 function editSwing(id) {
-  var sw = allSwings.find(function(s) { return s.id === id; });
+  var sw = null;
+  for (var i = 0; i < allSwings.length; i++) { if (allSwings[i].id === id) { sw = allSwings[i]; break; } }
   openSwingModal(sw);
 }
 
 async function deleteSwing(id) {
   if (!confirm('Delete this swing?')) return;
   await api('/api/swings/' + id, { method: 'DELETE' });
-  allSwings = allSwings.filter(function(s) { return s.id !== id; });
+  allSwings = allSwings.filter(function(s){ return s.id !== id; });
   renderSwings(); renderCalendar();
 }
 
@@ -709,13 +895,13 @@ async function saveSwing() {
     fly_out_flight: document.getElementById('sw-fiout-fl').value || null,
     village:        document.getElementById('sw-village').value,
     room_ref:       document.getElementById('sw-room').value || null,
-    notes:          document.getElementById('sw-notes').value || null,
+    notes:          document.getElementById('sw-notes').value || null
   };
   if (!payload.fly_in_date || !payload.fly_out_date) { alert('Fly-in and fly-out dates required.'); return; }
   var result;
   if (editSwingId) {
     result = await api('/api/swings/' + editSwingId, { method: 'PUT', body: JSON.stringify(payload) });
-    if (result) allSwings = allSwings.map(function(s) { return s.id === editSwingId ? result : s; });
+    if (result) allSwings = allSwings.map(function(s){ return s.id === editSwingId ? result : s; });
   } else {
     result = await api('/api/swings/', { method: 'POST', body: JSON.stringify(payload) });
     if (result) allSwings.push(result);
@@ -724,39 +910,58 @@ async function saveSwing() {
 }
 
 async function loadFlyOpts(dir) {
-  var dv = document.getElementById(dir === 'in' ? 'sw-fiin' : 'sw-fiout').value;
-  var od = document.getElementById(dir === 'in' ? 'fi-opts' : 'fo-opts');
-  var inp = dir === 'in' ? 'sw-fiin-fl' : 'sw-fiout-fl';
+  var dv = document.getElementById(dir==='in'?'sw-fiin':'sw-fiout').value;
+  var od = document.getElementById(dir==='in'?'fi-opts':'fo-opts');
+  var inp = dir==='in'?'sw-fiin-fl':'sw-fiout-fl';
   if (!dv) return;
   var d = new Date(dv + 'T12:00:00');
-  var dn = d.toLocaleDateString('en-AU', { weekday: 'long' });
-  var direction = dir === 'in' ? 'inbound' : 'outbound';
+  var dn = d.toLocaleDateString('en-AU',{weekday:'long'});
+  var direction = dir==='in'?'inbound':'outbound';
   var fl = await api('/api/flights/?site=CC&day_of_week=' + dn + '&direction=' + direction);
   if (!fl || !fl.length) { od.innerHTML = '<p class="tmuted" style="font-size:12px;margin-top:4px">No flights on this day.</p>'; return; }
-  od.innerHTML = fl.map(function(f) {
+  od.innerHTML = fl.map(function(f){
     return '<div class="fo" onclick="selFlight(\'' + inp + '\',\'' + f.flight_number + '\',this)">' +
       '<span class="fo-num">' + f.flight_number + '</span>' +
       '<span class="fo-rt">' + f.depart_location + ' to ' + f.arrive_location + '</span>' +
-      '<span class="fo-tm">' + f.depart_time + ' to ' + f.arrive_time + '</span></div>';
+      '<span class="fo-tm">' + f.depart_time + ' - ' + f.arrive_time + '</span></div>';
   }).join('');
 }
 
 function selFlight(inp, num, el) {
   document.getElementById(inp).value = num;
-  el.closest('.flight-opts').querySelectorAll('.fo').forEach(function(e) { e.classList.remove('sel'); });
+  el.closest('.flight-opts').querySelectorAll('.fo').forEach(function(e){ e.classList.remove('sel'); });
   el.classList.add('sel');
 }
 
 // ── CHANGE REQUESTS ───────────────────────────────────────────────────────────
-function openChangeModal(swingId) {
-  document.getElementById('cr-date').value = new Date().toISOString().slice(0, 10);
+function openChangeModal(swingId, preType, preDate) {
+  document.getElementById('cr-modal-ttl').textContent = 'New Change Request';
+  document.getElementById('cr-date').value = preDate || new Date().toISOString().slice(0,10);
   document.getElementById('cr-newdate').value = '';
   document.getElementById('cr-reason').value = '';
+  document.getElementById('cr-flight').value = '';
+  document.getElementById('cr-flight-opts').innerHTML = '';
+  document.getElementById('cr-flight-row').style.display = 'none';
+
   if (typeof swingId === 'number') {
-    var sw = allSwings.find(function(s) { return s.id === swingId; });
+    var sw = null;
+    for (var i = 0; i < allSwings.length; i++) { if (allSwings[i].id === swingId) { sw = allSwings[i]; break; } }
     if (sw) document.getElementById('cr-staff').value = sw.staff_emp;
   }
+  if (preType) {
+    document.getElementById('cr-type').value = preType;
+    toggleFlightRow(preType);
+  }
   document.getElementById('change-modal').classList.remove('hidden');
+}
+
+document.getElementById('cr-type').addEventListener('change', function() {
+  toggleFlightRow(this.value);
+});
+
+function toggleFlightRow(type) {
+  var show = type === 'flight_change_in' || type === 'flight_change_out';
+  document.getElementById('cr-flight-row').style.display = show ? 'block' : 'none';
 }
 
 async function saveChange() {
@@ -776,100 +981,111 @@ async function saveChange() {
   }
 }
 
-var SC  = { requested: 'sb-requested', booked: 'sb-booked', confirmed: 'sb-confirmed', notified: 'sb-notified', complete: 'sb-complete' };
-var SN  = { requested: 'booked', booked: 'confirmed', confirmed: 'notified', notified: 'complete' };
-var SNL = { requested: 'Mark Booked', booked: 'Log Confirmation', confirmed: 'Mark Notified', notified: 'Mark Complete' };
+var SC  = { requested:'sb-requested', booked:'sb-booked', confirmed:'sb-confirmed', notified:'sb-notified', complete:'sb-complete' };
+var SN  = { requested:'booked', booked:'confirmed', confirmed:'notified', notified:'complete' };
+var SNL = { requested:'Mark Booked', booked:'Log Confirmation', confirmed:'Mark Notified', notified:'Mark Complete' };
 
 function renderChanges() {
   var c = document.getElementById('changes-list');
   if (!allChanges.length) {
-    c.innerHTML = '<p class="tmuted" style="padding:40px 0;text-align:center">No change requests yet.<br><span style="font-size:12px">Submit from a swing record or click + New Request.</span></p>';
+    c.innerHTML = '<p class="tmuted" style="padding:40px 0;text-align:center">No change requests yet.<br><span style="font-size:12px">Click a swing on the calendar or use + New Request.</span></p>';
     return;
   }
-  c.innerHTML = allChanges.map(function(ch) {
+  var html = '';
+  for (var i = 0; i < allChanges.length; i++) {
+    var ch = allChanges[i];
     var name = NM[ch.staff_emp] || ch.staff_emp;
-    var slbl = ch.status.charAt(0).toUpperCase() + ch.status.slice(1).replace('_', ' ');
+    var slbl = ch.status.charAt(0).toUpperCase() + ch.status.slice(1).replace('_',' ');
     var next = SN[ch.status];
-    return '<div class="cr-card">' +
+    html += '<div class="cr-card">' +
       '<div class="cr-hdr"><div>' +
-      '<div class="cr-title">' + name + ' - ' + (CTL[ch.change_type] || ch.change_type) + '</div>' +
+      '<div class="cr-title">' + name + ' - ' + (CTL[ch.change_type]||ch.change_type) + '</div>' +
       '<div class="cr-meta">Effective ' + ch.effective_date + (ch.new_date ? ' - New: ' + ch.new_date : '') + ' - Logged ' + new Date(ch.created_at).toLocaleDateString('en-AU') + '</div>' +
       (ch.workflow_ref ? '<div class="cr-meta" style="color:var(--orange)">Ref: ' + ch.workflow_ref + '</div>' : '') +
-      '</div><span class="sbadge ' + (SC[ch.status] || '') + '">' + slbl + '</span></div>' +
+      '</div><span class="sbadge ' + (SC[ch.status]||'') + '">' + slbl + '</span></div>' +
       '<div class="cr-detail">' + ch.reason + '</div>' +
       '<div class="cr-acts">' +
       '<button class="btn btn-sm" onclick="showDraft(' + ch.id + ')">View Draft Email</button>' +
       (next ? '<button class="btn btn-sm btn-red" onclick="advStatus(' + ch.id + ')">' + SNL[ch.status] + '</button>' : '') +
       '<button class="btn btn-sm btn-ghost" style="color:var(--red)" onclick="delChange(' + ch.id + ')">Delete</button>' +
       '</div></div>';
-  }).join('');
+  }
+  c.innerHTML = html;
 }
 
 async function advStatus(id) {
-  var ch = allChanges.find(function(x) { return x.id === id; });
+  var ch = null;
+  for (var i = 0; i < allChanges.length; i++) { if (allChanges[i].id === id) { ch = allChanges[i]; break; } }
   if (!ch) return;
   var workflowRef = null;
   if (ch.status === 'booked') {
     workflowRef = prompt('Enter FMG Workflow confirmation reference:');
     if (!workflowRef) return;
   }
-  var newStatus = SN[ch.status];
   var result = await api('/api/changes/' + id + '/status', {
     method: 'PUT',
-    body: JSON.stringify({ status: newStatus, workflow_ref: workflowRef || undefined })
+    body: JSON.stringify({ status: SN[ch.status], workflow_ref: workflowRef || undefined })
   });
   if (result) {
-    allChanges = allChanges.map(function(x) { return x.id === id ? result : x; });
-    updateChangesBadge();
-    renderChanges();
+    allChanges = allChanges.map(function(x){ return x.id === id ? result : x; });
+    updateChangesBadge(); renderChanges();
   }
 }
 
 function showDraft(id) {
-  var ch = allChanges.find(function(x) { return x.id === id; });
+  var ch = null;
+  for (var i = 0; i < allChanges.length; i++) { if (allChanges[i].id === id) { ch = allChanges[i]; break; } }
   if (!ch) return;
-  document.getElementById('draft-content').textContent = buildDraft(ch.staff_emp, ch.change_type, ch.effective_date, ch.new_date, ch.reason);
+  document.getElementById('draft-content').textContent = buildDraft(ch);
   document.getElementById('draft-modal').classList.remove('hidden');
 }
 
-function buildDraft(emp, type, dt, newDt, reason) {
-  var name = NM[emp] || emp;
-  return 'To: mobilisation@issg.net.au\nSubject: Roster Change Request - ' + name + ' / Christmas Creek\n\nHi Team,\n\nPlease action the following roster change in FMG Workflow:\n\nTechnician: ' + name + '\nChange Type: ' + (CTL[type] || type) + '\nEffective Date: ' + dt + (newDt ? '\nNew Fly-Out Date: ' + newDt : '') + '\nSite: Christmas Creek (CCK)\n\nReason: ' + reason + '\n\nPlease confirm once actioned in Workflow and provide the booking reference.\n\nRegards,\n' + currentUser + '\nISSG - Eastern Hub';
+function buildDraft(ch) {
+  var name = NM[ch.staff_emp] || ch.staff_emp;
+  return 'To: mobilisation@issg.net.au\nSubject: Roster Change Request - ' + name + ' / Christmas Creek\n\n' +
+    'Hi Team,\n\nPlease action the following roster change in FMG Workflow:\n\n' +
+    'Technician: ' + name + '\n' +
+    'Change Type: ' + (CTL[ch.change_type]||ch.change_type) + '\n' +
+    'Effective Date: ' + ch.effective_date +
+    (ch.new_date ? '\nNew Date: ' + ch.new_date : '') + '\n' +
+    'Site: Christmas Creek (CCK)\n\n' +
+    'Reason: ' + ch.reason + '\n\n' +
+    'Please confirm once actioned in Workflow and provide the booking reference.\n\n' +
+    'Regards,\n' + currentUser + '\nISSG - Eastern Hub';
 }
 
 async function delChange(id) {
   if (!confirm('Delete this change request?')) return;
   var ok = await api('/api/changes/' + id, { method: 'DELETE' });
   if (ok !== null) {
-    allChanges = allChanges.filter(function(x) { return x.id !== id; });
-    updateChangesBadge();
-    renderChanges();
+    allChanges = allChanges.filter(function(x){ return x.id !== id; });
+    updateChangesBadge(); renderChanges();
   }
 }
 
 function updateChangesBadge() {
-  var open = allChanges.filter(function(c) { return c.status !== 'complete'; }).length;
+  var open = allChanges.filter(function(c){ return c.status !== 'complete'; }).length;
   var b = document.getElementById('changes-badge');
   b.textContent = open;
   b.classList.toggle('hidden', open === 0);
 }
 
 function copyDraft() {
-  navigator.clipboard.writeText(document.getElementById('draft-content').textContent).then(function() { alert('Copied.'); });
+  navigator.clipboard.writeText(document.getElementById('draft-content').textContent)
+    .then(function(){ alert('Copied.'); });
 }
 
 // ── AI AGENT ──────────────────────────────────────────────────────────────────
 async function sendAgent() {
   var inp = document.getElementById('agent-input');
-  var text = inp.value.trim();
-  if (!text) return;
+  var text = inp.value.trim(); if (!text) return;
   inp.value = '';
   appendMsg('user', text);
   agentHistory.push({ role: 'user', content: text });
   var t = appendMsg('agent', '...');
   var data = await api('/api/agent/chat', { method: 'POST', body: JSON.stringify({ messages: agentHistory }) });
   t.remove();
-  var reply = (data && data.reply) ? data.reply : 'No response. Please try again.';
+  var reply = (data && data.reply) ? data.reply : 'No response.';
   agentHistory.push({ role: 'assistant', content: reply });
   appendMsg('agent', reply);
 }
