@@ -9,7 +9,6 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL", "")
 
-# Railway sometimes provides postgres:// instead of postgresql://
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
@@ -17,8 +16,6 @@ engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-
-# --- Models ---
 
 class User(Base):
     __tablename__ = "users"
@@ -35,12 +32,12 @@ class Staff(Base):
     id = Column(Integer, primary_key=True, index=True)
     emp_number = Column(String, unique=True, index=True)
     full_name = Column(String, nullable=False)
-    role = Column(String)  # Technician, Relief
-    hub = Column(String)   # EAST, WEST, NORTH etc.
-    roster_type = Column(String)  # 8/6, casual
+    role = Column(String)
+    hub = Column(String)
+    roster_type = Column(String)
     roster_expiry = Column(Date, nullable=True)
-    village = Column(String)  # JV, KV, CB
-    site_code = Column(String)  # CC, SOL, ELI etc.
+    village = Column(String)
+    site_code = Column(String)
     is_active = Column(Boolean, default=True)
 
 
@@ -50,8 +47,8 @@ class Swing(Base):
     staff_emp = Column(String, index=True)
     fly_in_date = Column(Date, nullable=False)
     fly_out_date = Column(Date, nullable=False)
-    fly_in_flight = Column(String)   # e.g. QF2924
-    fly_out_flight = Column(String)  # e.g. QF2925
+    fly_in_flight = Column(String)
+    fly_out_flight = Column(String)
     village = Column(String)
     room_ref = Column(String, nullable=True)
     notes = Column(Text, nullable=True)
@@ -64,13 +61,28 @@ class RosterOverride(Base):
     id = Column(Integer, primary_key=True, index=True)
     staff_emp = Column(String, index=True)
     date = Column(Date, nullable=False)
-    status = Column(String, nullable=False)  # AL, LWOP, etc.
+    status = Column(String, nullable=False)  # AL, LWOP
     notes = Column(Text, nullable=True)
     created_by = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
 
 
-# --- DB init ---
+class ChangeRequest(Base):
+    __tablename__ = "change_requests"
+    id = Column(Integer, primary_key=True, index=True)
+    staff_emp = Column(String, index=True)
+    swing_id = Column(Integer, nullable=True)
+    change_type = Column(String, nullable=False)
+    effective_date = Column(Date, nullable=False)
+    new_date = Column(Date, nullable=True)
+    reason = Column(Text, nullable=False)
+    status = Column(String, default="requested")  # requested, booked, confirmed, notified, complete
+    workflow_ref = Column(String, nullable=True)
+    notes = Column(Text, nullable=True)
+    submitted_by = Column(String, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
 
 def init_db():
     Base.metadata.create_all(bind=engine)
