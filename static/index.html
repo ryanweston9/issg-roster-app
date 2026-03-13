@@ -11,6 +11,7 @@
     --bg:#f7f8fa;--card:#fff;--border:#e4e6ea;--text:#1a1a2e;--muted:#6b7280;
     --green-light:#dcfce7;--blue-light:#dbeafe;--purple-light:#ede9fe;
     --yellow-light:#fef9c3;--jv:#f7951e;--kv:#b21c24;--cb:#7c3aed;
+    --rr-bg:#f3f4f6;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
@@ -39,31 +40,29 @@
   .tb-user{font-size:12px;color:rgba(255,255,255,.5);}
   .tb-logout{background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.7);padding:5px 12px;border-radius:6px;font-size:12px;cursor:pointer;}
   .tb-logout:hover{background:rgba(255,255,255,.14);}
-
   .nav{background:#fff;border-bottom:1px solid var(--border);display:flex;padding:0 20px;gap:2px;}
   .nav-tab{padding:13px 16px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;display:flex;align-items:center;gap:6px;white-space:nowrap;}
   .nav-tab.active{color:var(--red);border-bottom-color:var(--red);font-weight:600;}
   .nav-tab:hover:not(.active){color:var(--text);}
   .nbadge{background:var(--red);color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:700;}
-
   .page{padding:20px;max-width:1400px;margin:0 auto;}
 
   /* STAFF STRIP */
-  .staff-strip{display:flex;gap:12px;margin-bottom:20px;}
-  .sc{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:12px;flex:1;min-width:0;}
+  .staff-strip{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;}
+  .sc{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:12px;flex:1;min-width:180px;}
   .sc-av{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0;}
   .sc-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .sc-status{display:flex;align-items:center;gap:6px;margin-top:3px;}
+  .sc-status{display:flex;align-items:center;gap:6px;margin-top:3px;flex-wrap:wrap;}
 
   /* PILLS */
-  .pill{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.2px;white-space:nowrap;}
+  .pill{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.2px;white-space:nowrap;}
   .pill-CC{background:var(--green-light);color:#166534;}
-  .pill-FIAM,.pill-FIPM{background:#dcfce7;color:#15803d;}
-  .pill-FOAM,.pill-FOPM{background:var(--purple-light);color:#6d28d9;}
-  .pill-RR{background:var(--blue-light);color:#1e40af;}
+  .pill-FIAM,.pill-FIPM{background:#bbf7d0;color:#15803d;border:1px solid #86efac;}
+  .pill-FOAM,.pill-FOPM{background:var(--purple-light);color:#6d28d9;border:1px solid #c4b5fd;}
   .pill-AL{background:var(--yellow-light);color:#854d0e;}
   .pill-LWOP{background:#fee2e2;color:#991b1b;}
   .pill-dash{background:var(--bg);color:var(--muted);}
+  /* R&R — no pill, just dimmed text styling applied inline */
   .vpill{display:inline-flex;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:700;color:#fff;}
   .vpill-JV{background:var(--jv);}
   .vpill-KV{background:var(--kv);}
@@ -79,26 +78,39 @@
   .cal-wrap{background:#fff;border:1px solid var(--border);border-radius:14px;overflow-x:auto;}
   .cal-table{width:100%;border-collapse:collapse;table-layout:auto;}
   .cal-table thead tr{background:var(--dark);}
-  .cal-table thead th{padding:10px 8px;font-size:11px;font-weight:600;color:rgba(255,255,255,.6);text-align:center;border-right:1px solid rgba(255,255,255,.06);white-space:nowrap;}
-  .cal-table thead th:first-child{text-align:left;padding-left:14px;width:120px;font-size:10px;color:rgba(255,255,255,.35);}
+  .cal-table thead th{padding:8px 6px;font-size:11px;font-weight:600;color:rgba(255,255,255,.6);text-align:center;border-right:1px solid rgba(255,255,255,.06);white-space:nowrap;}
+  .cal-table thead th:first-child{text-align:left;padding-left:14px;width:110px;font-size:10px;color:rgba(255,255,255,.35);}
   .cal-table thead th.tcol{background:rgba(178,28,36,.55);color:#fff;}
-  .th-day{display:block;font-size:13px;font-weight:700;color:#fff;}
+  .th-day{display:block;font-size:12px;font-weight:700;color:#fff;}
   .th-dt{display:block;font-size:10px;color:rgba(255,255,255,.5);margin-top:1px;}
   .tcol .th-day,.tcol .th-dt{color:#fff;}
   .cal-table tbody tr{border-top:1px solid var(--border);}
-  .cal-table tbody tr:hover{background:#fafbfc;}
-  .cal-table tbody td{padding:9px 6px;text-align:center;vertical-align:middle;border-right:1px solid var(--border);}
-  .cal-table tbody td:first-child{text-align:left;padding-left:14px;}
+  .cal-table tbody tr:hover{background:#f8f9fb;}
+  /* cell base */
+  .cal-table tbody td{padding:5px 4px;text-align:center;vertical-align:middle;border-right:1px solid var(--border);}
+  .cal-table tbody td:first-child{text-align:left;padding-left:12px;}
   .cal-table tbody td.tcol{background:#fffbf5;}
-  .csl{display:flex;align-items:center;gap:8px;}
-  .csd{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-  .csn{font-size:12px;font-weight:600;white-space:nowrap;}
-  .ccell{display:inline-flex;align-items:center;justify-content:center;gap:4px;flex-wrap:wrap;}
+  /* R&R cell shading */
+  .cal-table tbody td.cell-rr{background:var(--rr-bg);}
+  .cal-table tbody td.tcol.cell-rr{background:#efeff1;}
+  /* clickable cells */
+  .cal-table tbody td.cell-click{cursor:pointer;}
+  .cal-table tbody td.cell-click:hover{background:#f0fdf4;outline:2px solid #86efac;outline-offset:-2px;}
+  /* travel cell hover handled by popover logic */
+  .csl{display:flex;align-items:center;gap:7px;}
+  .csd{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+  .csn{font-size:11px;font-weight:600;white-space:nowrap;}
+  /* cell content — stack day type on top, village below */
+  .ccell{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:52px;}
+  .ccell-type{display:flex;align-items:center;justify-content:center;}
+  .ccell-village{display:flex;align-items:center;justify-content:center;}
+  /* R&R text style */
+  .rr-label{font-size:11px;color:#9ca3af;font-weight:500;letter-spacing:.1px;}
 
   /* POPOVER */
-  .popover{position:fixed;z-index:500;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.14);padding:14px 16px;min-width:220px;pointer-events:none;opacity:0;transition:opacity .1s;}
+  .popover{position:fixed;z-index:500;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.14);padding:14px 16px;min-width:230px;pointer-events:none;opacity:0;transition:opacity .1s;}
   .popover.vis{opacity:1;}
-  .pop-fl{font-size:20px;font-weight:800;color:var(--red);margin-bottom:4px;}
+  .pop-fl{font-size:20px;font-weight:800;color:var(--red);margin-bottom:2px;}
   .pop-rt{font-size:12px;color:var(--muted);margin-bottom:8px;}
   .pop-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
   .pop-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
@@ -106,24 +118,46 @@
   .pop-div{border:none;border-top:1px solid var(--border);margin:8px 0;}
   .pop-ci{font-size:11px;color:var(--muted);}
 
-  /* SWINGS */
+  /* SWING DETAIL MODAL */
+  .sd-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;gap:12px;}
+  .sd-name{font-size:16px;font-weight:800;line-height:1.2;}
+  .sd-sub{font-size:12px;color:var(--muted);margin-top:3px;}
+  .sd-flights{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+  .sd-fb{border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .15s;background:#fff;}
+  .sd-fb:hover{border-color:var(--red);background:var(--red-light);box-shadow:0 2px 8px rgba(178,28,36,.1);}
+  .sd-fb.active{border-color:var(--red);background:var(--red-light);}
+  .sd-fb-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;font-weight:600;}
+  .sd-fb-num{font-size:20px;font-weight:800;color:var(--red);line-height:1;}
+  .sd-fb-dt{font-size:11px;color:var(--muted);margin-top:3px;}
+  .sd-fb-times{font-size:12px;font-weight:600;color:var(--text);margin-top:4px;}
+  .sd-info{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px;}
+  .sd-info-row{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-right:1px solid var(--border);}
+  .sd-info-row:last-child{border-right:none;}
+  .sd-info-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;font-weight:600;}
+  .sd-info-val{font-size:13px;font-weight:600;margin-top:2px;}
+  .sd-cr-section{border-top:1px solid var(--border);padding-top:14px;}
+  .sd-cr-ttl{font-size:12px;font-weight:700;margin-bottom:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+  .sd-cr-btns{display:flex;gap:8px;flex-wrap:wrap;}
+
+  /* SWINGS TAB */
   .section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
   .section-ttl{font-size:17px;font-weight:700;}
-  .sw-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:flex-start;gap:16px;margin-bottom:10px;}
+  .sw-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:flex-start;gap:14px;margin-bottom:8px;}
   .sw-left{flex:1;min-width:0;}
-  .sw-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
-  .sw-name{font-size:14px;font-weight:700;}
-  .sw-dates{font-size:13px;color:var(--muted);}
-  .sw-flights{display:flex;gap:10px;}
-  .fb{background:var(--bg);border-radius:8px;padding:8px 12px;border:1px solid var(--border);flex:1;min-width:0;}
-  .fb-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;}
-  .fb-num{font-size:16px;font-weight:800;color:var(--red);}
-  .sw-acts{display:flex;flex-direction:column;gap:6px;flex-shrink:0;}
+  .sw-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  .sw-name{font-size:13px;font-weight:700;}
+  .sw-dates{font-size:12px;color:var(--muted);}
+  .sw-flights{display:flex;gap:8px;}
+  .fb{background:var(--bg);border-radius:8px;padding:7px 10px;border:1px solid var(--border);flex:1;min-width:0;}
+  .fb-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;}
+  .fb-num{font-size:14px;font-weight:800;color:var(--red);}
+  .fb-tm{font-size:11px;color:var(--muted);margin-top:2px;}
+  .sw-acts{display:flex;flex-direction:column;gap:5px;flex-shrink:0;}
 
   /* CHANGES */
-  .cr-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:10px;}
-  .cr-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
-  .cr-title{font-size:14px;font-weight:700;}
+  .cr-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:8px;}
+  .cr-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;}
+  .cr-title{font-size:13px;font-weight:700;}
   .cr-meta{font-size:12px;color:var(--muted);margin-top:2px;}
   .sbadge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
   .sb-requested{background:#f3f4f6;color:#374151;}
@@ -131,8 +165,8 @@
   .sb-confirmed{background:var(--green-light);color:#166534;}
   .sb-notified{background:var(--blue-light);color:#1e40af;}
   .sb-complete{background:var(--red-light);color:var(--red);}
-  .cr-detail{font-size:13px;color:var(--text);margin-bottom:12px;line-height:1.5;}
-  .cr-acts{display:flex;gap:8px;flex-wrap:wrap;}
+  .cr-detail{font-size:13px;color:var(--text);margin-bottom:10px;line-height:1.5;}
+  .cr-acts{display:flex;gap:6px;flex-wrap:wrap;}
 
   /* DRAFT */
   .draft-box{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;font-size:12px;font-family:monospace;white-space:pre-wrap;line-height:1.6;max-height:280px;overflow-y:auto;margin-top:10px;}
@@ -144,24 +178,24 @@
   .btn-red:hover{opacity:.9;background:var(--red);}
   .btn-orange{background:var(--orange);color:#fff;border-color:var(--orange);}
   .btn-orange:hover{opacity:.9;}
-  .btn-sm{padding:5px 11px;font-size:12px;}
+  .btn-sm{padding:5px 10px;font-size:11px;}
   .btn-ghost{background:transparent;border-color:transparent;color:var(--muted);}
   .btn-ghost:hover{background:var(--bg);color:var(--text);}
 
   /* MODAL */
   .overlay{position:fixed;inset:0;background:rgba(15,15,35,.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;}
-  .modal{background:#fff;border-radius:16px;padding:28px;width:100%;max-width:500px;box-shadow:0 24px 64px rgba(0,0,0,.18);max-height:90vh;overflow-y:auto;}
-  .modal-ttl{font-size:17px;font-weight:700;margin-bottom:20px;}
-  .modal-acts{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;}
-  .fg{margin-bottom:14px;}
-  .flbl{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px;}
-  .finp,.fsel,.ftxt{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-family:inherit;outline:none;transition:border-color .15s;background:#fff;}
+  .modal{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:500px;box-shadow:0 24px 64px rgba(0,0,0,.18);max-height:90vh;overflow-y:auto;}
+  .modal-ttl{font-size:16px;font-weight:700;margin-bottom:18px;}
+  .modal-acts{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;}
+  .fg{margin-bottom:12px;}
+  .flbl{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;}
+  .finp,.fsel,.ftxt{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;outline:none;transition:border-color .15s;background:#fff;}
   .finp:focus,.fsel:focus,.ftxt:focus{border-color:var(--red);}
-  .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-  .flight-opts{display:flex;flex-direction:column;gap:6px;margin-top:6px;}
-  .fo{border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:all .12s;}
+  .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .flight-opts{display:flex;flex-direction:column;gap:5px;margin-top:6px;}
+  .fo{border:1.5px solid var(--border);border-radius:8px;padding:8px 11px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .12s;}
   .fo:hover,.fo.sel{border-color:var(--red);background:var(--red-light);}
-  .fo-num{font-weight:800;font-size:14px;color:var(--red);min-width:64px;}
+  .fo-num{font-weight:800;font-size:13px;color:var(--red);min-width:58px;}
   .fo-rt{font-size:11px;color:var(--muted);}
   .fo-tm{font-size:12px;font-weight:600;margin-left:auto;}
 
@@ -186,27 +220,6 @@
   .hidden{display:none!important;}
   .mt12{margin-top:12px;}
   .tmuted{color:var(--muted);font-size:13px;}
-  .red-light{background:var(--red-light);}
-</style>
-  /* SWING DETAIL MODAL */
-  .sd-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
-  .sd-name{font-size:16px;font-weight:800;}
-  .sd-sub{font-size:12px;color:var(--muted);margin-top:2px;}
-  .sd-flights{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
-  .sd-fb{border:1.5px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all .12s;}
-  .sd-fb:hover{border-color:var(--red);background:var(--red-light);}
-  .sd-fb.active{border-color:var(--red);background:var(--red-light);}
-  .sd-fb-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;}
-  .sd-fb-num{font-size:22px;font-weight:800;color:var(--red);}
-  .sd-fb-dt{font-size:12px;color:var(--muted);margin-top:2px;}
-  .sd-fb-times{font-size:12px;font-weight:600;margin-top:4px;}
-  .sd-info{background:var(--bg);border-radius:10px;padding:12px 14px;margin-bottom:16px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-  .sd-info-row{display:flex;flex-direction:column;gap:2px;}
-  .sd-info-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
-  .sd-info-val{font-size:13px;font-weight:600;}
-  .sd-cr-section{border-top:1px solid var(--border);padding-top:16px;margin-top:4px;}
-  .sd-cr-ttl{font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text);}
-  .sd-cr-hint{font-size:12px;color:var(--muted);margin-bottom:10px;}
 </style>
 </head>
 <body>
@@ -262,7 +275,7 @@
         <tbody id="cal-body"></tbody>
       </table>
     </div>
-    <p class="tmuted mt12" style="font-size:12px">Hover fly-in / fly-out cells for flight details &nbsp;·&nbsp; Click any on-site swing cell to view or request changes</p>
+    <p class="tmuted mt12" style="font-size:11px">Hover fly-in / fly-out cells for flight details &nbsp;·&nbsp; Click on-site cells to view swing or request a change</p>
   </div>
 
   <!-- SWINGS -->
@@ -308,7 +321,7 @@
   </div>
 </div>
 
-<!-- FLIGHT POPOVER (tooltip, no interaction) -->
+<!-- FLIGHT POPOVER -->
 <div class="popover" id="popover">
   <div class="pop-fl" id="pop-fl"></div>
   <div class="pop-rt" id="pop-rt"></div>
@@ -318,7 +331,7 @@
   <div class="pop-ci" id="pop-ci"></div>
 </div>
 
-<!-- SWING DETAIL MODAL (click on calendar cell) -->
+<!-- SWING DETAIL MODAL -->
 <div class="overlay hidden" id="swing-detail-modal">
   <div class="modal" style="max-width:520px">
     <div class="sd-header">
@@ -326,17 +339,16 @@
         <div class="sd-name" id="sd-name"></div>
         <div class="sd-sub" id="sd-sub"></div>
       </div>
-      <button class="btn btn-ghost" onclick="closeModal('swing-detail-modal')">Close</button>
+      <button class="btn btn-sm btn-ghost" onclick="closeModal('swing-detail-modal')">&#10005; Close</button>
     </div>
     <div class="sd-flights" id="sd-flights"></div>
     <div class="sd-info" id="sd-info"></div>
     <div class="sd-cr-section">
       <div class="sd-cr-ttl">Request a Change</div>
-      <div class="sd-cr-hint">Select which part of this swing you need to change:</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="btn btn-red" id="sd-cr-fiin-btn">Change Fly-In</button>
-        <button class="btn btn-red" id="sd-cr-fiout-btn">Change Fly-Out</button>
-        <button class="btn" id="sd-cr-other-btn">Other / General</button>
+      <div class="sd-cr-btns">
+        <button class="btn btn-sm btn-red" id="sd-cr-fiin-btn">&#9992; Change Fly-In</button>
+        <button class="btn btn-sm btn-red" id="sd-cr-fiout-btn">&#9992; Change Fly-Out</button>
+        <button class="btn btn-sm" id="sd-cr-other-btn">Other / General</button>
       </div>
     </div>
   </div>
@@ -396,7 +408,7 @@
       </select>
     </div>
     <div class="fg"><label class="flbl">Change Type</label>
-      <select class="fsel" id="cr-type">
+      <select class="fsel" id="cr-type" onchange="toggleFlightRow(this.value)">
         <option value="flight_change_in">Fly-In Flight Change</option>
         <option value="flight_change_out">Fly-Out Flight Change</option>
         <option value="swing_extension">Swing Extension</option>
@@ -456,7 +468,8 @@ var STAFF_DEF = [
   { emp: 'PETE-CASUAL', name: 'Pete Scully',           short: 'Pete',   base: null,        village: 'JV', color: '#6b7280' },
 ];
 
-var SL  = { FIAM:'Fly In (AM)', FIPM:'Fly In (PM)', FOAM:'Fly Out (AM)', FOPM:'Fly Out (PM)', CC:'On Site', RR:'R&R', AL:'Annual Leave', LWOP:'LWOP' };
+// Day type labels — these are the only values shown in cells
+var DT_LABEL = { FIAM:'Fly In (AM)', FIPM:'Fly In (PM)', FOAM:'Fly Out (AM)', FOPM:'Fly Out (PM)', CC:'On Site', RR:'R&R', AL:'Annual Leave', LWOP:'LWOP' };
 var CTL = { flight_change_in:'Fly-In Change', flight_change_out:'Fly-Out Change', swing_extension:'Swing Extension', swing_cut_short:'Swing Cut Short', sick_leave:'Sick Leave', annual_leave:'Annual Leave', relief_mobilisation:'Relief Mobilisation' };
 var NM  = { '764148':'Amanda Inglis-Baillie', '807406':'Clive Ettia', 'PETE-CASUAL':'Pete Scully' };
 
@@ -480,13 +493,11 @@ async function doLogin() {
   var err = document.getElementById('lerr');
   err.style.display = 'none';
   var form = new FormData();
-  form.append('username', u);
-  form.append('password', p);
+  form.append('username', u); form.append('password', p);
   var res = await fetch('/api/auth/token', { method: 'POST', body: form });
   if (!res.ok) { err.style.display = 'block'; return; }
   var data = await res.json();
-  token = data.access_token;
-  currentUser = data.full_name;
+  token = data.access_token; currentUser = data.full_name;
   localStorage.setItem('issg_token', token);
   localStorage.setItem('issg_user', currentUser);
   showApp();
@@ -494,8 +505,7 @@ async function doLogin() {
 
 function doLogout() {
   token = ''; currentUser = '';
-  localStorage.removeItem('issg_token');
-  localStorage.removeItem('issg_user');
+  localStorage.removeItem('issg_token'); localStorage.removeItem('issg_user');
   document.getElementById('app').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
 }
@@ -508,22 +518,28 @@ async function showApp() {
   document.getElementById('app').style.display = 'block';
   document.getElementById('user-chip').textContent = currentUser;
   await loadData();
+  // Pre-load all flight data so detail modal shows times immediately
+  await preloadFlights();
   renderStaffStrip();
   renderCalendar();
 }
 
 async function loadData() {
   var results = await Promise.all([
-    api('/api/swings/'),
-    api('/api/staff/'),
-    api('/api/changes/'),
-    api('/api/overrides/')
+    api('/api/swings/'), api('/api/staff/'), api('/api/changes/'), api('/api/overrides/')
   ]);
   allSwings    = results[0] || [];
   allStaff     = results[1] || [];
   allChanges   = results[2] || [];
   allOverrides = results[3] || [];
   updateChangesBadge();
+}
+
+async function preloadFlights() {
+  var r1 = await api('/api/flights/?site=CC&direction=inbound');
+  var r2 = await api('/api/flights/?site=CC&direction=outbound');
+  if (r1) r1.forEach(function(f) { flightCache[f.flight_number] = f; });
+  if (r2) r2.forEach(function(f) { flightCache[f.flight_number] = f; });
 }
 
 // ── TABS ──────────────────────────────────────────────────────────────────────
@@ -541,16 +557,14 @@ function toDateStr(d) { return d.toISOString().slice(0, 10); }
 
 function getStatusForDate(emp, d) {
   var ds = toDateStr(d);
-  // 1. Override
-  var ov = null;
+  // 1. Override (AL, LWOP)
   for (var i = 0; i < allOverrides.length; i++) {
-    if (allOverrides[i].staff_emp === emp && allOverrides[i].date === ds) { ov = allOverrides[i]; break; }
+    if (allOverrides[i].staff_emp === emp && allOverrides[i].date === ds) return allOverrides[i].status;
   }
-  if (ov) return ov.status;
-  // 2. Swing record
+  // 2. DB swing record
   var sw = getSwingForDate(emp, ds);
   if (sw) {
-    var fi = sw.fly_in_date ? sw.fly_in_date.slice(0,10) : null;
+    var fi = sw.fly_in_date  ? sw.fly_in_date.slice(0,10)  : null;
     var fo = sw.fly_out_date ? sw.fly_out_date.slice(0,10) : null;
     if (fi === ds) return 'FIAM';
     if (fo === ds) return 'FOAM';
@@ -567,7 +581,7 @@ function getSwingForDate(emp, ds) {
   for (var i = 0; i < allSwings.length; i++) {
     var s = allSwings[i];
     if (s.staff_emp !== emp) continue;
-    var fi = s.fly_in_date ? s.fly_in_date.slice(0,10) : null;
+    var fi = s.fly_in_date  ? s.fly_in_date.slice(0,10)  : null;
     var fo = s.fly_out_date ? s.fly_out_date.slice(0,10) : null;
     if (fi === ds || fo === ds || (fi && fo && ds > fi && ds < fo)) return s;
   }
@@ -576,23 +590,21 @@ function getSwingForDate(emp, ds) {
 
 function calcStatus(base, d) {
   var diff = Math.floor((d - base) / 86400000);
-  var pos = ((diff % CYCLE) + CYCLE) % CYCLE;
-  if (pos === 0) return 'FIAM';
-  if (pos < SWING_ON) return 'CC';
+  var pos  = ((diff % CYCLE) + CYCLE) % CYCLE;
+  if (pos === 0)        return 'FIAM';
+  if (pos < SWING_ON)   return 'CC';
   if (pos === SWING_ON) return 'FOAM';
   return 'RR';
 }
 
 function isTravelDay(s) { return s === 'FIAM' || s === 'FIPM' || s === 'FOAM' || s === 'FOPM'; }
-function isOnSite(s)    { return s === 'FIAM' || s === 'FIPM' || s === 'CC' || s === 'FOAM' || s === 'FOPM'; }
+function isOnSite(s)    { return s === 'FIAM' || s === 'FIPM' || s === 'CC'   || s === 'FOAM' || s === 'FOPM'; }
 
 // ── CALENDAR ──────────────────────────────────────────────────────────────────
 function getMonday(d) {
-  var day = d.getDay();
-  var r = new Date(d);
+  var day = d.getDay(), r = new Date(d);
   r.setDate(d.getDate() - day + (day === 0 ? -6 : 1));
-  r.setHours(0,0,0,0);
-  return r;
+  r.setHours(0,0,0,0); return r;
 }
 function calShift(n) { calStart = new Date(calStart); calStart.setDate(calStart.getDate() + n); renderCalendar(); }
 function calToday()  { calStart = getMonday(new Date()); renderCalendar(); }
@@ -607,63 +619,68 @@ function renderCalendar() {
     days[0].toLocaleDateString('en-AU',{day:'numeric',month:'short'}) + ' - ' +
     days[13].toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'});
 
-  // Header
+  // Header row
   var hh = '<tr><th></th>';
   for (var i = 0; i < days.length; i++) {
     var isT = days[i].getTime() === today.getTime();
-    hh += '<th class="' + (isT?'tcol':'') + '"><span class="th-day">' +
-      days[i].toLocaleDateString('en-AU',{weekday:'short'}) + '</span><span class="th-dt">' +
-      days[i].toLocaleDateString('en-AU',{day:'numeric',month:'short'}) + '</span></th>';
+    hh += '<th class="' + (isT ? 'tcol' : '') + '">' +
+      '<span class="th-day">' + days[i].toLocaleDateString('en-AU',{weekday:'short'}) + '</span>' +
+      '<span class="th-dt">'  + days[i].toLocaleDateString('en-AU',{day:'numeric',month:'short'}) + '</span></th>';
   }
   document.getElementById('cal-head').innerHTML = hh + '</tr>';
 
-  // Body
+  // Body rows
   var tbody = document.getElementById('cal-body');
   tbody.innerHTML = '';
   for (var si = 0; si < STAFF_DEF.length; si++) {
     var s = STAFF_DEF[si];
     var tr = document.createElement('tr');
-    var html = '<td><div class="csl"><div class="csd" style="background:' + s.color + '"></div><span class="csn">' + s.short + '</span></div></td>';
+    var html = '<td><div class="csl">' +
+      '<div class="csd" style="background:' + s.color + '"></div>' +
+      '<span class="csn">' + s.short + '</span></div></td>';
+
     for (var di = 0; di < days.length; di++) {
-      var d = days[di];
+      var d   = days[di];
       var isT = d.getTime() === today.getTime();
-      var ds = toDateStr(d);
-      var status = getStatusForDate(s.emp, d);
-      var sw = getSwingForDate(s.emp, ds);
-      var travel = isTravelDay(status);
-      var onsite = isOnSite(status);
+      var ds  = toDateStr(d);
+      var status  = getStatusForDate(s.emp, d);
+      var sw      = getSwingForDate(s.emp, ds);
+      var travel  = isTravelDay(status);
+      var onsite  = isOnSite(status);
+      var isRR    = status === 'RR';
       var village = onsite ? getVillageForDate(s.emp, ds, s.village) : null;
 
-      // Only show popover on actual travel days with a swing record
-      var flNum = null;
-      var flData = null;
-      if (travel && sw) {
-        flNum = (status === 'FIAM' || status === 'FIPM') ? sw.fly_in_flight : sw.fly_out_flight;
-        if (flNum && flightCache[flNum]) flData = flightCache[flNum];
+      // Flight number only used for popover — never shown in cell
+      var flNum = (travel && sw) ? ((status === 'FIAM' || status === 'FIPM') ? sw.fly_in_flight : sw.fly_out_flight) : null;
+
+      // Build cell content — day type on line 1, village on line 2
+      var typeHtml = '';
+      if (isRR) {
+        typeHtml = '<span class="rr-label">R&amp;R</span>';
+      } else if (status === '---') {
+        typeHtml = '<span class="rr-label">---</span>';
+      } else {
+        typeHtml = '<span class="pill pill-' + status + '">' + (DT_LABEL[status] || status) + '</span>';
       }
+      var villageHtml = village ? '<span class="vpill vpill-' + village + '">' + village + '</span>' : '';
 
-      var label = flNum ? flNum : (SL[status] || status);
-      var cellHtml = '<span class="pill pill-' + (status || 'dash') + '">' + label + '</span>';
-      if (village) cellHtml += ' <span class="vpill vpill-' + village + '">' + village + '</span>';
+      var cellContent = '<div class="ccell">' +
+        '<div class="ccell-type">' + typeHtml + '</div>' +
+        (villageHtml ? '<div class="ccell-village">' + villageHtml + '</div>' : '') +
+        '</div>';
 
-      var tdClass = isT ? 'tcol' : '';
-      var tdAttrs = '';
-      var tdStyle = '';
+      // TD classes and interaction
+      var tdClass = (isT ? 'tcol ' : '') + (isRR ? 'cell-rr ' : '') + (sw && status === 'CC' ? 'cell-click ' : '');
 
       if (travel && flNum) {
-        // Hover popover only on travel days
-        tdAttrs = 'data-fl="' + flNum + '" data-st="' + status + '"';
-        tdStyle = 'cursor:default;';
-        html += '<td class="' + tdClass + '" ' + tdAttrs + ' style="' + tdStyle + '" ' +
-          'onmouseenter="schedPop(event,this)" onmouseleave="cancelPop()">' +
-          '<div class="ccell">' + cellHtml + '</div></td>';
-      } else if (sw && (status === 'CC')) {
-        // Clickable on-site days — opens swing detail
-        var swId = sw.id;
-        html += '<td class="' + tdClass + '" style="cursor:pointer;" onclick="openSwingDetail(' + swId + ',\'' + ds + '\')">' +
-          '<div class="ccell">' + cellHtml + '</div></td>';
+        // Hover popover on travel days
+        html += '<td class="' + tdClass + '" data-fl="' + flNum + '" data-st="' + status + '" ' +
+          'onmouseenter="schedPop(event,this)" onmouseleave="cancelPop()">' + cellContent + '</td>';
+      } else if (sw && status === 'CC') {
+        // Click to open swing detail
+        html += '<td class="' + tdClass + '" onclick="openSwingDetail(' + sw.id + ',\'' + ds + '\')">' + cellContent + '</td>';
       } else {
-        html += '<td class="' + tdClass + '"><div class="ccell">' + cellHtml + '</div></td>';
+        html += '<td class="' + tdClass + '">' + cellContent + '</td>';
       }
     }
     tr.innerHTML = html;
@@ -683,12 +700,15 @@ function renderStaffStrip() {
   var html = '';
   for (var i = 0; i < STAFF_DEF.length; i++) {
     var s = STAFF_DEF[i];
-    var status = getStatusForDate(s.emp, today);
-    var ini = s.name.split(' ').map(function(w){return w[0];}).join('').slice(0,2);
+    var status  = getStatusForDate(s.emp, today);
+    var ini     = s.name.split(' ').map(function(w){return w[0];}).join('').slice(0,2);
     var village = isOnSite(status) ? getVillageForDate(s.emp, toDateStr(today), s.village) : null;
+    var statusHtml = status === 'RR'
+      ? '<span class="rr-label">R&amp;R</span>'
+      : '<span class="pill pill-' + (status||'dash') + '">' + (DT_LABEL[status]||'---') + '</span>';
     html += '<div class="sc"><div class="sc-av" style="background:' + s.color + '">' + ini + '</div>' +
       '<div style="min-width:0"><div class="sc-name">' + s.name + '</div>' +
-      '<div class="sc-status"><span class="pill pill-' + (status||'dash') + '">' + (SL[status]||'---') + '</span>' +
+      '<div class="sc-status">' + statusHtml +
       (village ? '<span class="vpill vpill-' + village + '">' + village + '</span>' : '') +
       '</div></div></div>';
   }
@@ -696,86 +716,40 @@ function renderStaffStrip() {
 }
 
 // ── FLIGHT POPOVER ────────────────────────────────────────────────────────────
-// Uses delayed show to prevent flicker; hides immediately on mouseleave
-function schedPop(e, el) {
-  cancelPop();
-  popTimer = setTimeout(function() { doShowPop(e, el); }, 120);
-}
+function schedPop(e, el) { cancelPop(); popTimer = setTimeout(function() { doShowPop(el); }, 100); }
+function cancelPop() { if (popTimer) { clearTimeout(popTimer); popTimer = null; } hidePop(); }
 
-function cancelPop() {
-  if (popTimer) { clearTimeout(popTimer); popTimer = null; }
-  hidePop();
-}
-
-async function doShowPop(e, el) {
-  var flNum = el.dataset.fl;
-  var status = el.dataset.st;
+function doShowPop(el) {
+  var flNum = el.dataset.fl, status = el.dataset.st;
   if (!flNum) return;
-
-  // Fetch flight data if not cached
-  if (!flightCache[flNum]) {
-    var dir = (status === 'FIAM' || status === 'FIPM') ? 'inbound' : 'outbound';
-    var res = await api('/api/flights/?site=CC&direction=' + dir);
-    if (res) {
-      for (var i = 0; i < res.length; i++) {
-        flightCache[res[i].flight_number] = res[i];
-      }
-    }
-  }
-
-  var fd = flightCache[flNum];
+  var fd  = flightCache[flNum];
   var pop = document.getElementById('popover');
   document.getElementById('pop-fl').textContent = flNum;
-
-  if (fd) {
-    document.getElementById('pop-rt').textContent = fd.depart_location + ' to ' + fd.arrive_location;
-    document.getElementById('pop-dep').textContent = fd.depart_time || '---';
-    document.getElementById('pop-arr').textContent = fd.arrive_time || '---';
-    document.getElementById('pop-ci').textContent = fd.checkin_open
-      ? 'Check-in ' + fd.checkin_open + ' - ' + fd.checkin_close
-      : '';
-  } else {
-    document.getElementById('pop-rt').textContent = status === 'FIAM' ? 'Perth to Christmas Creek' : 'Christmas Creek to Perth';
-    document.getElementById('pop-dep').textContent = '---';
-    document.getElementById('pop-arr').textContent = '---';
-    document.getElementById('pop-ci').textContent = 'Flight times not loaded';
-  }
-
-  // Position below the cell
+  document.getElementById('pop-rt').textContent = fd
+    ? (fd.depart_location + '  to  ' + fd.arrive_location)
+    : (status === 'FIAM' || status === 'FIPM') ? 'Perth to Christmas Creek' : 'Christmas Creek to Perth';
+  document.getElementById('pop-dep').textContent = fd ? (fd.depart_time || '---') : 'Loading...';
+  document.getElementById('pop-arr').textContent = fd ? (fd.arrive_time || '---') : '';
+  document.getElementById('pop-ci').textContent  = (fd && fd.checkin_open)
+    ? 'Check-in  ' + fd.checkin_open + ' - ' + fd.checkin_close : '';
   var rect = el.getBoundingClientRect();
-  var left = Math.min(rect.left, window.innerWidth - 250);
-  pop.style.left = left + 'px';
-  pop.style.top = (rect.bottom + window.scrollY + 6) + 'px';
+  pop.style.left = Math.min(rect.left, window.innerWidth - 260) + 'px';
+  pop.style.top  = (rect.bottom + window.scrollY + 6) + 'px';
   pop.classList.add('vis');
 }
 
-function hidePop() {
-  document.getElementById('popover').classList.remove('vis');
-}
+function hidePop() { document.getElementById('popover').classList.remove('vis'); }
 
 // ── SWING DETAIL MODAL ────────────────────────────────────────────────────────
-async function openSwingDetail(swingId, ds) {
+function openSwingDetail(swingId, ds) {
   var sw = null;
   for (var i = 0; i < allSwings.length; i++) { if (allSwings[i].id === swingId) { sw = allSwings[i]; break; } }
   if (!sw) return;
 
-  var staffDef = null;
-  for (var i = 0; i < STAFF_DEF.length; i++) { if (STAFF_DEF[i].emp === sw.staff_emp) { staffDef = STAFF_DEF[i]; break; } }
-
   document.getElementById('sd-name').textContent = NM[sw.staff_emp] || sw.staff_emp;
-  document.getElementById('sd-sub').textContent = sw.fly_in_date + '  to  ' + sw.fly_out_date + (sw.village ? '  |  ' + sw.village : '');
+  document.getElementById('sd-sub').textContent  = sw.fly_in_date + '  to  ' + sw.fly_out_date + (sw.village ? '  |  ' + sw.village : '');
 
-  // Load flight details for both legs
-  var fiF = sw.fly_in_flight, foF = sw.fly_out_flight;
-  if (fiF && !flightCache[fiF]) {
-    var r = await api('/api/flights/?site=CC&direction=inbound'); 
-    if (r) r.forEach(function(f){ flightCache[f.flight_number] = f; });
-  }
-  if (foF && !flightCache[foF]) {
-    var r = await api('/api/flights/?site=CC&direction=outbound');
-    if (r) r.forEach(function(f){ flightCache[f.flight_number] = f; });
-  }
-
+  var fiF    = sw.fly_in_flight,  foF    = sw.fly_out_flight;
   var fiData = fiF ? flightCache[fiF] : null;
   var foData = foF ? flightCache[foF] : null;
 
@@ -783,23 +757,23 @@ async function openSwingDetail(swingId, ds) {
     '<div class="sd-fb" id="sd-fi-card">' +
       '<div class="sd-fb-lbl">Fly In</div>' +
       '<div class="sd-fb-num">' + (fiF || '---') + '</div>' +
-      '<div class="sd-fb-dt">' + (sw.fly_in_date || '') + '</div>' +
-      '<div class="sd-fb-times">' + (fiData ? fiData.depart_time + ' - ' + fiData.arrive_time : fiF ? 'Times not loaded' : 'No flight set') + '</div>' +
+      '<div class="sd-fb-dt">'  + (sw.fly_in_date || '') + '</div>' +
+      '<div class="sd-fb-times">' + (fiData ? fiData.depart_time + ' - ' + fiData.arrive_time : (fiF ? 'Times unavailable' : 'No flight set')) + '</div>' +
     '</div>' +
     '<div class="sd-fb" id="sd-fo-card">' +
       '<div class="sd-fb-lbl">Fly Out</div>' +
       '<div class="sd-fb-num">' + (foF || '---') + '</div>' +
-      '<div class="sd-fb-dt">' + (sw.fly_out_date || '') + '</div>' +
-      '<div class="sd-fb-times">' + (foData ? foData.depart_time + ' - ' + foData.arrive_time : foF ? 'Times not loaded' : 'No flight set') + '</div>' +
+      '<div class="sd-fb-dt">'  + (sw.fly_out_date || '') + '</div>' +
+      '<div class="sd-fb-times">' + (foData ? foData.depart_time + ' - ' + foData.arrive_time : (foF ? 'Times unavailable' : 'No flight set')) + '</div>' +
     '</div>';
 
+  var days = calcDaysOnSite(sw.fly_in_date, sw.fly_out_date);
   document.getElementById('sd-info').innerHTML =
     '<div class="sd-info-row"><div class="sd-info-lbl">Village</div><div class="sd-info-val">' + (sw.village || '---') + '</div></div>' +
-    '<div class="sd-info-row"><div class="sd-info-lbl">Room</div><div class="sd-info-val">' + (sw.room_ref || '---') + '</div></div>' +
-    '<div class="sd-info-row"><div class="sd-info-lbl">Days on site</div><div class="sd-info-val">' + calcDaysOnSite(sw.fly_in_date, sw.fly_out_date) + '</div></div>' +
-    '<div class="sd-info-row"><div class="sd-info-lbl">Notes</div><div class="sd-info-val">' + (sw.notes || '---') + '</div></div>';
+    '<div class="sd-info-row"><div class="sd-info-lbl">Room</div><div class="sd-info-val">'    + (sw.room_ref || '---') + '</div></div>' +
+    '<div class="sd-info-row"><div class="sd-info-lbl">Days</div><div class="sd-info-val">'   + days + '</div></div>' +
+    '<div class="sd-info-row"><div class="sd-info-lbl">Notes</div><div class="sd-info-val" style="font-weight:400;font-size:12px">' + (sw.notes || '---') + '</div></div>';
 
-  // Wire up the change buttons
   document.getElementById('sd-cr-fiin-btn').onclick = function() {
     closeModal('swing-detail-modal');
     openChangeModal(sw.id, 'flight_change_in', sw.fly_in_date);
@@ -818,8 +792,7 @@ async function openSwingDetail(swingId, ds) {
 
 function calcDaysOnSite(fi, fo) {
   if (!fi || !fo) return '---';
-  var a = new Date(fi), b = new Date(fo);
-  return Math.round((b - a) / 86400000) + ' days';
+  return Math.round((new Date(fo) - new Date(fi)) / 86400000) + ' days';
 }
 
 // ── SWINGS TAB ────────────────────────────────────────────────────────────────
@@ -832,24 +805,27 @@ function renderSwings() {
     var sw = sorted[i];
     var s = null;
     for (var j = 0; j < STAFF_DEF.length; j++) { if (STAFF_DEF[j].emp === sw.staff_emp) { s = STAFF_DEF[j]; break; } }
-    var fiData = sw.fly_in_flight ? flightCache[sw.fly_in_flight] : null;
+    var fiData = sw.fly_in_flight  ? flightCache[sw.fly_in_flight]  : null;
     var foData = sw.fly_out_flight ? flightCache[sw.fly_out_flight] : null;
     html += '<div class="sw-card">' +
       '<div class="sw-left">' +
-      '<div class="sw-top"><span class="sw-name" style="color:' + (s?s.color:'#333') + '">' + (NM[sw.staff_emp]||sw.staff_emp) + '</span>' +
-      (sw.village ? '<span class="vpill vpill-' + sw.village + '">' + sw.village + '</span>' : '') +
-      '<span class="sw-dates">' + sw.fly_in_date + ' to ' + sw.fly_out_date + '</span></div>' +
+      '<div class="sw-top">' +
+        '<span class="sw-name" style="color:' + (s ? s.color : '#333') + '">' + (NM[sw.staff_emp]||sw.staff_emp) + '</span>' +
+        (sw.village ? '<span class="vpill vpill-' + sw.village + '">' + sw.village + '</span>' : '') +
+        '<span class="sw-dates">' + sw.fly_in_date + ' to ' + sw.fly_out_date + '</span>' +
+      '</div>' +
       '<div class="sw-flights">' +
-      '<div class="fb"><div class="fb-lbl">Fly In</div><div class="fb-num">' + (sw.fly_in_flight||'---') + '</div>' +
-      (fiData ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + fiData.depart_time + ' - ' + fiData.arrive_time + '</div>' : '') + '</div>' +
-      '<div class="fb"><div class="fb-lbl">Fly Out</div><div class="fb-num">' + (sw.fly_out_flight||'---') + '</div>' +
-      (foData ? '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + foData.depart_time + ' - ' + foData.arrive_time + '</div>' : '') + '</div>' +
-      '</div>' + (sw.notes ? '<p class="tmuted" style="margin-top:8px">' + sw.notes + '</p>' : '') +
+        '<div class="fb"><div class="fb-lbl">Fly In</div><div class="fb-num">' + (sw.fly_in_flight||'---') + '</div>' +
+          (fiData ? '<div class="fb-tm">' + fiData.depart_time + ' - ' + fiData.arrive_time + '</div>' : '') + '</div>' +
+        '<div class="fb"><div class="fb-lbl">Fly Out</div><div class="fb-num">' + (sw.fly_out_flight||'---') + '</div>' +
+          (foData ? '<div class="fb-tm">' + foData.depart_time + ' - ' + foData.arrive_time + '</div>' : '') + '</div>' +
+      '</div>' +
+      (sw.notes ? '<p class="tmuted" style="margin-top:6px;font-size:12px">' + sw.notes + '</p>' : '') +
       '</div>' +
       '<div class="sw-acts">' +
-      '<button class="btn btn-sm" onclick="editSwing(' + sw.id + ')">Edit</button>' +
-      '<button class="btn btn-sm btn-orange" onclick="openChangeModal(' + sw.id + ',null,null)">Request Change</button>' +
-      '<button class="btn btn-sm btn-ghost" style="color:var(--red)" onclick="deleteSwing(' + sw.id + ')">Delete</button>' +
+        '<button class="btn btn-sm" onclick="editSwing(' + sw.id + ')">Edit</button>' +
+        '<button class="btn btn-sm btn-orange" onclick="openChangeModal(' + sw.id + ',null,null)">Request Change</button>' +
+        '<button class="btn btn-sm btn-ghost" style="color:var(--red)" onclick="deleteSwing(' + sw.id + ')">Delete</button>' +
       '</div></div>';
   }
   c.innerHTML = html;
@@ -859,15 +835,15 @@ function openSwingModal(swing) {
   swing = swing || null;
   editSwingId = swing ? swing.id : null;
   document.getElementById('sw-modal-ttl').textContent = swing ? 'Edit Swing' : 'Add Swing';
-  document.getElementById('sw-id').value = swing ? swing.id : '';
-  document.getElementById('sw-staff').value = swing ? swing.staff_emp : '764148';
-  document.getElementById('sw-fiin').value = swing ? (swing.fly_in_date||'') : '';
-  document.getElementById('sw-fiout').value = swing ? (swing.fly_out_date||'') : '';
-  document.getElementById('sw-fiin-fl').value = swing ? (swing.fly_in_flight||'') : '';
+  document.getElementById('sw-id').value       = swing ? swing.id : '';
+  document.getElementById('sw-staff').value    = swing ? swing.staff_emp : '764148';
+  document.getElementById('sw-fiin').value     = swing ? (swing.fly_in_date||'')   : '';
+  document.getElementById('sw-fiout').value    = swing ? (swing.fly_out_date||'')  : '';
+  document.getElementById('sw-fiin-fl').value  = swing ? (swing.fly_in_flight||'') : '';
   document.getElementById('sw-fiout-fl').value = swing ? (swing.fly_out_flight||'') : '';
-  document.getElementById('sw-village').value = swing ? (swing.village||'JV') : 'JV';
-  document.getElementById('sw-room').value = swing ? (swing.room_ref||'') : '';
-  document.getElementById('sw-notes').value = swing ? (swing.notes||'') : '';
+  document.getElementById('sw-village').value  = swing ? (swing.village||'JV')     : 'JV';
+  document.getElementById('sw-room').value     = swing ? (swing.room_ref||'')      : '';
+  document.getElementById('sw-notes').value    = swing ? (swing.notes||'')         : '';
   document.getElementById('fi-opts').innerHTML = '';
   document.getElementById('fo-opts').innerHTML = '';
   document.getElementById('swing-modal').classList.remove('hidden');
@@ -891,11 +867,11 @@ async function saveSwing() {
     staff_emp:      document.getElementById('sw-staff').value,
     fly_in_date:    document.getElementById('sw-fiin').value,
     fly_out_date:   document.getElementById('sw-fiout').value,
-    fly_in_flight:  document.getElementById('sw-fiin-fl').value || null,
+    fly_in_flight:  document.getElementById('sw-fiin-fl').value  || null,
     fly_out_flight: document.getElementById('sw-fiout-fl').value || null,
     village:        document.getElementById('sw-village').value,
-    room_ref:       document.getElementById('sw-room').value || null,
-    notes:          document.getElementById('sw-notes').value || null
+    room_ref:       document.getElementById('sw-room').value     || null,
+    notes:          document.getElementById('sw-notes').value    || null
   };
   if (!payload.fly_in_date || !payload.fly_out_date) { alert('Fly-in and fly-out dates required.'); return; }
   var result;
@@ -910,20 +886,19 @@ async function saveSwing() {
 }
 
 async function loadFlyOpts(dir) {
-  var dv = document.getElementById(dir==='in'?'sw-fiin':'sw-fiout').value;
-  var od = document.getElementById(dir==='in'?'fi-opts':'fo-opts');
-  var inp = dir==='in'?'sw-fiin-fl':'sw-fiout-fl';
+  var dv  = document.getElementById(dir==='in' ? 'sw-fiin'   : 'sw-fiout').value;
+  var od  = document.getElementById(dir==='in' ? 'fi-opts'   : 'fo-opts');
+  var inp = dir==='in' ? 'sw-fiin-fl' : 'sw-fiout-fl';
   if (!dv) return;
-  var d = new Date(dv + 'T12:00:00');
-  var dn = d.toLocaleDateString('en-AU',{weekday:'long'});
-  var direction = dir==='in'?'inbound':'outbound';
-  var fl = await api('/api/flights/?site=CC&day_of_week=' + dn + '&direction=' + direction);
+  var d   = new Date(dv + 'T12:00:00');
+  var dn  = d.toLocaleDateString('en-AU',{weekday:'long'});
+  var fl  = await api('/api/flights/?site=CC&day_of_week=' + dn + '&direction=' + (dir==='in'?'inbound':'outbound'));
   if (!fl || !fl.length) { od.innerHTML = '<p class="tmuted" style="font-size:12px;margin-top:4px">No flights on this day.</p>'; return; }
   od.innerHTML = fl.map(function(f){
     return '<div class="fo" onclick="selFlight(\'' + inp + '\',\'' + f.flight_number + '\',this)">' +
       '<span class="fo-num">' + f.flight_number + '</span>' +
-      '<span class="fo-rt">' + f.depart_location + ' to ' + f.arrive_location + '</span>' +
-      '<span class="fo-tm">' + f.depart_time + ' - ' + f.arrive_time + '</span></div>';
+      '<span class="fo-rt">'  + f.depart_location + ' to ' + f.arrive_location + '</span>' +
+      '<span class="fo-tm">'  + f.depart_time + ' - ' + f.arrive_time + '</span></div>';
   }).join('');
 }
 
@@ -936,13 +911,12 @@ function selFlight(inp, num, el) {
 // ── CHANGE REQUESTS ───────────────────────────────────────────────────────────
 function openChangeModal(swingId, preType, preDate) {
   document.getElementById('cr-modal-ttl').textContent = 'New Change Request';
-  document.getElementById('cr-date').value = preDate || new Date().toISOString().slice(0,10);
+  document.getElementById('cr-date').value    = preDate || new Date().toISOString().slice(0,10);
   document.getElementById('cr-newdate').value = '';
-  document.getElementById('cr-reason').value = '';
-  document.getElementById('cr-flight').value = '';
+  document.getElementById('cr-reason').value  = '';
+  document.getElementById('cr-flight').value  = '';
   document.getElementById('cr-flight-opts').innerHTML = '';
   document.getElementById('cr-flight-row').style.display = 'none';
-
   if (typeof swingId === 'number') {
     var sw = null;
     for (var i = 0; i < allSwings.length; i++) { if (allSwings[i].id === swingId) { sw = allSwings[i]; break; } }
@@ -955,13 +929,9 @@ function openChangeModal(swingId, preType, preDate) {
   document.getElementById('change-modal').classList.remove('hidden');
 }
 
-document.getElementById('cr-type').addEventListener('change', function() {
-  toggleFlightRow(this.value);
-});
-
 function toggleFlightRow(type) {
-  var show = type === 'flight_change_in' || type === 'flight_change_out';
-  document.getElementById('cr-flight-row').style.display = show ? 'block' : 'none';
+  document.getElementById('cr-flight-row').style.display =
+    (type === 'flight_change_in' || type === 'flight_change_out') ? 'block' : 'none';
 }
 
 async function saveChange() {
@@ -971,8 +941,9 @@ async function saveChange() {
   var newDt  = document.getElementById('cr-newdate').value;
   var reason = document.getElementById('cr-reason').value.trim();
   if (!reason) { alert('Please enter a reason.'); return; }
-  var payload = { staff_emp: emp, change_type: type, effective_date: dt, new_date: newDt || null, reason: reason };
-  var result = await api('/api/changes/', { method: 'POST', body: JSON.stringify(payload) });
+  var result = await api('/api/changes/', { method: 'POST', body: JSON.stringify({
+    staff_emp: emp, change_type: type, effective_date: dt, new_date: newDt || null, reason: reason
+  })});
   if (result) {
     allChanges.unshift(result);
     updateChangesBadge();
@@ -988,26 +959,28 @@ var SNL = { requested:'Mark Booked', booked:'Log Confirmation', confirmed:'Mark 
 function renderChanges() {
   var c = document.getElementById('changes-list');
   if (!allChanges.length) {
-    c.innerHTML = '<p class="tmuted" style="padding:40px 0;text-align:center">No change requests yet.<br><span style="font-size:12px">Click a swing on the calendar or use + New Request.</span></p>';
+    c.innerHTML = '<p class="tmuted" style="padding:32px 0;text-align:center">No change requests yet.<br><span style="font-size:12px">Click an on-site cell on the roster or use + New Request.</span></p>';
     return;
   }
   var html = '';
   for (var i = 0; i < allChanges.length; i++) {
-    var ch = allChanges[i];
+    var ch   = allChanges[i];
     var name = NM[ch.staff_emp] || ch.staff_emp;
     var slbl = ch.status.charAt(0).toUpperCase() + ch.status.slice(1).replace('_',' ');
     var next = SN[ch.status];
     html += '<div class="cr-card">' +
       '<div class="cr-hdr"><div>' +
-      '<div class="cr-title">' + name + ' - ' + (CTL[ch.change_type]||ch.change_type) + '</div>' +
-      '<div class="cr-meta">Effective ' + ch.effective_date + (ch.new_date ? ' - New: ' + ch.new_date : '') + ' - Logged ' + new Date(ch.created_at).toLocaleDateString('en-AU') + '</div>' +
-      (ch.workflow_ref ? '<div class="cr-meta" style="color:var(--orange)">Ref: ' + ch.workflow_ref + '</div>' : '') +
+        '<div class="cr-title">' + name + '  -  ' + (CTL[ch.change_type]||ch.change_type) + '</div>' +
+        '<div class="cr-meta">Effective ' + ch.effective_date +
+          (ch.new_date ? '  -  New: ' + ch.new_date : '') +
+          '  -  Logged ' + new Date(ch.created_at).toLocaleDateString('en-AU') + '</div>' +
+        (ch.workflow_ref ? '<div class="cr-meta" style="color:var(--orange)">Ref: ' + ch.workflow_ref + '</div>' : '') +
       '</div><span class="sbadge ' + (SC[ch.status]||'') + '">' + slbl + '</span></div>' +
       '<div class="cr-detail">' + ch.reason + '</div>' +
       '<div class="cr-acts">' +
-      '<button class="btn btn-sm" onclick="showDraft(' + ch.id + ')">View Draft Email</button>' +
-      (next ? '<button class="btn btn-sm btn-red" onclick="advStatus(' + ch.id + ')">' + SNL[ch.status] + '</button>' : '') +
-      '<button class="btn btn-sm btn-ghost" style="color:var(--red)" onclick="delChange(' + ch.id + ')">Delete</button>' +
+        '<button class="btn btn-sm" onclick="showDraft(' + ch.id + ')">View Draft Email</button>' +
+        (next ? '<button class="btn btn-sm btn-red" onclick="advStatus(' + ch.id + ')">' + SNL[ch.status] + '</button>' : '') +
+        '<button class="btn btn-sm btn-ghost" style="color:var(--red)" onclick="delChange(' + ch.id + ')">Delete</button>' +
       '</div></div>';
   }
   c.innerHTML = html;
@@ -1017,14 +990,10 @@ async function advStatus(id) {
   var ch = null;
   for (var i = 0; i < allChanges.length; i++) { if (allChanges[i].id === id) { ch = allChanges[i]; break; } }
   if (!ch) return;
-  var workflowRef = null;
-  if (ch.status === 'booked') {
-    workflowRef = prompt('Enter FMG Workflow confirmation reference:');
-    if (!workflowRef) return;
-  }
+  var wfRef = null;
+  if (ch.status === 'booked') { wfRef = prompt('Enter FMG Workflow reference:'); if (!wfRef) return; }
   var result = await api('/api/changes/' + id + '/status', {
-    method: 'PUT',
-    body: JSON.stringify({ status: SN[ch.status], workflow_ref: workflowRef || undefined })
+    method: 'PUT', body: JSON.stringify({ status: SN[ch.status], workflow_ref: wfRef || undefined })
   });
   if (result) {
     allChanges = allChanges.map(function(x){ return x.id === id ? result : x; });
@@ -1044,12 +1013,9 @@ function buildDraft(ch) {
   var name = NM[ch.staff_emp] || ch.staff_emp;
   return 'To: mobilisation@issg.net.au\nSubject: Roster Change Request - ' + name + ' / Christmas Creek\n\n' +
     'Hi Team,\n\nPlease action the following roster change in FMG Workflow:\n\n' +
-    'Technician: ' + name + '\n' +
-    'Change Type: ' + (CTL[ch.change_type]||ch.change_type) + '\n' +
-    'Effective Date: ' + ch.effective_date +
-    (ch.new_date ? '\nNew Date: ' + ch.new_date : '') + '\n' +
-    'Site: Christmas Creek (CCK)\n\n' +
-    'Reason: ' + ch.reason + '\n\n' +
+    'Technician: ' + name + '\nChange Type: ' + (CTL[ch.change_type]||ch.change_type) + '\n' +
+    'Effective Date: ' + ch.effective_date + (ch.new_date ? '\nNew Date: ' + ch.new_date : '') + '\n' +
+    'Site: Christmas Creek (CCK)\n\nReason: ' + ch.reason + '\n\n' +
     'Please confirm once actioned in Workflow and provide the booking reference.\n\n' +
     'Regards,\n' + currentUser + '\nISSG - Eastern Hub';
 }
@@ -1066,8 +1032,7 @@ async function delChange(id) {
 function updateChangesBadge() {
   var open = allChanges.filter(function(c){ return c.status !== 'complete'; }).length;
   var b = document.getElementById('changes-badge');
-  b.textContent = open;
-  b.classList.toggle('hidden', open === 0);
+  b.textContent = open; b.classList.toggle('hidden', open === 0);
 }
 
 function copyDraft() {
@@ -1095,11 +1060,8 @@ function aq(text) { document.getElementById('agent-input').value = text; sendAge
 function appendMsg(role, text) {
   var msgs = document.getElementById('agent-msgs');
   var el = document.createElement('div');
-  el.className = 'msg msg-' + role;
-  el.textContent = text;
-  msgs.appendChild(el);
-  msgs.scrollTop = msgs.scrollHeight;
-  return el;
+  el.className = 'msg msg-' + role; el.textContent = text;
+  msgs.appendChild(el); msgs.scrollTop = msgs.scrollHeight; return el;
 }
 
 // ── UTILS ─────────────────────────────────────────────────────────────────────
