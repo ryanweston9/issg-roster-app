@@ -61,8 +61,7 @@
   .pill-FOAM,.pill-FOPM{background:var(--purple-light);color:#6d28d9;border:1px solid #c4b5fd;}
   .pill-AL{background:var(--yellow-light);color:#854d0e;}
   .pill-LWOP{background:#fee2e2;color:#991b1b;}
-  .pill-dash{background:var(--bg);color:var(--muted);}
-  /* R&R — no pill, just dimmed text styling applied inline */
+  /* R&R and unconfirmed — no pill, just dimmed text */
   .vpill{display:inline-flex;padding:1px 7px;border-radius:10px;font-size:10px;font-weight:700;color:#fff;}
   .vpill-JV{background:var(--jv);}
   .vpill-KV{background:var(--kv);}
@@ -93,10 +92,12 @@
   /* R&R cell shading */
   .cal-table tbody td.cell-rr{background:var(--rr-bg);}
   .cal-table tbody td.tcol.cell-rr{background:#efeff1;}
-  /* clickable cells */
+  /* clickable cells — all swing-linked cells */
   .cal-table tbody td.cell-click{cursor:pointer;}
-  .cal-table tbody td.cell-click:hover{background:#f0fdf4;outline:2px solid #86efac;outline-offset:-2px;}
-  /* travel cell hover handled by popover logic */
+  .cal-table tbody td.cell-click:hover{background:#f0fdf4;}
+  /* unconfirmed / off-site cells — click to add swing */
+  .cal-table tbody td.cell-empty{background:var(--rr-bg);cursor:pointer;}
+  .cal-table tbody td.cell-empty:hover{background:#ebebed;}
   .csl{display:flex;align-items:center;gap:7px;}
   .csd{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
   .csn{font-size:11px;font-weight:600;white-space:nowrap;}
@@ -321,15 +322,7 @@
   </div>
 </div>
 
-<!-- FLIGHT POPOVER -->
-<div class="popover" id="popover">
-  <div class="pop-fl" id="pop-fl"></div>
-  <div class="pop-rt" id="pop-rt"></div>
-  <hr class="pop-div">
-  <div class="pop-row"><span class="pop-lbl">Departs</span><span class="pop-val" id="pop-dep"></span></div>
-  <div class="pop-row"><span class="pop-lbl">Arrives</span><span class="pop-val" id="pop-arr"></span></div>
-  <div class="pop-ci" id="pop-ci"></div>
-</div>
+<!-- Flight popover removed — click swing cells for details -->
 
 <!-- SWING DETAIL MODAL -->
 <div class="overlay hidden" id="swing-detail-modal">
@@ -455,17 +448,12 @@ var currentUser = localStorage.getItem('issg_user') || '';
 var calStart = getMonday(new Date());
 var allSwings = [], allStaff = [], allChanges = [], allOverrides = [];
 var agentHistory = [], editSwingId = null, flightCache = {};
-var popTimer = null;
 
 // ── CONSTANTS ─────────────────────────────────────────────────────────────────
-var SWING_ON = 8, CYCLE = 14;
-var AMANDA_BASE = new Date('2025-03-05T00:00:00');
-var CLIVE_BASE  = new Date('2025-03-12T00:00:00');
-
 var STAFF_DEF = [
-  { emp: '764148',      name: 'Amanda Inglis-Baillie', short: 'Amanda', base: AMANDA_BASE, village: 'JV', color: '#e67e22' },
-  { emp: '807406',      name: 'Clive Ettia',           short: 'Clive',  base: CLIVE_BASE,  village: 'KV', color: '#b21c24' },
-  { emp: 'PETE-CASUAL', name: 'Pete Scully',           short: 'Pete',   base: null,        village: 'JV', color: '#6b7280' },
+  { emp: '764148',      name: 'Amanda Inglis-Baillie', short: 'Amanda', village: 'JV', color: '#e67e22' },
+  { emp: '807406',      name: 'Clive Ettia',           short: 'Clive',  village: 'KV', color: '#b21c24' },
+  { emp: 'PETE-CASUAL', name: 'Pete Scully',           short: 'Pete',   village: 'JV', color: '#6b7280' },
 ];
 
 // Day type labels — these are the only values shown in cells
@@ -553,15 +541,17 @@ function showTab(name) {
 }
 
 // ── STATUS LOGIC ──────────────────────────────────────────────────────────────
+// No auto-calculation fallback. Calendar reflects confirmed DB swings + overrides only.
+// Unconfirmed dates show as empty/grey — click to add a swing.
+
 function toDateStr(d) { return d.toISOString().slice(0, 10); }
 
-function getStatusForDate(emp, d) {
-  var ds = toDateStr(d);
+function getStatusForDate(emp, ds) {
   // 1. Override (AL, LWOP)
   for (var i = 0; i < allOverrides.length; i++) {
     if (allOverrides[i].staff_emp === emp && allOverrides[i].date === ds) return allOverrides[i].status;
   }
-  // 2. DB swing record
+  // 2. DB swing record only — null means unconfirmed
   var sw = getSwingForDate(emp, ds);
   if (sw) {
     var fi = sw.fly_in_date  ? sw.fly_in_date.slice(0,10)  : null;
@@ -570,11 +560,7 @@ function getStatusForDate(emp, d) {
     if (fo === ds) return 'FOAM';
     return 'CC';
   }
-  // 3. Calculated fallback
-  var def = null;
-  for (var j = 0; j < STAFF_DEF.length; j++) { if (STAFF_DEF[j].emp === emp) { def = STAFF_DEF[j]; break; } }
-  if (!def || !def.base) return '---';
-  return calcStatus(def.base, d);
+  return null;
 }
 
 function getSwingForDate(emp, ds) {
@@ -588,17 +574,7 @@ function getSwingForDate(emp, ds) {
   return null;
 }
 
-function calcStatus(base, d) {
-  var diff = Math.floor((d - base) / 86400000);
-  var pos  = ((diff % CYCLE) + CYCLE) % CYCLE;
-  if (pos === 0)        return 'FIAM';
-  if (pos < SWING_ON)   return 'CC';
-  if (pos === SWING_ON) return 'FOAM';
-  return 'RR';
-}
-
-function isTravelDay(s) { return s === 'FIAM' || s === 'FIPM' || s === 'FOAM' || s === 'FOPM'; }
-function isOnSite(s)    { return s === 'FIAM' || s === 'FIPM' || s === 'CC'   || s === 'FOAM' || s === 'FOPM'; }
+function isOnSite(s) { return s === 'FIAM' || s === 'FIPM' || s === 'CC' || s === 'FOAM' || s === 'FOPM'; }
 
 // ── CALENDAR ──────────────────────────────────────────────────────────────────
 function getMonday(d) {
@@ -616,10 +592,10 @@ function renderCalendar() {
     var d = new Date(calStart); d.setDate(d.getDate() + i); d.setHours(0,0,0,0); days.push(d);
   }
   document.getElementById('cal-title').textContent =
-    days[0].toLocaleDateString('en-AU',{day:'numeric',month:'short'}) + ' - ' +
+    days[0].toLocaleDateString('en-AU',{day:'numeric',month:'short'}) + ' \u2014 ' +
     days[13].toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'});
 
-  // Header row
+  // Header
   var hh = '<tr><th></th>';
   for (var i = 0; i < days.length; i++) {
     var isT = days[i].getTime() === today.getTime();
@@ -632,6 +608,7 @@ function renderCalendar() {
   // Body rows
   var tbody = document.getElementById('cal-body');
   tbody.innerHTML = '';
+
   for (var si = 0; si < STAFF_DEF.length; si++) {
     var s = STAFF_DEF[si];
     var tr = document.createElement('tr');
@@ -643,44 +620,38 @@ function renderCalendar() {
       var d   = days[di];
       var isT = d.getTime() === today.getTime();
       var ds  = toDateStr(d);
-      var status  = getStatusForDate(s.emp, d);
+      var status  = getStatusForDate(s.emp, ds);
       var sw      = getSwingForDate(s.emp, ds);
-      var travel  = isTravelDay(status);
-      var onsite  = isOnSite(status);
-      var isRR    = status === 'RR';
+      var onsite  = status && isOnSite(status);
       var village = onsite ? getVillageForDate(s.emp, ds, s.village) : null;
 
-      // Flight number only used for popover — never shown in cell
-      var flNum = (travel && sw) ? ((status === 'FIAM' || status === 'FIPM') ? sw.fly_in_flight : sw.fly_out_flight) : null;
-
-      // Build cell content — day type on line 1, village on line 2
+      // Cell label
       var typeHtml = '';
-      if (isRR) {
-        typeHtml = '<span class="rr-label">R&amp;R</span>';
-      } else if (status === '---') {
-        typeHtml = '<span class="rr-label">---</span>';
+      if (!status) {
+        typeHtml = ''; // empty — grey cell
+      } else if (status === 'RR' || status === 'AL' || status === 'LWOP') {
+        typeHtml = '<span class="rr-label">' + (DT_LABEL[status] || status) + '</span>';
       } else {
         typeHtml = '<span class="pill pill-' + status + '">' + (DT_LABEL[status] || status) + '</span>';
       }
-      var villageHtml = village ? '<span class="vpill vpill-' + village + '">' + village + '</span>' : '';
 
+      var villageHtml = village ? '<span class="vpill vpill-' + village + '">' + village + '</span>' : '';
       var cellContent = '<div class="ccell">' +
         '<div class="ccell-type">' + typeHtml + '</div>' +
         (villageHtml ? '<div class="ccell-village">' + villageHtml + '</div>' : '') +
         '</div>';
 
-      // TD classes and interaction
-      var tdClass = (isT ? 'tcol ' : '') + (isRR ? 'cell-rr ' : '') + (sw && status === 'CC' ? 'cell-click ' : '');
+      var tdBase = isT ? 'tcol ' : '';
 
-      if (travel && flNum) {
-        // Hover popover on travel days
-        html += '<td class="' + tdClass + '" data-fl="' + flNum + '" data-st="' + status + '" ' +
-          'onmouseenter="schedPop(event,this)" onmouseleave="cancelPop()">' + cellContent + '</td>';
-      } else if (sw && status === 'CC') {
-        // Click to open swing detail
-        html += '<td class="' + tdClass + '" onclick="openSwingDetail(' + sw.id + ',\'' + ds + '\')">' + cellContent + '</td>';
+      if (!status) {
+        // Unconfirmed — grey, click to add swing
+        html += '<td class="' + tdBase + 'cell-empty" onclick="promptAddSwing(\'' + s.emp + '\',\'' + ds + '\')">' + cellContent + '</td>';
+      } else if (sw) {
+        // Confirmed swing — click to open detail (all day types: FIAM, CC, FOAM etc)
+        html += '<td class="' + tdBase + 'cell-click" onclick="openSwingDetail(' + sw.id + ',\'' + ds + '\')">' + cellContent + '</td>';
       } else {
-        html += '<td class="' + tdClass + '">' + cellContent + '</td>';
+        // Override only (AL/LWOP) — no swing, not clickable, greyed
+        html += '<td class="' + tdBase + 'cell-rr">' + cellContent + '</td>';
       }
     }
     tr.innerHTML = html;
@@ -688,6 +659,8 @@ function renderCalendar() {
   }
   renderStaffStrip();
 }
+
+function promptAddSwing(emp, ds) { openSwingModal(null, emp, ds); }
 
 function getVillageForDate(emp, ds, def) {
   var sw = getSwingForDate(emp, ds);
@@ -697,15 +670,21 @@ function getVillageForDate(emp, ds, def) {
 // ── STAFF STRIP ───────────────────────────────────────────────────────────────
 function renderStaffStrip() {
   var today = new Date(); today.setHours(0,0,0,0);
+  var ds = toDateStr(today);
   var html = '';
   for (var i = 0; i < STAFF_DEF.length; i++) {
     var s = STAFF_DEF[i];
-    var status  = getStatusForDate(s.emp, today);
+    var status  = getStatusForDate(s.emp, ds);
     var ini     = s.name.split(' ').map(function(w){return w[0];}).join('').slice(0,2);
-    var village = isOnSite(status) ? getVillageForDate(s.emp, toDateStr(today), s.village) : null;
-    var statusHtml = status === 'RR'
-      ? '<span class="rr-label">R&amp;R</span>'
-      : '<span class="pill pill-' + (status||'dash') + '">' + (DT_LABEL[status]||'---') + '</span>';
+    var village = (status && isOnSite(status)) ? getVillageForDate(s.emp, ds, s.village) : null;
+    var statusHtml;
+    if (!status) {
+      statusHtml = '<span class="rr-label">Unconfirmed</span>';
+    } else if (status === 'RR' || status === 'AL' || status === 'LWOP') {
+      statusHtml = '<span class="rr-label">' + (DT_LABEL[status]||status) + '</span>';
+    } else {
+      statusHtml = '<span class="pill pill-' + status + '">' + (DT_LABEL[status]||status) + '</span>';
+    }
     html += '<div class="sc"><div class="sc-av" style="background:' + s.color + '">' + ini + '</div>' +
       '<div style="min-width:0"><div class="sc-name">' + s.name + '</div>' +
       '<div class="sc-status">' + statusHtml +
@@ -715,30 +694,7 @@ function renderStaffStrip() {
   document.getElementById('staff-strip').innerHTML = html;
 }
 
-// ── FLIGHT POPOVER ────────────────────────────────────────────────────────────
-function schedPop(e, el) { cancelPop(); popTimer = setTimeout(function() { doShowPop(el); }, 100); }
-function cancelPop() { if (popTimer) { clearTimeout(popTimer); popTimer = null; } hidePop(); }
-
-function doShowPop(el) {
-  var flNum = el.dataset.fl, status = el.dataset.st;
-  if (!flNum) return;
-  var fd  = flightCache[flNum];
-  var pop = document.getElementById('popover');
-  document.getElementById('pop-fl').textContent = flNum;
-  document.getElementById('pop-rt').textContent = fd
-    ? (fd.depart_location + '  to  ' + fd.arrive_location)
-    : (status === 'FIAM' || status === 'FIPM') ? 'Perth to Christmas Creek' : 'Christmas Creek to Perth';
-  document.getElementById('pop-dep').textContent = fd ? (fd.depart_time || '---') : 'Loading...';
-  document.getElementById('pop-arr').textContent = fd ? (fd.arrive_time || '---') : '';
-  document.getElementById('pop-ci').textContent  = (fd && fd.checkin_open)
-    ? 'Check-in  ' + fd.checkin_open + ' - ' + fd.checkin_close : '';
-  var rect = el.getBoundingClientRect();
-  pop.style.left = Math.min(rect.left, window.innerWidth - 260) + 'px';
-  pop.style.top  = (rect.bottom + window.scrollY + 6) + 'px';
-  pop.classList.add('vis');
-}
-
-function hidePop() { document.getElementById('popover').classList.remove('vis'); }
+// Flight popover removed — swing detail modal handles all click interactions
 
 // ── SWING DETAIL MODAL ────────────────────────────────────────────────────────
 function openSwingDetail(swingId, ds) {
@@ -831,19 +787,19 @@ function renderSwings() {
   c.innerHTML = html;
 }
 
-function openSwingModal(swing) {
+function openSwingModal(swing, preEmp, preDate) {
   swing = swing || null;
   editSwingId = swing ? swing.id : null;
   document.getElementById('sw-modal-ttl').textContent = swing ? 'Edit Swing' : 'Add Swing';
   document.getElementById('sw-id').value       = swing ? swing.id : '';
-  document.getElementById('sw-staff').value    = swing ? swing.staff_emp : '764148';
-  document.getElementById('sw-fiin').value     = swing ? (swing.fly_in_date||'')   : '';
-  document.getElementById('sw-fiout').value    = swing ? (swing.fly_out_date||'')  : '';
-  document.getElementById('sw-fiin-fl').value  = swing ? (swing.fly_in_flight||'') : '';
+  document.getElementById('sw-staff').value    = swing ? swing.staff_emp : (preEmp || '764148');
+  document.getElementById('sw-fiin').value     = swing ? (swing.fly_in_date||'')    : (preDate || '');
+  document.getElementById('sw-fiout').value    = swing ? (swing.fly_out_date||'')   : '';
+  document.getElementById('sw-fiin-fl').value  = swing ? (swing.fly_in_flight||'')  : '';
   document.getElementById('sw-fiout-fl').value = swing ? (swing.fly_out_flight||'') : '';
-  document.getElementById('sw-village').value  = swing ? (swing.village||'JV')     : 'JV';
-  document.getElementById('sw-room').value     = swing ? (swing.room_ref||'')      : '';
-  document.getElementById('sw-notes').value    = swing ? (swing.notes||'')         : '';
+  document.getElementById('sw-village').value  = swing ? (swing.village||'JV')      : 'JV';
+  document.getElementById('sw-room').value     = swing ? (swing.room_ref||'')       : '';
+  document.getElementById('sw-notes').value    = swing ? (swing.notes||'')          : '';
   document.getElementById('fi-opts').innerHTML = '';
   document.getElementById('fo-opts').innerHTML = '';
   document.getElementById('swing-modal').classList.remove('hidden');
