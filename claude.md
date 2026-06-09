@@ -199,3 +199,9 @@ OR: Upload zip via Railway dashboard → Deploy from zip.
 - Supervisor list with assigned hub per person
 - Confirm roster-confirm@issg.net.au inbox can be provisioned (Avantegarde)
 - Staff email addresses for automated notifications
+
+## Future Features (FF) workflow
+New features are specced before they're built. Run `/ff <name>` to start (`/ff quick "<idea>"` to just stash an idea, `/ff list` to see the backlog). It drives need-validation → codebase stress-test → full spec, and only emits a build prompt once the spec is **complete**.
+- Registry/backlog: `docs/FUTURE_FEATURES.md` (existing direction also in `roster-tool-ROADMAP.md`) · full specs: `docs/future-features/FF-NNN-slug.md` · template: `docs/future-features/_TEMPLATE.md`
+- **Do not start building an FF until its Status is `Ready for Build`.**
+- Standard across all projects: `~/.claude/DOCUMENTATION_STANDARDS.md`.
