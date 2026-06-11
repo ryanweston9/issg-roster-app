@@ -4,7 +4,7 @@
 > Keep the matching one-line entry in this project's `FUTURE_FEATURES.md` registry in sync
 > (same change, every change). **This feature is not built until Status reaches `Ready for Build`.**
 
-**Status:** In Build <!-- Draft → Validated → Speccing → Ready for Build → In Build → Shipped -->
+**Status:** Shipped <!-- Draft → Validated → Speccing → Ready for Build → In Build → Shipped -->
 **Added:** 2026-06-11
 **Updated:** 2026-06-11
 **Owner:** Ryan Weston
@@ -227,3 +227,36 @@ Frontend-only (`static/index.html`); the backend alias from §4A is unchanged.
 - **Behaviour change to note:** times are now *correct-or-blank*. A swing whose date's weekday doesn't
   match any flight row for that number now reads "No scheduled time" rather than an arbitrary
   (possibly wrong-day) time.
+
+### 11a. The actual prod blocker — SQLite cross-thread 500 (found via live smoke)
+
+The live smoke after deploy revealed every `/api/flights/*` call (incl. unchanged `/sites`) was
+**500ing** in prod — the real reason flight times never showed. The §1/§3 root-cause analysis was done
+with a *direct, single-threaded* SQLite query, so it never hit this:
+
+```
+File "/app/routers/flights.py", in list_flights
+sqlite3.ProgrammingError: SQLite objects created in a thread can only be used in that same thread.
+```
+
+`get_flights_db()` is a **sync** generator dependency (FastAPI runs it in a threadpool worker, where
+the connection is created), but the endpoints are **`async def`** (run in the event-loop thread, where
+`conn.execute` is called) → connection created in one thread, used in another → SQLite refuses. The
+frontend's `api()` swallowed the 500, so `flightCache` stayed empty and everything read
+"Times unavailable" — the same symptom the site-filter bug would produce, masking it.
+
+**Fix:** open the per-request connection with `check_same_thread=False` (`routers/flights.py`). Each
+request gets its own short-lived connection, never used concurrently, so it's safe.
+
+**Verified:** local FastAPI harness (async endpoint + sync `get_db`, real flights DB) — default connect
+→ HTTP 500 (reproduces prod), `check_same_thread=False` → HTTP 200. **Live prod smoke after deploy:**
+`?site=CC&direction=inbound` → 13, `outbound` → 12, `?site=ZZ` → [], `/api/flights/` → 149 (all 6 hubs),
+`/sites` → all six sites. Endpoint healthy.
+
+> **Lesson:** smoke the running server, not just a direct DB query — the threading defect only appears
+> under the ASGI threadpool, never in a single-threaded repro.
+
+### 11b. Remaining
+
+API + data path are live-verified. The only open item is a **visual eyeball** in the browser (Britt /
+Ryan): open a swing → real `depart - arrive` times; open Add Swing → picker lists flights for the day.
