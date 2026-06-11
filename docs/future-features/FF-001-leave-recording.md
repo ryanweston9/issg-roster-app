@@ -4,7 +4,7 @@
 > Keep the matching one-line entry in this project's `FUTURE_FEATURES.md` registry in sync
 > (same change, every change). **This feature is not built until Status reaches `Ready for Build`.**
 
-**Status:** In Build <!-- Draft → Validated → Speccing → Ready for Build → In Build → Shipped -->
+**Status:** Shipped <!-- Draft → Validated → Speccing → Ready for Build → In Build → Shipped -->
 **Added:** 2026-06-11
 **Updated:** 2026-06-11
 **Owner:** Ryan Weston

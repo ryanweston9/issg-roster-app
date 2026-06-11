@@ -11,8 +11,8 @@ Existing direction also lives in `../roster-tool-ROADMAP.md`; this file is the l
 ---
 
 ## FF-001 — Leave Recording (`leave-recording`)
-**Status:** In Build  ·  **Added:** 2026-06-11  ·  **Updated:** 2026-06-11
-Roadmap Phase 1. Let the Coordinator click any calendar cell to set/remove AL or LWOP over a date range, persisted as RosterOverrides. Closes the biggest current gap: Britt has no in-app way to record leave. Frontend-only; backend endpoints already exist. Spec: `future-features/FF-001-leave-recording.md`.
+**Status:** Shipped  ·  **Added:** 2026-06-11  ·  **Updated:** 2026-06-11
+Roadmap Phase 1. Let the Coordinator click any calendar cell to set/remove AL or LWOP over a date range, persisted as RosterOverrides. Closes the biggest current gap: Britt has no in-app way to record leave. Frontend-only; backend endpoints already exist. Shipped to prod (commit 8bf3d28). Spec: `future-features/FF-001-leave-recording.md`.
 
 ---
 
