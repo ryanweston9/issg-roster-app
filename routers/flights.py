@@ -9,6 +9,9 @@ router = APIRouter(prefix="/api/flights", tags=["flights"])
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "fmg_flights.db")
 
+# Site codes used by the app map to the full site names stored in the flights DB.
+SITE_ALIASES = {"CC": "Christmas Creek"}  # extend per hub as they onboard (CB, etc.)
+
 
 def get_flights_db():
     conn = sqlite3.connect(DB_PATH)
@@ -44,8 +47,9 @@ async def list_flights(
     query = "SELECT * FROM flights WHERE 1=1"
     params = []
     if site:
-        query += " AND site = ?"
-        params.append(site.upper())
+        name = SITE_ALIASES.get(site.strip().upper(), site)
+        query += " AND UPPER(site) = UPPER(?)"
+        params.append(name)
     if day_of_week:
         query += " AND day_of_week = ?"
         params.append(day_of_week.capitalize())

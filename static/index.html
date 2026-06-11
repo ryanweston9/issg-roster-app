@@ -881,13 +881,13 @@ function openSwingDetail(swingId, ds) {
       '<div class="sd-fb-lbl">Fly In</div>' +
       '<div class="sd-fb-num">' + (fiF || '---') + '</div>' +
       '<div class="sd-fb-dt">'  + (sw.fly_in_date || '') + '</div>' +
-      '<div class="sd-fb-times">' + (fiData ? fiData.depart_time + ' - ' + fiData.arrive_time : (fiF ? 'Times unavailable' : 'No flight set')) + '</div>' +
+      '<div class="sd-fb-times">' + (fiData ? fiData.depart_time + ' - ' + fiData.arrive_time : (fiF ? 'No scheduled time' : 'No flight set')) + '</div>' +
     '</div>' +
     '<div class="sd-fb" id="sd-fo-card">' +
       '<div class="sd-fb-lbl">Fly Out</div>' +
       '<div class="sd-fb-num">' + (foF || '---') + '</div>' +
       '<div class="sd-fb-dt">'  + (sw.fly_out_date || '') + '</div>' +
-      '<div class="sd-fb-times">' + (foData ? foData.depart_time + ' - ' + foData.arrive_time : (foF ? 'Times unavailable' : 'No flight set')) + '</div>' +
+      '<div class="sd-fb-times">' + (foData ? foData.depart_time + ' - ' + foData.arrive_time : (foF ? 'No scheduled time' : 'No flight set')) + '</div>' +
     '</div>';
 
   var days = calcDaysOnSite(sw.fly_in_date, sw.fly_out_date);
