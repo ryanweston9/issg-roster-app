@@ -389,6 +389,43 @@
   </div>
 </div>
 
+<!-- CELL ACTION CHOOSER MODAL -->
+<div class="overlay hidden" id="chooser-modal">
+  <div class="modal" style="max-width:340px">
+    <div class="modal-ttl" id="chooser-ttl">Choose an action</div>
+    <div id="chooser-opts" style="display:flex;flex-direction:column;gap:8px;"></div>
+    <div class="modal-acts">
+      <button class="btn" onclick="closeModal('chooser-modal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- LEAVE MODAL -->
+<div class="overlay hidden" id="leave-modal">
+  <div class="modal" style="max-width:440px">
+    <div class="modal-ttl">Set Leave</div>
+    <div class="fg"><label class="flbl">Staff Member</label>
+      <input type="text" class="finp" id="lv-staff-name" disabled>
+      <input type="hidden" id="lv-staff-emp">
+    </div>
+    <div class="fg"><label class="flbl">Leave Type</label>
+      <select class="fsel" id="lv-type">
+        <option value="AL">Annual Leave</option>
+        <option value="LWOP">Leave Without Pay</option>
+      </select>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="flbl">Start Date</label><input type="date" class="finp" id="lv-start"></div>
+      <div class="fg"><label class="flbl">End Date</label><input type="date" class="finp" id="lv-end"></div>
+    </div>
+    <div class="fg"><label class="flbl">Notes</label><textarea class="ftxt" id="lv-notes" rows="2" placeholder="Optional"></textarea></div>
+    <div class="modal-acts">
+      <button class="btn" onclick="closeModal('leave-modal')">Cancel</button>
+      <button class="btn btn-red" onclick="saveLeave()">Save Leave</button>
+    </div>
+  </div>
+</div>
+
 <!-- CHANGE REQUEST MODAL -->
 <div class="overlay hidden" id="change-modal">
   <div class="modal">
@@ -644,14 +681,14 @@ function renderCalendar() {
       var tdBase = isT ? 'tcol ' : '';
 
       if (!status) {
-        // Unconfirmed — grey, click to add swing
-        html += '<td class="' + tdBase + 'cell-empty" onclick="promptAddSwing(\'' + s.emp + '\',\'' + ds + '\')">' + cellContent + '</td>';
+        // Unconfirmed — grey, click for chooser (Add Swing / Set Leave)
+        html += '<td class="' + tdBase + 'cell-empty" onclick="cellChooser(\'' + s.emp + '\',\'' + ds + '\')">' + cellContent + '</td>';
       } else if (sw) {
-        // Confirmed swing — click to open detail (all day types: FIAM, CC, FOAM etc)
-        html += '<td class="' + tdBase + 'cell-click" onclick="openSwingDetail(' + sw.id + ',\'' + ds + '\')">' + cellContent + '</td>';
+        // Confirmed swing — click for chooser (View Swing / Set Leave)
+        html += '<td class="' + tdBase + 'cell-click" onclick="cellChooser(\'' + s.emp + '\',\'' + ds + '\')">' + cellContent + '</td>';
       } else {
-        // Override only (AL/LWOP) — no swing, not clickable, greyed
-        html += '<td class="' + tdBase + 'cell-rr">' + cellContent + '</td>';
+        // Override only (AL/LWOP) — click for chooser (Remove Leave)
+        html += '<td class="' + tdBase + 'cell-rr cell-click" onclick="cellChooser(\'' + s.emp + '\',\'' + ds + '\')">' + cellContent + '</td>';
       }
     }
     tr.innerHTML = html;
@@ -661,6 +698,136 @@ function renderCalendar() {
 }
 
 function promptAddSwing(emp, ds) { openSwingModal(null, emp, ds); }
+
+// ── CELL ACTION CHOOSER ─────────────────────────────────────────────────────────
+function findOverride(emp, ds) {
+  for (var i = 0; i < allOverrides.length; i++) {
+    if (allOverrides[i].staff_emp === emp && allOverrides[i].date === ds) return allOverrides[i];
+  }
+  return null;
+}
+
+// Display helpers — the calendar key (ds) is a UTC slice of a local-midnight Date, so in
+// +UTC zones (e.g. AWST) it sits one calendar day behind the column header. These map a
+// stored key to the local date the header shows, for DISPLAY only — toDateStr and the
+// stored data are untouched, so leave stays consistent with how swings are stored.
+function keyToDisplay(ds) {
+  var p = ds.split('-');
+  for (var off = -1; off <= 1; off++) {
+    var d = new Date(+p[0], +p[1] - 1, +p[2]); d.setDate(d.getDate() + off); d.setHours(0,0,0,0);
+    if (toDateStr(d) === ds) return d;
+  }
+  var f = new Date(+p[0], +p[1] - 1, +p[2]); f.setHours(0,0,0,0); return f;
+}
+function localYMD(d) {
+  return d.getFullYear() + '-' + ('0'+(d.getMonth()+1)).slice(-2) + '-' + ('0'+d.getDate()).slice(-2);
+}
+
+function cellChooser(emp, ds) {
+  var status = getStatusForDate(emp, ds);
+  var sw     = getSwingForDate(emp, ds);
+  var name   = NM[emp] || emp;
+  var prettyDate = keyToDisplay(ds).toLocaleDateString('en-AU', { weekday:'short', day:'numeric', month:'short' });
+  document.getElementById('chooser-ttl').textContent = name + ' — ' + prettyDate;
+
+  var opts = '';
+  if (status === 'AL' || status === 'LWOP') {
+    opts += '<button class="btn btn-red" onclick="removeLeave(\'' + emp + '\',\'' + ds + '\')">Remove Leave</button>';
+  } else {
+    if (sw) {
+      opts += '<button class="btn" onclick="chooserView(' + sw.id + ',\'' + ds + '\')">View Swing</button>';
+    } else {
+      opts += '<button class="btn" onclick="chooserAddSwing(\'' + emp + '\',\'' + ds + '\')">Add Swing</button>';
+    }
+    opts += '<button class="btn btn-red" onclick="openLeaveModal(\'' + emp + '\',\'' + ds + '\')">Set Leave</button>';
+  }
+  document.getElementById('chooser-opts').innerHTML = opts;
+  document.getElementById('chooser-modal').classList.remove('hidden');
+}
+
+function chooserAddSwing(emp, ds) {
+  closeModal('chooser-modal');
+  openSwingModal(null, emp, ds);
+}
+
+function chooserView(swingId, ds) {
+  closeModal('chooser-modal');
+  openSwingDetail(swingId, ds);
+}
+
+// ── LEAVE MODAL + SAVE ──────────────────────────────────────────────────────────
+function openLeaveModal(emp, ds) {
+  closeModal('chooser-modal');
+  document.getElementById('lv-staff-name').value = NM[emp] || emp;
+  document.getElementById('lv-staff-emp').value  = emp;
+  document.getElementById('lv-type').value       = 'AL';
+  var disp = localYMD(keyToDisplay(ds));
+  document.getElementById('lv-start').value      = disp;
+  document.getElementById('lv-end').value        = disp;
+  document.getElementById('lv-notes').value      = '';
+  document.getElementById('leave-modal').classList.remove('hidden');
+}
+
+async function saveLeave() {
+  var emp    = document.getElementById('lv-staff-emp').value;
+  var status = document.getElementById('lv-type').value;
+  var start  = document.getElementById('lv-start').value;
+  var end    = document.getElementById('lv-end').value;
+  var notes  = document.getElementById('lv-notes').value.trim() || null;
+  if (!start || !end) { alert('Start and end dates are required.'); return; }
+  if (end < start)    { alert('End date must be on or after the start date.'); return; }
+
+  // The inputs hold LOCAL display dates (matching the calendar header). Iterate local
+  // dates and apply toDateStr() — the same transform renderCalendar uses — to get each
+  // storage key, so stored leave lands on exactly the cells the picker showed. toDateStr
+  // is untouched, so keys stay consistent with how swings are stored.
+  var sp = start.split('-'), ep = end.split('-');
+  var cur  = new Date(+sp[0], +sp[1] - 1, +sp[2]); cur.setHours(0,0,0,0);
+  var endD = new Date(+ep[0], +ep[1] - 1, +ep[2]); endD.setHours(0,0,0,0);
+  var dates = [];
+  while (cur <= endD) {
+    dates.push(toDateStr(cur));
+    cur.setDate(cur.getDate() + 1);
+  }
+
+  for (var i = 0; i < dates.length; i++) {
+    var ds = dates[i];
+    var existing = findOverride(emp, ds);
+    // Idempotent: same status already recorded — skip (no destructive delete/recreate).
+    if (existing && existing.status === status) continue;
+    // Create the replacement FIRST; only delete the old override once the POST succeeds,
+    // so a failed POST (401/500/network) can never silently wipe recorded leave.
+    var created = await api('/api/overrides/', { method: 'POST', body: JSON.stringify({
+      staff_emp: emp, date: ds, status: status, notes: notes
+    })});
+    if (!created) {
+      alert('Could not save leave for ' + ds + '. No changes were made for this day onward.');
+      break;
+    }
+    if (existing) {
+      await api('/api/overrides/' + existing.id, { method: 'DELETE' });
+      allOverrides = allOverrides.filter(function(o){ return o.id !== existing.id; });
+    }
+    allOverrides.push(created);
+  }
+
+  closeModal('leave-modal');
+  renderCalendar();
+  renderStaffStrip();
+}
+
+// ── REMOVE LEAVE ──────────────────────────────────────────────────────────────
+async function removeLeave(emp, ds) {
+  if (!confirm('Remove leave for this day?')) return;
+  var existing = findOverride(emp, ds);
+  if (existing) {
+    await api('/api/overrides/' + existing.id, { method: 'DELETE' });
+    allOverrides = allOverrides.filter(function(o){ return o.id !== existing.id; });
+  }
+  closeModal('chooser-modal');
+  renderCalendar();
+  renderStaffStrip();
+}
 
 function getVillageForDate(emp, ds, def) {
   var sw = getSwingForDate(emp, ds);
