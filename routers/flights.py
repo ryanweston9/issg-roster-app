@@ -14,7 +14,10 @@ SITE_ALIASES = {"CC": "Christmas Creek"}  # extend per hub as they onboard (CB, 
 
 
 def get_flights_db():
-    conn = sqlite3.connect(DB_PATH)
+    # check_same_thread=False: the sync dependency creates the connection in a
+    # threadpool worker, but the async endpoint uses it in the event-loop thread.
+    # Each request gets its own short-lived connection, so cross-thread use is safe.
+    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     try:
         yield conn
