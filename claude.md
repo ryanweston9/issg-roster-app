@@ -138,7 +138,7 @@ Change types: `flight_change_in`, `flight_change_out`, `swing_extension`, `swing
 ## Known Decisions (Do Not Re-Litigate)
 
 - **pg8000 only** — psycopg2 fails on Railway
-- **No auto-calc pattern** — seeded swings wiped on startup; all data must be confirmed manually
+- **No auto-calc pattern** — swings are never auto-generated; all swings are manually confirmed and persist across restarts
 - **No hover popover** — removed due to UX issues on touch devices
 - **Single index.html** — all frontend in one file for simplicity
 - **Confirmed-only calendar** — null status = empty grey cell, never a guessed state

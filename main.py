@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from database import init_db, SessionLocal, User, Staff, Swing
+from database import init_db, SessionLocal, User, Staff
 from routers import auth_router, staff, swings, overrides, flights, agent
 from routers import changes as changes_router
 from build_flights_db import build as build_flights_db
@@ -36,10 +36,6 @@ def auto_seed():
         ]:
             if not db.query(StaffModel).filter(StaffModel.emp_number == s["emp_number"]).first():
                 db.add(StaffModel(**s))
-
-        # Wipe all auto-seeded swings on startup so calendar only shows confirmed records
-        db.query(Swing).delete()
-        print("Swing table cleared — awaiting confirmed swing entries only.")
 
         db.commit()
         print("Auto-seed complete.")
