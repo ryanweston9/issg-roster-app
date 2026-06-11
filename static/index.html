@@ -560,11 +560,23 @@ async function loadData() {
   updateChangesBadge();
 }
 
+// Cache every site's flights, keyed by number+day+direction so the detail modal
+// resolves the exact time for a swing's date (the same number flies different
+// times on different days). One request returns all sites, both directions.
 async function preloadFlights() {
-  var r1 = await api('/api/flights/?site=CC&direction=inbound');
-  var r2 = await api('/api/flights/?site=CC&direction=outbound');
-  if (r1) r1.forEach(function(f) { flightCache[f.flight_number] = f; });
-  if (r2) r2.forEach(function(f) { flightCache[f.flight_number] = f; });
+  var all = await api('/api/flights/');
+  if (all) all.forEach(function(f) {
+    flightCache[flightKey(f.flight_number, f.day_of_week, f.direction)] = f;
+  });
+}
+
+function flightKey(num, day, dir) { return num + '|' + day + '|' + dir; }
+
+// Resolve the flight for a given number on a swing's date + direction.
+function lookupFlight(num, dateStr, dir) {
+  if (!num || !dateStr) return null;
+  var day = new Date(dateStr + 'T12:00:00').toLocaleDateString('en-AU', { weekday: 'long' });
+  return flightCache[flightKey(num, day, dir)] || null;
 }
 
 // ── TABS ──────────────────────────────────────────────────────────────────────
@@ -873,8 +885,8 @@ function openSwingDetail(swingId, ds) {
   document.getElementById('sd-sub').textContent  = sw.fly_in_date + '  to  ' + sw.fly_out_date + (sw.village ? '  |  ' + sw.village : '');
 
   var fiF    = sw.fly_in_flight,  foF    = sw.fly_out_flight;
-  var fiData = fiF ? flightCache[fiF] : null;
-  var foData = foF ? flightCache[foF] : null;
+  var fiData = lookupFlight(fiF, sw.fly_in_date,  'inbound');
+  var foData = lookupFlight(foF, sw.fly_out_date, 'outbound');
 
   document.getElementById('sd-flights').innerHTML =
     '<div class="sd-fb" id="sd-fi-card">' +
@@ -928,8 +940,8 @@ function renderSwings() {
     var sw = sorted[i];
     var s = null;
     for (var j = 0; j < STAFF_DEF.length; j++) { if (STAFF_DEF[j].emp === sw.staff_emp) { s = STAFF_DEF[j]; break; } }
-    var fiData = sw.fly_in_flight  ? flightCache[sw.fly_in_flight]  : null;
-    var foData = sw.fly_out_flight ? flightCache[sw.fly_out_flight] : null;
+    var fiData = lookupFlight(sw.fly_in_flight,  sw.fly_in_date,  'inbound');
+    var foData = lookupFlight(sw.fly_out_flight, sw.fly_out_date, 'outbound');
     html += '<div class="sw-card">' +
       '<div class="sw-left">' +
       '<div class="sw-top">' +
@@ -1015,7 +1027,10 @@ async function loadFlyOpts(dir) {
   if (!dv) return;
   var d   = new Date(dv + 'T12:00:00');
   var dn  = d.toLocaleDateString('en-AU',{weekday:'long'});
-  var fl  = await api('/api/flights/?site=CC&day_of_week=' + dn + '&direction=' + (dir==='in'?'inbound':'outbound'));
+  var emp  = document.getElementById('sw-staff').value;
+  var site = 'CC';
+  for (var i = 0; i < allStaff.length; i++) { if (allStaff[i].emp_number === emp) { site = allStaff[i].site_code || 'CC'; break; } }
+  var fl  = await api('/api/flights/?site=' + encodeURIComponent(site) + '&day_of_week=' + dn + '&direction=' + (dir==='in'?'inbound':'outbound'));
   if (!fl || !fl.length) { od.innerHTML = '<p class="tmuted" style="font-size:12px;margin-top:4px">No flights on this day.</p>'; return; }
   od.innerHTML = fl.map(function(f){
     return '<div class="fo" onclick="selFlight(\'' + inp + '\',\'' + f.flight_number + '\',this)">' +

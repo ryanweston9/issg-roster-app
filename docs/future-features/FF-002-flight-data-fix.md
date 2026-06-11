@@ -44,10 +44,14 @@
   - A flight number genuinely **not** in the schedule degrades gracefully (show the number +
     "No scheduled time", not "Times unavailable").
 - **Non-goals:**
-  - No multi-hub roll-out: only `CC → Christmas Creek` is aliased now (extend per hub later).
-  - No change to `preloadFlights`' CC-only scope, the flights data, or `build_flights_db.py`.
+  - No change to the flights data or `build_flights_db.py`.
   - No new by-flight-number endpoint; no fetching arbitrary numbers.
   - No validation/locking of the free-text flight inputs.
+
+> **Scope expanded 2026-06-11** (Ryan follow-up: "live across all sites, inline, no page
+> refresh"). The original CC-only non-goals below in §2 are **superseded** — see §11. The cache now
+> covers every hub and resolves times by the swing's actual day, and the picker follows the staff's
+> site. Still no data/build/endpoint changes.
 
 ## 3. Codebase stress-test — Repo audit (2026-06-11)  *(GATE)*
 
@@ -195,3 +199,31 @@ Phases (each independently verifiable):
 Acceptance: all §5 criteria. Test per §6. Keep the FUTURE_FEATURES.md FF-002 Status line in sync in
 the same change as code. Smoke the live API after deploy (read-only).
 ```
+
+## 11. Follow-up — all-hubs + inline (2026-06-11)
+
+Ryan's follow-up after the base fix: "make it live across all sites, inline, no full page refresh."
+Frontend-only (`static/index.html`); the backend alias from §4A is unchanged.
+
+- **All hubs.** `preloadFlights()` now fetches `/api/flights/` with **no site filter** (one request,
+  all 6 sites, both directions) instead of CC-only. Every swing's flight resolves from cache, whatever
+  the site.
+- **Day-accurate cache.** Cache is keyed by `flight_number|day_of_week|direction` (was number only).
+  The same number flies different times on different days (37 ambiguous numbers across hubs; **6 even
+  within CC** — pre-existing latent bug: the modal showed whichever day's row loaded last). New
+  `lookupFlight(num, dateStr, dir)` computes the swing date's weekday and returns the exact flight, or
+  `null` → "No scheduled time". Used by the swing-detail modal and the Swings tab.
+- **Site-aware picker.** `loadFlyOpts()` derives the site from the selected staff member's `site_code`
+  (returned by `/api/staff/`, currently all `CC`) instead of hardcoding `CC` — so the Add-Swing picker
+  lists the right hub's flights for future non-CC staff.
+- **Inline, no page refresh.** The all-hubs cache populates once at login and every render path
+  (detail modal, Swings tab, calendar) reads it synchronously; save already re-renders in place. No
+  manual browser refresh is needed during a session.
+- **Verified** (Node simulation against the real 149-flight DB): day-accurate times for multi-day
+  numbers (QF2918 Mon/Wed/Thu/Fri), correct site for cross-site numbers (QF2916 Cloudbreak-Wed vs
+  Solomon-Thu), direction separation, and graceful `null` for unknown numbers / non-operating days.
+- **Cache key trivia:** `(number, day, direction)` has exactly one same-site collision (QF2911
+  Tue outbound, 2 times) — last-wins, negligible.
+- **Behaviour change to note:** times are now *correct-or-blank*. A swing whose date's weekday doesn't
+  match any flight row for that number now reads "No scheduled time" rather than an arbitrary
+  (possibly wrong-day) time.

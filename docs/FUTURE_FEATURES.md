@@ -16,7 +16,7 @@ Roadmap Phase 1. Let the Coordinator click any calendar cell to set/remove AL or
 
 ## FF-002 — Flight data fix (`flight-data-fix`)
 **Status:** In Build  ·  **Added:** 2026-06-11  ·  **Updated:** 2026-06-11
-Roadmap Phase 2. Swing detail shows "Times unavailable" and the Add-Swing flight picker shows "No flights". Root cause: app queries `site=CC` but the flights DB stores `site="Christmas Creek"` → zero matches, so the flight cache is always empty. Fix = backend site-code alias in `routers/flights.py` + graceful "No scheduled time" for unknown numbers. Spec: `future-features/FF-002-flight-data-fix.md`.
+Roadmap Phase 2. Swing detail shows "Times unavailable" and the Add-Swing flight picker shows "No flights". Root cause: app queries `site=CC` but the flights DB stores `site="Christmas Creek"` → zero matches, so the flight cache is always empty. Fix = backend site-code alias in `routers/flights.py` + graceful "No scheduled time" for unknown numbers. Follow-up (§11): cache all hubs, key by number+day+direction for day-accurate times, site-aware Add-Swing picker — live inline, no page refresh. Spec: `future-features/FF-002-flight-data-fix.md`.
 
 ---
 
